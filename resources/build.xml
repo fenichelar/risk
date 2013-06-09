@@ -9,8 +9,9 @@
   <property name="src.home"      value="${basedir}/src/main/"/>
   <property name="web.home"      value="${basedir}/web"/>
 
-<!-- Define the CLASSPATH -->
-  <path id="compile.classpath"> 
+  <path id="compile.classpath">
+
+    <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
       <include name="*.jar"/>
     </fileset>
@@ -18,10 +19,7 @@
     <fileset dir="${catalina.home}/lib">
       <include name="*.jar"/>
     </fileset>
-     <pathelement location="${basedir}/lib"/>
-    <fileset dir="${basedir}/lib">
-      <include name="*.jar"/>
-    </fileset>
+
   </path>
 
   <target name="clean"
@@ -32,19 +30,17 @@
   <target name="compile" description="Compile Java sources">
 
     <!-- Compile Java classes as necessary -->
-    <mkdir    dir="${build.home}/classes"/>
+    <mkdir    dir="${build.home}/WEB-INF/classes"/>
     <javac srcdir="${src.home}"
-          destdir="${build.home}/classes"
-          includeantruntime="false">
+          destdir="${build.home}/WEB-INF/classes">
         <classpath refid="compile.classpath"/>
-
     </javac>
 
   </target>
 
   <target name="prepare" depends="compile">
     <copy  todir="${build.home}">
-      <fileset dir="${basedir}/web"/>
+      <fileset dir="${src.home}/webapp"/>
     </copy>    
   </target>
 
