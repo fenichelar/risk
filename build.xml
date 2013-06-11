@@ -7,7 +7,8 @@
   <property name="build.home"    value="${basedir}/target"/>
   <property name="catalina.home" value="${env.CATALINA_HOME}"/>
   <property name="src.home"      value="${basedir}/src/main/"/>
-  <property name="web.home"      value="${basedir}/web"/>
+  <property name="web.dir"       value="${basedir}/web"/>
+
 
 <!-- Define the CLASSPATH -->
   <path id="compile.classpath"> 
@@ -27,6 +28,7 @@
   <target name="clean"
    description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
+  	<delete dir="${catalina.home}/webapps/${app.name}"/>
   </target>
 
   <target name="compile" description="Compile Java sources">
@@ -44,7 +46,7 @@
 
   <target name="prepare" depends="compile">
     <copy  todir="${build.home}">
-      <fileset dir="${basedir}/web"/>
+      <fileset dir="${basedir}/web/"/>
     </copy>    
   </target>
 

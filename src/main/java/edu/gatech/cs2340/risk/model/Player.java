@@ -2,6 +2,7 @@ package main.java.edu.gatech.cs2340.risk.model;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * @author Caroline Paulus
@@ -12,6 +13,7 @@ public class Player {
 	private String playerName;
 	private int playerId;
 	private ArrayList<Territory> territories;
+	private TreeMap<Territory, ArrayList<Army>> armies;
 	private Color playerColor;
 	
 	public String getPlayerName() {
