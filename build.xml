@@ -46,8 +46,11 @@
 
   <target name="prepare" depends="compile">
     <copy  todir="${build.home}">
-      <fileset dir="${basedir}/web/"/>
-    </copy>    
+      <fileset dir="${basedir}/web/WEB-INF"/>
+    </copy>
+  	<copy  todir="${build.home}">
+  	      <fileset dir="${basedir}/web/WEB-INF/jsp"/>
+  	    </copy>  
   </target>
 
   <target name="deploy" depends="prepare">
