@@ -14,7 +14,13 @@ public class Player {
 	private int playerId;
 	private ArrayList<Territory> territories;
 	private TreeMap<Territory, ArrayList<Army>> armies;
+	private int armyCount;
 	private Color playerColor;
+	
+	public Player(String playerName, int playerId) {
+		this.playerName = playerName;
+		this.playerId = playerId;
+	}
 	
 	public String getPlayerName() {
 		return playerName;
@@ -45,6 +51,14 @@ public class Player {
 			territories = new ArrayList<Territory>();
 		}
 		territories.add(territory);
+	}
+
+	public int getArmyCount() {
+		return armyCount;
+	}
+
+	public void setArmyCount(int armyCount) {
+		this.armyCount = armyCount;
 	}
 
 }

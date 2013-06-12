@@ -34,14 +34,12 @@
   <target name="compile" description="Compile Java sources">
 
     <!-- Compile Java classes as necessary -->
-    <mkdir    dir="${build.home}/classes"/>
+    <mkdir    dir="${build.home}/WEB-INF/classes"/>
     <javac srcdir="${src.home}"
-          destdir="${build.home}/classes"
+          destdir="${build.home}/WEB-INF/classes"
           includeantruntime="false">
         <classpath refid="compile.classpath"/>
-
     </javac>
-
   </target>
 
   <target name="prepare" depends="compile">
@@ -50,7 +48,10 @@
     </copy>
   	<copy  todir="${build.home}">
   	      <fileset dir="${basedir}/web/WEB-INF/jsp"/>
-  	    </copy>  
+  	</copy>
+  	<copy  todir="${build.home}">
+  	  	   <fileset dir="${web.dir}/res"/>
+  	</copy>
   </target>
 
   <target name="deploy" depends="prepare">
