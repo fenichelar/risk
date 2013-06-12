@@ -1,18 +1,21 @@
 package main.java.edu.gatech.cs2340.risk.service;
 
-import java.util.TreeMap;
+import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 
-public class PlayerService {
+/**
+ * @author Caroline Paulus
+ *
+ */
+public interface PlayerService {
 	
-	public static TreeMap<Integer, Player> assignArmiesToPlayers(TreeMap<Integer, Player> players) {
-		
-		int armyCount = (50 - (players.size() * 5));
-		for (int i = 0; i < players.size(); i++) {
-			players.get(i).setArmyCount(armyCount);
-		}
-		return players;
-	}
+	public ArrayList<Player> getPlayers(); // returns all players
+	
+	public ArrayList<Player> getPlayer(int playerId); // returns player with id = playerId
+	
+	public Player addPlayer(Player player);
+	
+	public Player deletePlayer(int playerId);
 
 }

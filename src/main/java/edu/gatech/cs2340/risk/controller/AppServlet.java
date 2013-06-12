@@ -1,6 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException;
+import java.io.IOException; 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -11,31 +12,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
-import main.java.edu.gatech.cs2340.risk.service.PlayerService;
+import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
+import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 
 //import org.apache.log4j.Logger; TODO figure out how to get this to work
 
-
+/** 
+ * @author Caroline Paulus
+ * 
+ * This class receives and handles user input for the Risk game UI
+ */
 @WebServlet("/app")
-public class RiskServlet extends HttpServlet {
+public class AppServlet extends HttpServlet {
 	
-	//private static Logger log = Logger.getLogger(RiskServlet.class);
-	TreeMap<Integer, Player> players = new TreeMap<Integer, Player>(); // GET FROM DATABASE
+	//private static Logger log = Logger.getLogger(AppServlet.class);
+	private PlayerServiceImpl playerService = new PlayerServiceImpl();
+	private ArmyServiceImpl armyService = new ArmyServiceImpl();
+	private ArrayList<Player> players;
 
 	protected void doGet(HttpServletRequest request,
             HttpServletResponse response)
             		throws IOException, ServletException {
 		
-		// get players from database
-		//players = PlayerService.assignArmiesToPlayers(players);
-		request.setAttribute("players", players);
+		players = playerService.getPlayers();
+		players = armyService.addArmies(players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/app.jsp");
         dispatcher.forward(request,response);
 	}
-	
-	public void setPlayers(TreeMap<Integer, Player> players) {
-		this.players = players;
-	}
+
 
 }

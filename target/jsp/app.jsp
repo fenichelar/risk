@@ -6,7 +6,7 @@
 
 <html>
 	<head>
-		<title>Risk Home Page</title>
+		<title>Game of Risk</title>
 		<link rel="stylesheet" type="text/css" href="css/app.css" /> 
 	</head>
 

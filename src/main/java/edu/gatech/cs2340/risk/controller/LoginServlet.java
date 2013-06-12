@@ -1,7 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException;
-import java.util.TreeMap;
+import java.io.IOException; 
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,17 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import org.apache.log4j.Logger; TODO figure out how to get this to work
-
 import main.java.edu.gatech.cs2340.risk.model.Player;
-// TODO rename
+import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
+
+/** 
+ * @author Caroline Paulus
+ *
+ * This class receives and handles user input for the home page
+ * Responsible for initializing database and adding players
+ */
 @WebServlet("")
-public class PlayerServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	
 	//private static Logger log = Logger.getLogger(RiskServlet.class); 
-
-    TreeMap<Integer, Player> players = new TreeMap<Integer, Player>();
-    RiskServlet riskServlet = new RiskServlet();
+	private PlayerServiceImpl playerService = new PlayerServiceImpl();
+    ArrayList<Player> players = new ArrayList<Player>();
+    AppServlet riskServlet = new AppServlet();
 
     @Override
     protected void doPost(HttpServletRequest request,
@@ -41,32 +47,34 @@ public class PlayerServlet extends HttpServlet {
         } else if (operation.equalsIgnoreCase("DELETE")) {
             doDelete(request, response);
         } else if (operation.equalsIgnoreCase("LAUNCH")) {
-        	riskServlet.setPlayers(players);
         	riskServlet.doGet(request, response);
         } else {
             String name = request.getParameter("name");
-            // create a new Player
-            players.put(players.size(), new Player(name, players.size()));
-            // send the updated list back to index.jsp
+            // add the player to the database
+            Player player = playerService.addPlayer(new Player(name, players.size()));
+            players.add(player);
+            // send the updated list back to login.jsp
             request.setAttribute("players", players);
             RequestDispatcher dispatcher = 
-                getServletContext().getRequestDispatcher("/index.jsp");
+                getServletContext().getRequestDispatcher("/login.jsp");
             dispatcher.forward(request,response);
         }
     }
 
     /**
      * Called when page is first loaded
-     * Initializes "players" variable for index.jsp
+     * Initializes "players" variable for login.jsp
      */
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws IOException, ServletException {
-    
-        System.out.println("In doGet()");
+    	
+    	RiskUtil.deleteDatabaseIfExists(); //TODO should this be called somewhere else?
+    	RiskUtil.checkForExistingDatabase();
+    	RiskUtil.checkForExistingTable("Players");
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
-            getServletContext().getRequestDispatcher("/index.jsp");
+            getServletContext().getRequestDispatcher("/login.jsp");
         dispatcher.forward(request,response);
     }
 
@@ -79,10 +87,11 @@ public class PlayerServlet extends HttpServlet {
         System.out.println("In doPut()");
         String name = (String) request.getParameter("name");
         int id = getId(request);
-        players.put(id, new Player(name, id));
+        Player player = playerService.addPlayer(new Player(name, id));
+        players.add(player);
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
-            getServletContext().getRequestDispatcher("/index.jsp");
+            getServletContext().getRequestDispatcher("/login.jsp");
         dispatcher.forward(request,response);
     }
 
@@ -92,9 +101,11 @@ public class PlayerServlet extends HttpServlet {
         System.out.println("In doDelete()");
         int id = getId(request);
         players.remove(id);
+        // delete player from database
+        playerService.deletePlayer(id);
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
-            getServletContext().getRequestDispatcher("/index.jsp");
+            getServletContext().getRequestDispatcher("/login.jsp");
         dispatcher.forward(request,response);
     }
 

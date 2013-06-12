@@ -2,13 +2,13 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 
-<% TreeMap<Integer, Player> players = 
-   (TreeMap<Integer, Player>) request.getAttribute("players"); %>
+<% ArrayList<Player> players = 
+   (ArrayList<Player>) request.getAttribute("players"); %>
 
 <html>
 	<head>
 		<title>Risk Home Page</title>
-		<link rel="stylesheet" type="text/css" href="risk/css/index.css" /> 
+		<link rel="stylesheet" type="text/css" href="risk/css/login.css" /> 
 	</head>
 
 <body>
@@ -20,7 +20,7 @@
 <th>Player Name</th>
 </tr>
 
-<% for (Integer id: players.keySet()) { %>
+<% for (int id = 0; id < players.size(); id ++) { %>
 <% Player player = players.get(id);     %>
 <tr>
 <form action="/risk<%= id %>" method="POST">
@@ -38,7 +38,7 @@
  </td>
 </tr>
 <% } %>
-<% if (players.size() >= 3) { %>
+<% if (players.size() >= 3 && players.size() <= 6) { %>
 <tr>
 <td>
  <form action="risk/app" method="GET">
