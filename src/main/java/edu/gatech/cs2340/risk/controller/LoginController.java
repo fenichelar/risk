@@ -1,6 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,12 +20,12 @@ import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
  * Responsible for initializing database and adding players
  */
 @WebServlet("")
-public class LoginServlet extends HttpServlet {
+public class LoginController extends HttpServlet {
 	
 	//private static Logger log = Logger.getLogger(RiskServlet.class); 
+	private AppController appController = new AppController();
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
     ArrayList<Player> players = new ArrayList<Player>();
-    AppServlet riskServlet = new AppServlet();
 
     @Override
     protected void doPost(HttpServletRequest request,
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         } else if (operation.equalsIgnoreCase("DELETE")) {
             doDelete(request, response);
         } else if (operation.equalsIgnoreCase("LAUNCH")) {
-        	riskServlet.doGet(request, response);
+        	appController.doGet(request, response);
         } else {
             String name = request.getParameter("name");
             // add the player to the database

@@ -1,9 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.TreeMap;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +21,7 @@ import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
  * This class receives and handles user input for the Risk game UI
  */
 @WebServlet("/app")
-public class AppServlet extends HttpServlet {
+public class AppController extends HttpServlet {
 	
 	//private static Logger log = Logger.getLogger(AppServlet.class);
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
