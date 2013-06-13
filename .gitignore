@@ -1,1 +1,10 @@
 /bin
+/target
+
+.DS_Store
+.settings
+.classpath
+
+*.class
+*.jar
+
