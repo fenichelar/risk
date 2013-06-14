@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 
 //import org.apache.log4j.Logger; TODO figure out how to get this to work
 
@@ -33,6 +34,7 @@ public class AppController extends HttpServlet {
             		throws IOException, ServletException {
 		
 		players = playerService.getPlayers();
+		RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
 		players = armyService.addArmies(players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/app.jsp");

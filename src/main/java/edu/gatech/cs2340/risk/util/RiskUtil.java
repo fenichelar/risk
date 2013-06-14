@@ -14,14 +14,14 @@ public class RiskUtil {
 	private static final String DB_PASSWORD = "mypass";
 
 	
-	public static void checkForExistingDatabase()  {
+	public static void buildDatabase()  {
 		try {
 			// try to create a new database 
 			createNewDatabase();
 			System.out.println("Successfully created database risk_database");
 		}
 		catch (SQLException e) {
-			// assume that database already exists
+			// assume that database already exists - SHOULD NOT TODO deal with this
 			System.out.println("Risk_database already exists");
 		} catch (InstantiationException e) {
 			// TODO add log statements

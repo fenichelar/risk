@@ -13,13 +13,13 @@ public class Player {
 	private String playerName;
 	private int playerId;
 	private ArrayList<Territory> territories;
-	private TreeMap<Territory, ArrayList<Army>> armies;
-	private int armyCount;
-	private Color playerColor;
+	private ArrayList<Army> armies;
+	private int armyCount; //TODO necessary?
+	private Color playerColor; //TODO randomly generate?
 	
-	public Player(String playerName, int playerId) {
-		this.playerName = playerName;
+	public Player( int playerId, String playerName) {
 		this.playerId = playerId;
+		this.playerName = playerName;
 	}
 	
 	public String getPlayerName() {
@@ -53,12 +53,32 @@ public class Player {
 		territories.add(territory);
 	}
 
+	public ArrayList<Army> getArmies() {
+		return armies;
+	}
+
+	public void setArmies(ArrayList<Army> armies) {
+		this.armies = armies;
+	}
+	
+	public void addArmy(Army army) {
+		if (armies == null) {
+			armies = new ArrayList<Army>();
+		}
+		armies.add(army);
+	}
+
 	public int getArmyCount() {
 		return armyCount;
 	}
 
 	public void setArmyCount(int armyCount) {
 		this.armyCount = armyCount;
+	}
+	
+	@Override
+	public String toString() {
+		return "[Name: " + playerName + ", ID: " + playerId + "]";
 	}
 
 }

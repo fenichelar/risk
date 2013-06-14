@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.dao.PlayerDAO;
 import main.java.edu.gatech.cs2340.risk.model.Player;
+import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
  * @author Caroline Paulus
@@ -16,19 +17,14 @@ import main.java.edu.gatech.cs2340.risk.model.Player;
  */
 public class PlayerDAOImpl implements PlayerDAO {
 	
-	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	private static final String DB_NAME = "Risk_Database";
-	private static final String DB_URL = "jdbc:mysql://localhost/";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "mypass";
-	
 
 	@Override
 	public ArrayList<Player> getPlayers() throws SQLException, ClassNotFoundException {
 		
 		ArrayList<Player> players = new ArrayList<Player>();
-		Connection conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASSWORD);
-		Class.forName(JDBC_DRIVER);
+		Connection conn = DriverManager.getConnection(RiskConstants.DB_URL 
+				+ RiskConstants.DB_NAME, RiskConstants.DB_USER, RiskConstants.DB_PASSWORD);
+		Class.forName(RiskConstants.JDBC_DRIVER);
 		
 		Statement s = conn.createStatement();
 		String sql = "SELECT * FROM Players;";
@@ -36,7 +32,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 		ResultSet rs = s.executeQuery(sql);
 		
 		while (rs.next()) {
-			Player player = new Player(rs.getString("name"), rs.getInt("id"));
+			Player player = new Player(rs.getInt("id"), rs.getString("name"));
 			players.add(player);
 		}
 		
@@ -44,8 +40,6 @@ public class PlayerDAOImpl implements PlayerDAO {
 		conn.close();
 		
 		return players;
-		
-		
 	}
 
 	@Override
@@ -56,8 +50,9 @@ public class PlayerDAOImpl implements PlayerDAO {
 
 	@Override
 	public Player addPlayer(Player player) throws SQLException, ClassNotFoundException {
-		Connection conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASSWORD);
-		Class.forName(JDBC_DRIVER);
+		Connection conn = DriverManager.getConnection(RiskConstants.DB_URL 
+				+ RiskConstants.DB_NAME, RiskConstants.DB_USER, RiskConstants.DB_PASSWORD);
+		Class.forName(RiskConstants.JDBC_DRIVER);
 		
 		Statement s = conn.createStatement();
 		String sql = "INSERT INTO Players(id, name) VALUES (" 
@@ -72,15 +67,16 @@ public class PlayerDAOImpl implements PlayerDAO {
 
 	@Override
 	public Player deletePlayer(int playerId) throws SQLException, ClassNotFoundException {
-		Connection conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASSWORD);
-		Class.forName(JDBC_DRIVER);
+		Connection conn = DriverManager.getConnection(RiskConstants.DB_URL 
+				+ RiskConstants.DB_NAME, RiskConstants.DB_USER, RiskConstants.DB_PASSWORD);
+		Class.forName(RiskConstants.JDBC_DRIVER);
 		
 		Statement s = conn.createStatement();
 		String sql = "SELECT * FROM Players WHERE id = " + playerId + ";";
 		System.out.println(sql); // needs to be log eventually
 		ResultSet rs = s.executeQuery(sql);
 		
-		Player player = new Player(rs.getString("name"), rs.getInt("id"));
+		Player player = new Player(rs.getInt("id"), rs.getString("name"));
 		if (rs.next()) {
 			// this is not good - means the program found two players with the same id
 			// handle this
