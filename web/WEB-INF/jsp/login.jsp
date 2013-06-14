@@ -21,7 +21,7 @@
 </tr>
 
 <% for (int id = 0; id < players.size(); id ++) { %>
-<% Player player = players.get(id);     %>
+<% Player player = players.get(id); %>
 <tr>
 <form action="/risk<%= id %>" method="POST">
   <!-- hidden operation element to simulate HTTP PUT method in server -->
@@ -29,6 +29,7 @@
   <td><input type="text" name="name" value="<%= player.getPlayerName() %>"/></td>
   <td><input type="submit" value="Update"/></td>
 </form>
+
 <td>
   <form action="/risk<%= id %>" method="POST">
   <!-- hidden operation element to simulate HTTP DELETE method in server -->
@@ -47,6 +48,9 @@
  </td>
 </tr>
 <% } %>
+
+<% if (players.size() < 6) { %>
+
 <tr>
 <form action="/risk" method="POST">
   <td><input type="text" name="name"/></td>
@@ -54,6 +58,7 @@
 </form>
 <td></td> <!-- empty cell to align with previous cells -->
 </tr>
+<% } %>
 </table>
 
 </body>
