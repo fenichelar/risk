@@ -7,11 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
+import com.google.gson.Gson; 
 
 public class RiskUtilMock  {
 
-	private static Logger log = Logger.getLogger(RiskUtilMock.class);
+	//private static Logger log = Logger.getLogger(RiskUtilMock.class);
 
 	private static Gson gson = new Gson();
 
@@ -19,6 +19,7 @@ public class RiskUtilMock  {
 		return gson.toJson(obj);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Object convertJsonFileToObject(String file, Class model) {
 
 		Object obj = null;
@@ -45,13 +46,13 @@ public class RiskUtilMock  {
 	public static void createFileFromJson(String file, Object obj) {
 		
 		String json = gson.toJson(obj); 
-		log.debug("Json created for file: " + json);
+		//log.debug("Json created for file: " + json);
 
 		String fileLoc = "resources/json/" + file;
-		log.debug("File location for file: " + fileLoc);
+		//log.debug("File location for file: " + fileLoc);
 		File newFile = new File(fileLoc);
 		if (newFile.exists()) {
-			log.debug("Deleting existing file at " + fileLoc);
+			//log.debug("Deleting existing file at " + fileLoc);
 			newFile.delete();
 		}
 
@@ -60,7 +61,7 @@ public class RiskUtilMock  {
 			fileWriter.write(json);
 			fileWriter.close();
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			//log.error(e.getMessage());
 			return;
 
 		}
@@ -76,7 +77,7 @@ public class RiskUtilMock  {
 				count ++;
 			}
 		}
-		log.debug("Number of files in " + location + ": " + count);
+		//log.debug("Number of files in " + location + ": " + count);
 		return count;
 	}
 	

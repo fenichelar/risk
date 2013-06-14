@@ -1,6 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -69,9 +69,9 @@ public class LoginController extends HttpServlet {
                          HttpServletResponse response)
             throws IOException, ServletException {
     	
-    	RiskUtil.deleteDatabaseIfExists(); //TODO should this be called somewhere else?
-    	RiskUtil.buildDatabase();
-    	RiskUtil.checkForExistingTable("Players");
+    	//RiskUtil.deleteDatabaseIfExists(); //TODO should this be called somewhere else?
+    	//RiskUtil.buildDatabase();
+    	//RiskUtil.checkForExistingTable("Players");
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/login.jsp");

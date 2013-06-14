@@ -7,7 +7,7 @@
   <property name="build.home"    value="${basedir}/target"/>
   <property name="catalina.home" value="${env.CATALINA_HOME}"/>
   <property name="src.home"      value="${basedir}/src/main/"/>
-  <property name="web.dir"       value="${basedir}/web"/>
+  <property name="web.dir"       value="${basedir}/web/"/>
 
 
 <!-- Define the CLASSPATH -->
@@ -20,7 +20,7 @@
       <include name="*.jar"/>
     </fileset>
      <pathelement location="${web.dir}/WEB-INF/lib"/>
-    <fileset dir="${web.dir}/WEB-INF/lib">
+    <fileset dir="${basedir}/web/WEB-INF/lib">
       <include name="*.jar"/>
     </fileset>
   </path>
@@ -51,6 +51,12 @@
   	</copy>
   	<copy  todir="${build.home}">
   	  	   <fileset dir="${web.dir}/res"/>
+  	</copy>
+  	<copy  todir="${build.home}/WEB-INF/lib">
+  	  	  <fileset dir="${basedir}/web/WEB-INF/lib"/>
+  	</copy>
+  	<copy  todir="${build.home}">
+  	  	  <fileset dir="${basedir}/resources"/>
   	</copy>
   </target>
 
