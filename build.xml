@@ -19,8 +19,8 @@
     <fileset dir="${catalina.home}/lib">
       <include name="*.jar"/>
     </fileset>
-     <pathelement location="${basedir}/lib"/>
-    <fileset dir="${basedir}/lib">
+     <pathelement location="${web.dir}/WEB-INF/lib"/>
+    <fileset dir="${web.dir}/WEB-INF/lib">
       <include name="*.jar"/>
     </fileset>
   </path>
