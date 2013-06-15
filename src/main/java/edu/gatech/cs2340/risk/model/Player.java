@@ -3,6 +3,7 @@ package main.java.edu.gatech.cs2340.risk.model;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.Random;
 
 /**
  * @author Caroline Paulus
@@ -16,7 +17,9 @@ public class Player {
 	private ArrayList<Army> armies;
 	private int armyCount; //TODO necessary?
 	private Color playerColor; //TODO randomly generate?
-	
+	private Random randGen = new Random();
+	private int turnRoll;
+
 	public Player( int playerId, String playerName) {
 		this.playerId = playerId;
 		this.playerName = playerName;
@@ -75,7 +78,18 @@ public class Player {
 	public void setArmyCount(int armyCount) {
 		this.armyCount = armyCount;
 	}
-	
+
+        public int rollDie() {
+		return randGen.nextInt(6)+1;		
+        }
+
+	public void setTurnRoll(int turnRoll) {
+		this.turnRoll = turnRoll;
+	}        	
+
+	public int getTurnRoll() {
+		return turnRoll;
+	}
 	@Override
 	public String toString() {
 		return "[Name: " + playerName + ", ID: " + playerId + "]";

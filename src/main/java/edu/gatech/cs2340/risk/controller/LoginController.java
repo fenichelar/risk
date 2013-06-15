@@ -52,7 +52,8 @@ public class LoginController extends HttpServlet {
             String name = request.getParameter("name");
             // add the player to the database
             Player player = playerService.addPlayer(new Player(players.size(), name));
-            players.add(player);
+            player.setTurnRoll(player.rollDie());
+            players.add(player); 
             // send the updated list back to login.jsp
             request.setAttribute("players", players);
             RequestDispatcher dispatcher = 
@@ -72,7 +73,8 @@ public class LoginController extends HttpServlet {
     	//RiskUtil.deleteDatabaseIfExists(); //TODO should this be called somewhere else?
     	//RiskUtil.buildDatabase();
     	//RiskUtil.checkForExistingTable("Players");
-        request.setAttribute("players", players);
+        System.out.println(players.toString());
+	request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/login.jsp");
         dispatcher.forward(request,response);
