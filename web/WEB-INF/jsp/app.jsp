@@ -2,7 +2,10 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 
-<% //TreeMap<Integer, Player> players = (TreeMap<Integer, Player>) request.getAttribute("players"); %>
+<% ArrayList<Player> players =
+   (ArrayList<Player>) request.getAttribute("players"); %>
+<% int i = players.size(); %>
+<% out.write(i); %>
 
 <html>
 	<head>
@@ -19,6 +22,10 @@
 <th>TEST</th>
 </tr>
 
+<% for (int id = 0; id < players.size(); id ++) { %>
+<% Player player = players.get(id); %>
+<% System.out.println(player.getPlayerName()); %>
+<% } %>
 </table>
 
 </body>

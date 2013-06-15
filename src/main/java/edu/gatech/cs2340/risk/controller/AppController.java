@@ -27,15 +27,15 @@ public class AppController extends HttpServlet {
 	//private static Logger log = Logger.getLogger(AppServlet.class);
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private ArmyServiceImpl armyService = new ArmyServiceImpl();
-	private ArrayList<Player> players;
+	//private ArrayList<Player> players;
 
 	protected void doGet(HttpServletRequest request,
             HttpServletResponse response)
             		throws IOException, ServletException {
 		
-		players = playerService.getPlayers();
-		RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
-		players = armyService.addArmies(players);
+	//	players = playerService.getPlayers();
+	//	RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
+	//	players = armyService.addArmies(players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/app.jsp");
         dispatcher.forward(request,response);
