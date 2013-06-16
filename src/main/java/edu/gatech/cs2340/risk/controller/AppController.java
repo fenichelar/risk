@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
-import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskDatabaseUtil;
 
 //import org.apache.log4j.Logger; TODO figure out how to get this to work
 

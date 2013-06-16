@@ -4,25 +4,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.dao.PlayerDAO;
+import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
 import main.java.edu.gatech.cs2340.risk.model.Player;
-import main.java.edu.gatech.cs2340.risk.util.RiskUtilMock;
-
+import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
+/**
+ * @author Caroline Paulus
+ *
+ */
 public class PlayerDAOMock implements PlayerDAO {
 	
 	private static final String PLAYER_JSON = "player/player";
 
 	@Override
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<Player> getPlayers() throws PackageNotFoundException {
 		
 		ArrayList<Player> players = new ArrayList<Player>();
 		
 		// get existing number of players in player package
-		int numPlayers = RiskUtilMock.getFileCountInPackage("player");
+		int numPlayers = RiskMockUtil.getFileCountInPackage("player");
 		System.out.println("Current player count in player json package: " + numPlayers);
 		
 		for (int i = 0; i < numPlayers; i++) {
 			String fileName = PLAYER_JSON + i + ".json";  
-			Player player = (Player) RiskUtilMock.convertJsonFileToObject(fileName, Player.class);
+			Player player = (Player) RiskMockUtil.convertJsonFileToObject(fileName, Player.class);
 			players.add(player);
 		}
 		return players;
@@ -36,10 +40,10 @@ public class PlayerDAOMock implements PlayerDAO {
 
 	@Override
 	public Player addPlayer(Player player) throws SQLException,
-			ClassNotFoundException {
+			ClassNotFoundException, PackageNotFoundException {
 
 		// get existing number of players in player package
-		int numPlayers = RiskUtilMock.getFileCountInPackage("player");
+		int numPlayers = RiskMockUtil.getFileCountInPackage("player");
 		System.out.println("Current player count in player json package: " + numPlayers);
 		
 		// create ID for player
@@ -48,7 +52,7 @@ public class PlayerDAOMock implements PlayerDAO {
 		// create file for new player
 		String newFile = PLAYER_JSON + player.getPlayerId() + ".json";
 		System.out.println("Creating new json file for player at " + newFile);
-		RiskUtilMock.createFileFromJson(newFile, player);
+		RiskMockUtil.createFileFromJson(newFile, player);
 		
 		// return player
 		System.out.println("Returning player " + player);

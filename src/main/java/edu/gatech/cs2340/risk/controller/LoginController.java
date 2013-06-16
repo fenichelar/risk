@@ -1,6 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
-import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
+import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskDatabaseUtil;
 
 /** 
  * @author Caroline Paulus
@@ -51,9 +53,16 @@ public class LoginController extends HttpServlet {
         } else {
             String name = request.getParameter("name");
             // add the player to the database
-            Player player = playerService.addPlayer(new Player(players.size(), name));
-            player.setTurnRoll(player.rollDie());
+            Player player = null;
+			try {
+				player = playerService.addPlayer(new Player(players.size(), name));
+			} catch (PackageNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            player.setRollOrder(PlayerUtil.rollDie());
             players.add(player); 
+            players = PlayerUtil.setPlayerOrder(players);
             // send the updated list back to login.jsp
             request.setAttribute("players", players);
             RequestDispatcher dispatcher = 
@@ -89,7 +98,13 @@ public class LoginController extends HttpServlet {
         System.out.println("In doPut()");
         String name = (String) request.getParameter("name");
         int id = getId(request);
-        Player player = playerService.addPlayer(new Player(id, name));
+        Player player = null;
+		try {
+			player = playerService.addPlayer(new Player(id, name));
+		} catch (PackageNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         players.add(player);
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 

@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import main.java.edu.gatech.cs2340.risk.dao.impl.PlayerDAOImpl;
 import main.java.edu.gatech.cs2340.risk.dao.mock.PlayerDAOMock;
+import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.PlayerService;
 
@@ -19,7 +20,7 @@ public class PlayerServiceImpl implements PlayerService {
 	private PlayerDAOMock playerDAO = new PlayerDAOMock();
 
 	@Override
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<Player> getPlayers() throws PackageNotFoundException {
 		return playerDAO.getPlayers();
 	}
 
@@ -30,7 +31,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public Player addPlayer(Player player) {
+	public Player addPlayer(Player player) throws PackageNotFoundException {
 		try {
 			return playerDAO.addPlayer(player);
 		} catch (ClassNotFoundException | SQLException e) {

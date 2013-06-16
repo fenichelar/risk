@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
+
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson; 
 
-public class RiskUtilMock  {
+public class RiskMockUtil  {
 
 	//private static Logger log = Logger.getLogger(RiskUtilMock.class);
 
@@ -67,9 +70,16 @@ public class RiskUtilMock  {
 		}
 	}
 
-	public static int getFileCountInPackage(String location) {
+	public static int getFileCountInPackage(String location) 
+			throws PackageNotFoundException {
 		String fileLoc = "resources/json/" + location;
-		File packageLoc = new File(fileLoc);
+		File packageLoc;
+		try {
+			packageLoc = new File(fileLoc);
+		}
+		catch (NullPointerException e) {
+			throw new PackageNotFoundException();
+		}
 		int count = 0;
 
 		for (File file : packageLoc.listFiles()) {
