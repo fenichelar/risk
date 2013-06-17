@@ -36,9 +36,7 @@ public class AppController extends HttpServlet {
 		
 		players = playerService.getPlayers();
 		players = PlayerUtil.setPlayerOrder(players);
-		System.out.println("[AppController] players: " + players);
-	//	RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
-	//	players = armyService.addArmies(players);
+		players = armyService.addArmies(players);
 		request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/app.jsp");
