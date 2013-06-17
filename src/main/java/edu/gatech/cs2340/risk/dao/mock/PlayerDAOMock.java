@@ -41,13 +41,6 @@ public class PlayerDAOMock implements PlayerDAO {
 	@Override
 	public Player addPlayer(Player player) 
 			throws SQLException, ClassNotFoundException {
-
-		// get existing number of players in player package
-		int numPlayers = RiskMockUtil.getFileCountInPackage("player");
-		System.out.println("Current player count in player json package: " + numPlayers);
-		
-		// create ID for player
-		int modelId = numPlayers + 1;
 		
 		// create file for new player
 		String newFile = PLAYER_JSON + player.getPlayerId() + ".json";

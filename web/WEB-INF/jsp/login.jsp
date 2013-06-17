@@ -1,6 +1,7 @@
-<%@ page import="main.java.edu.gatech.cs2340.risk.model.Player" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="main.java.edu.gatech.cs2340.risk.model.Player"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
+
 
 
 <% ArrayList<Player> players = 

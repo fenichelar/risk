@@ -12,7 +12,6 @@
 		<title>Game of Risk</title>
 		<link rel="stylesheet" type="text/css" href="css/app.css" /> 
 	</head>
-
 <body>
 
 <h1>GAME OF RISK</h1>
@@ -25,7 +24,7 @@
 <% for (int id = 0; id < players.size(); id ++) { %>
 <% Player player = players.get(id); %>
 
- <td><input type="text" name="name" value="<%= player.getPlayerName() %>"/></td>
+ <td><input type="text" name="name" value="<%= player.getPlayerName() + " - " + player.getArmies().size() + " armies" %>"/></td>
  </tr>
 <% } %>
 </table>
