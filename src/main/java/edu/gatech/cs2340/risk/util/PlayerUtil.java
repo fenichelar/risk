@@ -15,6 +15,14 @@ public class PlayerUtil {
 		return RANDOM.nextInt(6) + 1;
 	}
 	
+	public static int[] rollDie(int numTimes) {
+		int[] rollResults = new int[numTimes];
+		for (int i = 0; i < numTimes; i ++) {
+			rollResults[i] = rollDie();
+		}
+		return rollResults;
+	}
+	
 	public static ArrayList<Player> setPlayerOrder(ArrayList<Player> players) {
 		
 		Collections.sort(players, new Comparator<Player>() {
