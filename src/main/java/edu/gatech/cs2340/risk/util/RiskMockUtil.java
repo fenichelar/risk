@@ -11,14 +11,15 @@ import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson; 
+import com.google.gson.Gson;
 
-public class RiskMockUtil  {
+public class RiskMockUtil {
 
-	//private static Logger log = Logger.getLogger(RiskUtilMock.class);
+	// private static Logger log = Logger.getLogger(RiskUtilMock.class);
 
 	private static Gson gson = new Gson();
-	private static final String RELATIVE_LOCATION = System.getProperty("catalina.base");
+	private static final String RELATIVE_LOCATION = System
+			.getProperty("catalina.base");
 
 	public static String convertObjectToJsonFile(Object obj) {
 		return gson.toJson(obj);
@@ -31,11 +32,9 @@ public class RiskMockUtil  {
 
 		try {
 			String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/" + file;
-			BufferedReader br = new BufferedReader(
-					new FileReader(fileLoc));
+			BufferedReader br = new BufferedReader(new FileReader(fileLoc));
 
-
-			//convert the json string back to object
+			// convert the json string back to object
 			obj = gson.fromJson(br, model);
 
 			// close the reader
@@ -50,11 +49,11 @@ public class RiskMockUtil  {
 
 	public static void createFileFromJson(String file, Object obj) {
 
-		String json = gson.toJson(obj); 
-		//log.debug("Json created for file: " + json);
+		String json = gson.toJson(obj);
+		// log.debug("Json created for file: " + json);
 
 		String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/" + file;
-		//log.debug("File location for file: " + fileLoc);
+		// log.debug("File location for file: " + fileLoc);
 		File newFile = new File(fileLoc);
 		if (newFile.exists()) {
 			newFile.delete();
@@ -65,14 +64,14 @@ public class RiskMockUtil  {
 			fileWriter.write(json);
 			fileWriter.close();
 		} catch (IOException e) {
-			//log.error(e.getMessage());
+			// log.error(e.getMessage());
 			return;
 
 		}
 	}
 
 	public static int getFileCountInPackage(String location) {
-		
+
 		String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/" + location;
 		System.out.println("FileLoc: " + fileLoc);
 		File packageLoc = new File(fileLoc);
@@ -81,7 +80,7 @@ public class RiskMockUtil  {
 		if (packageLoc.listFiles() != null) {
 			for (File file : packageLoc.listFiles()) {
 				if (file.isFile()) {
-					count ++;
+					count++;
 				}
 			}
 		}
@@ -92,10 +91,11 @@ public class RiskMockUtil  {
 	public static void restoreDefaults() {
 		String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/player";
 		File folder = new File(fileLoc);
-
-		for (File file : folder.listFiles()) {
-			System.out.println("Deleting " + file.toString());
-			file.delete();
+		if (folder.isDirectory()) {
+			for (File file : folder.listFiles()) {
+				System.out.println("Deleting " + file.toString());
+				file.delete();
+			}
 		}
 	}
 }
