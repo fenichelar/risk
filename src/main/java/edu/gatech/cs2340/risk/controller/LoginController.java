@@ -74,6 +74,7 @@ public class LoginController extends HttpServlet {
 					throws IOException, ServletException {
 		
 		RiskMockUtil.restoreDefaults();
+		players = new ArrayList<Player>();
 		System.out.println(players.toString());
 		request.setAttribute("players", players);
 		RequestDispatcher dispatcher = 
