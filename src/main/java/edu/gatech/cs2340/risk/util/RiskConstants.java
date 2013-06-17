@@ -11,5 +11,4 @@ public interface RiskConstants {
 	public static final String DB_URL = "jdbc:mysql://localhost/";
 	public static final String DB_USER = "root";
 	public static final String DB_PASSWORD = "mypass";
-
 }

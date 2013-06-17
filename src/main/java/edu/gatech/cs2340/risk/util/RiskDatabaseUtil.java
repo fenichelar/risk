@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class RiskUtil {
+public class RiskDatabaseUtil {
 	
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 	private static final String DB_NAME = "Risk_Database";
@@ -21,7 +21,7 @@ public class RiskUtil {
 			System.out.println("Successfully created database risk_database");
 		}
 		catch (SQLException e) {
-			// assume that database already exists - SHOULD NOT TODO deal with this
+			// assume that database already exists - SHOULD NOT (TODO- deal with this)
 			System.out.println("Risk_database already exists");
 		} catch (InstantiationException e) {
 			// TODO add log statements

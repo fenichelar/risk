@@ -19,12 +19,14 @@
 
 <table>
 <tr>
-<th>TEST</th>
+<th>Players: </th>
 </tr>
-
+<tr>
 <% for (int id = 0; id < players.size(); id ++) { %>
 <% Player player = players.get(id); %>
-<% System.out.println(player.getPlayerName()); %>
+
+ <td><input type="text" name="name" value="<%= player.getPlayerName() %>"/></td>
+ </tr>
 <% } %>
 </table>
 
