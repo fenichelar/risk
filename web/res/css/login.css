@@ -1,6 +1,8 @@
-/* This file still needs to be written. */
-/*Will contain the CSS for the Risk Index page (first page) */
+/*Contains the CSS for the Risk Login page (first page) */
 
+body {
+	background-color: #FFFFC2;
+}
 h1 {
 	margin-bottom: 50px;
 }
