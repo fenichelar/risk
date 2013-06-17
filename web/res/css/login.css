@@ -1,8 +1,19 @@
 /* This file still needs to be written. */
 /*Will contain the CSS for the Risk Index page (first page) */
-body {
-	background-color: #95B9C7;
-	height: 100%;
-	padding: 0;
-	margin: 0;
+
+h1 {
+	margin-bottom: 50px;
+}
+
+.prevSubmissionName {
+	margin-bottom: 0;
+}
+
+.newSubmissionName input{
+	height: 30px;
+}
+
+#btnStart {
+	margin-top: 50px;
+	width: 200px;
 }

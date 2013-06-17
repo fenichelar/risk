@@ -96,6 +96,8 @@ public class RiskMockUtil {
 				System.out.println("Deleting " + file.toString());
 				file.delete();
 			}
+		} else {
+			folder.mkdirs();
 		}
 	}
 }
