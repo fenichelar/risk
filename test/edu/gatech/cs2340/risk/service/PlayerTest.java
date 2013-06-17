@@ -18,11 +18,11 @@ public class PlayerTest {
 	@Test
 	public void test() {
 		//RiskUtil.deleteDatabaseIfExists(); 
-    	//RiskUtil.buildDatabase();
-    	//RiskUtil.checkForExistingTable("Players");
-    	//RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
-    	RiskMockUtil.restoreDefaults();
-    	
+		//RiskUtil.buildDatabase();
+		//RiskUtil.checkForExistingTable("Players");
+		//RiskUtil.checkForExistingColumn("Players", "ArmyCount", "Integer");
+		RiskMockUtil.restoreDefaults();
+
 		PlayerServiceImpl playerService = new PlayerServiceImpl();
 		ArmyServiceImpl armyService = new ArmyServiceImpl();
 
@@ -30,22 +30,18 @@ public class PlayerTest {
 		Player john = new Player(2, "John");
 		Player anna = new Player(3, "Anna");
 		Player david = new Player(4, "David");
-		
-		try {
-			rebecca = playerService.addPlayer(rebecca);
-			john  = playerService.addPlayer(john);
-			anna = playerService.addPlayer(anna);
-			david = playerService.addPlayer(david);
-		}
-		catch (PackageNotFoundException e) {
-			e.printStackTrace();
-		}
+
+		rebecca = playerService.addPlayer(rebecca);
+		john  = playerService.addPlayer(john);
+		anna = playerService.addPlayer(anna);
+		david = playerService.addPlayer(david);
+
 		ArrayList<Player> players = new ArrayList<Player>();
 		players.add(rebecca);
 		players.add(john);
 		players.add(anna);
 		players.add(david);
-		
+
 		players = armyService.addArmies(players);
 		assertNotNull(players.get(1).getArmies());
 	}

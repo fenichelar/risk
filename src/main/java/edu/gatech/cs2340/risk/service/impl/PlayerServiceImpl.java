@@ -20,7 +20,7 @@ public class PlayerServiceImpl implements PlayerService {
 	private PlayerDAOMock playerDAO = new PlayerDAOMock();
 
 	@Override
-	public ArrayList<Player> getPlayers() throws PackageNotFoundException {
+	public ArrayList<Player> getPlayers() {
 		return playerDAO.getPlayers();
 	}
 
@@ -31,7 +31,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public Player addPlayer(Player player) throws PackageNotFoundException {
+	public Player addPlayer(Player player) {
 		try {
 			return playerDAO.addPlayer(player);
 		} catch (ClassNotFoundException | SQLException e) {

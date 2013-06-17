@@ -16,7 +16,7 @@ public class PlayerDAOMock implements PlayerDAO {
 	private static final String PLAYER_JSON = "player/player";
 
 	@Override
-	public ArrayList<Player> getPlayers() throws PackageNotFoundException {
+	public ArrayList<Player> getPlayers() {
 		
 		ArrayList<Player> players = new ArrayList<Player>();
 		
@@ -39,8 +39,8 @@ public class PlayerDAOMock implements PlayerDAO {
 	}
 
 	@Override
-	public Player addPlayer(Player player) throws SQLException,
-			ClassNotFoundException, PackageNotFoundException {
+	public Player addPlayer(Player player) 
+			throws SQLException, ClassNotFoundException {
 
 		// get existing number of players in player package
 		int numPlayers = RiskMockUtil.getFileCountInPackage("player");

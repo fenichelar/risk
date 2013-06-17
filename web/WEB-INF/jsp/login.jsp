@@ -23,16 +23,11 @@
 
 <% for (int id = 0; id < players.size(); id ++) { %>
 <% Player player = players.get(id); %>
-<% out.write(player.toString()); %>
-<% out.write("Turn roll: " + player.getTurnRoll()); %>
-<br>
-
 <tr>
 <form action="/risk<%= id %>" method="POST">
   <!-- hidden operation element to simulate HTTP PUT method in server -->
   <input type="hidden" name="operation" value="PUT"/>
   <td><input type="text" name="name" value="<%= player.getPlayerName() %>"/></td>
-  <td><input type="submit" value="Roll Again!"/></td>
 </form>
 
 <td>
@@ -52,8 +47,6 @@
 </form>
  </td>
 </tr>
-
-<tr><b> Highest turn roll goes first!</b> </tr>
  
 <% } %>
 
