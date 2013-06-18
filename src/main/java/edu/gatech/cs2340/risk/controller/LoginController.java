@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet {
 		} else {
 			String name = request.getParameter("name");
 			
-			Player player = new Player(players.size(), name);
+			Player player = new Player(players.size() + 1, name);
 			player.setRollOrder(PlayerUtil.rollDie());
 			playerService.addPlayer(player);
 			players.add(player); 

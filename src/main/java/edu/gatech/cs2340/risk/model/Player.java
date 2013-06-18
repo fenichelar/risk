@@ -15,9 +15,7 @@ public class Player {
 	private int playerId;
 	private ArrayList<Territory> territories;
 	private ArrayList<Army> armies;
-	private int armyCount; //TODO necessary?
 	private Color playerColor; //TODO randomly generate?
-	private Random randGen = new Random();
 	private int rollOrder;
 
 	public Player( int playerId, String playerName) {
@@ -69,14 +67,6 @@ public class Player {
 			armies = new ArrayList<Army>();
 		}
 		armies.add(army);
-	}
-
-	public int getArmyCount() {
-		return armyCount;
-	}
-
-	public void setArmyCount(int armyCount) {
-		this.armyCount = armyCount;
 	}
 
 	public void setRollOrder(int rollOrder) {
