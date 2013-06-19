@@ -1,0 +1,21 @@
+/*Contains the CSS for the Risk Login page (first page) */
+
+body {
+	background-color: #FFFFC2;
+}
+h1 {
+	margin-bottom: 50px;
+}
+
+.prevSubmissionName {
+	margin-bottom: 0;
+}
+
+.newSubmissionName input{
+	height: 30px;
+}
+
+#btnStart {
+	margin-top: 50px;
+	width: 200px;
+}
