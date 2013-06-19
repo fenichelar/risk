@@ -1,5 +1,5 @@
 {
 	"territoryId": 31,
 	"territoryName": "Japan",
-	"country": "Asia"	
+	"country": { "countryId": 5, "countryName": "Asia" }	
 }

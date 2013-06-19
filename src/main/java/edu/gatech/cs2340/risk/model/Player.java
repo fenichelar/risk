@@ -15,8 +15,9 @@ public class Player {
 	private int playerId;
 	private ArrayList<Territory> territories;
 	private ArrayList<Army> armies;
-	private Color playerColor; //TODO randomly generate?
 	private int rollOrder;
+	private Color playerColor; 
+	
 
 	public Player( int playerId, String playerName) {
 		this.playerId = playerId;
@@ -76,6 +77,14 @@ public class Player {
 	public int getRollOrder() {
 		return rollOrder;
 	}
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	public void setPlayerColor(Color playerColor) {
+		this.playerColor = playerColor;
+	}
+
 	@Override
 	public String toString() {
 		return "[Name: " + playerName + ", ID: " + playerId + "]";

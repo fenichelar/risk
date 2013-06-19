@@ -2,6 +2,7 @@ package main.java.edu.gatech.cs2340.risk.service.impl;
 
 import java.util.ArrayList;
 
+import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.service.TerritoryService;
 
@@ -10,23 +11,22 @@ import main.java.edu.gatech.cs2340.risk.service.TerritoryService;
  *
  */
 public class TerritoryServiceImpl implements TerritoryService {
+	
+	private TerritoryDAOMock territoryDAO = new TerritoryDAOMock();
 
 	@Override
 	public ArrayList<Territory> getTerritories() {
-		// TODO Auto-generated method stub
-		return null;
+		return territoryDAO.getTerritories();
 	}
 
 	@Override
 	public ArrayList<Territory> getTerritories(int countryId) {
-		// TODO Auto-generated method stub
-		return null;
+		return territoryDAO.getTerritories(countryId);
 	}
 
 	@Override
 	public Territory getTerritory(int territoryId) {
-		// TODO Auto-generated method stub
-		return null;
+		return territoryDAO.getTerritory(territoryId);
 	}
 
 }

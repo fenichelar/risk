@@ -1,5 +1,5 @@
 {
 	"territoryId": 10,
 	"territoryName": "Argentina",
-	"country": "South America"	
+	"country": { "countryId": 2, "countryName": "South America" }
 }

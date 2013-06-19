@@ -1,5 +1,5 @@
 {
 	"territoryId": 30,
 	"territoryName": "Irkutsk",
-	"country": "Asia"	
+	"country": { "countryId": 5, "countryName": "Asia" }		
 }

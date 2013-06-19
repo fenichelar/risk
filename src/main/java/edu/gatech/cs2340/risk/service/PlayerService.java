@@ -1,5 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList; 
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
@@ -27,14 +28,18 @@ public interface PlayerService {
 	 * 
 	 * @param player
 	 * @return
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Player addPlayer(Player player);
+	public Player addPlayer(Player player) throws ClassNotFoundException, SQLException;
 	/**
 	 * Deletes the player from the database of players and returns it
 	 * 
 	 * @param playerId
 	 * @return
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Player deletePlayer(int playerId);
+	public Player deletePlayer(int playerId) throws ClassNotFoundException, SQLException;
 
 }
