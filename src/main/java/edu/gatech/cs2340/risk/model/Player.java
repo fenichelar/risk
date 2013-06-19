@@ -87,7 +87,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "[Name: " + playerName + ", ID: " + playerId + "]";
+		return "[" + playerName + ", ID: " + playerId + "]";
 	}
 
 }

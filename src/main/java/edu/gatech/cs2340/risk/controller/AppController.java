@@ -14,6 +14,7 @@ import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
+import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskDatabaseUtil;
 
@@ -31,6 +32,7 @@ public class AppController extends HttpServlet {
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private ArmyServiceImpl armyService = new ArmyServiceImpl();
 	private CountryServiceImpl countryService = new CountryServiceImpl();
+	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 	
 	private ArrayList<Player> players; 
 	private ArrayList<Country> countries;
@@ -42,6 +44,7 @@ public class AppController extends HttpServlet {
 		players = playerService.getPlayers();
 		players = PlayerUtil.setPlayerOrder(players);
 		players = armyService.addArmies(players);
+		players = territoryService.addTerritories(players);
 		request.setAttribute("players", players);
 		
 		countries = countryService.getCountries();

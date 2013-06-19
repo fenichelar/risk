@@ -1,11 +1,14 @@
 package main.java.edu.gatech.cs2340.risk.dao.mock;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import main.java.edu.gatech.cs2340.risk.dao.TerritoryDAO;
 import main.java.edu.gatech.cs2340.risk.model.Country;
+import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
+import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /**
  * @author Caroline Paulus
@@ -52,6 +55,33 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		Territory territory = (Territory) 
 				RiskMockUtil.convertJsonFileToObject(fileName, Territory.class);
 		return territory;
+	}
+
+	@Override
+	public ArrayList<Player> addTerritories(ArrayList<Player> players) {
+		ArrayList<Territory> territories = getTerritories();
+		Random rand = new Random();
+		
+		while (territories.size() > 0) {
+			for (Player player : players) {
+				int territoryId = rand.nextInt(territories.size());
+				player.addTerritory(territories.get(territoryId));
+				territories.remove(territoryId);
+			}
+		}
+		for (int i = 0; i < players.size(); i ++) {
+			// sort territories by ID
+			players.get(i).setTerritories(TerritoryUtil.sort(players.get(i).getTerritories()));
+			System.out.println("Player " + players.get(i) 
+					+ " has territories " + players.get(i).getTerritories());
+		}
+		return players;
+	}
+
+	@Override
+	public Player addTerritories(Player player) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
