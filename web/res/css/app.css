@@ -7,29 +7,52 @@ body {
 a:link {
 	color: #FF0000;
 }
-.text {
-	color: #00FF00;
+span#player1 {
+ color: #FF0000;
 }
 
 
-#player2 a:link {
+#player2 
+a:link {
 	color: #0020C2;
 }
+
+span#player2 {
+	color: #0020C2;
+}
+
 
 #player3 a:link {
-	color: #0020C2;
+	color: #347C17;
 }
+
+span#player3 {
+	color: #347C17;
+}
+
 
 #player4 a:link {
 	color: #E9AB17;
 }
 
-#player5 a:link {
-	color: #0020C2;
+span#player4 {
+	color: #E9AB17;
 }
+
+
+#player5 a:link {
+	color: #4B0082;
+}
+
+span#player5 {
+	color: #4B0082;
+}
+
 
 #player6 a:link {
-	color: #0020C2;
+	color: #F87217;
 }
 
-	
+span#player6 {
+	color: #F87217;
+}

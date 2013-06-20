@@ -26,34 +26,34 @@
 
  <td><% out.write("1. " + players.get(0).getPlayerName()  
 		 + " - " + players.get(0).getArmies().size() + " armies"); %>
-	<span id="player1" class="text">&#8226;</span>
+	<span id="player1">&#8226;</span>
 </td>
 </tr><tr>
  <td><% out.write("2. " + players.get(1).getPlayerName()  
 		 + " - " + players.get(2).getArmies().size() + " armies"); %>
-	<span style="Color:blue">&#8226;</span>
+	<span id="player2">&#8226;</span>
 </td>
 </tr><tr>
  <td><% out.write("3. " + players.get(2).getPlayerName()  
 		 + " - " + players.get(2).getArmies().size() + " armies"); %>
-	<span style="Color:green">&#8226;</span>
+	<span id="player3">&#8226;</span>
 </td></tr>
 <% if (players.size() >= 4) { %>
  <tr><td><% out.write("4. " + players.get(3).getPlayerName()  
 		 + " - " + players.get(3).getArmies().size() + " armies"); %>
-	<span style="Color:#E9AB17">&#8226;</span>
+	<span id="player4">&#8226;</span>
 </td></tr>
 <% } %>
 <% if (players.size() >= 5) { %>
  <tr><td><% out.write("5. " + players.get(4).getPlayerName()  
 		 + " - " + players.get(4).getArmies().size() + " armies"); %>
-	<span style="Color:purple">&#8226;</span>
+	<span id="player5">&#8226;</span>
 </td></tr>
 <% } %>
 <% if (players.size() == 6) { %>
  <tr><td><% out.write("6. " + players.get(5).getPlayerName()  
 		 + " - " + players.get(5).getArmies().size() + " armies"); %>
-	<span style="Color:orange">&#8226;</span>
+	<span id="player6">&#8226;</span>
 </td></tr>
 <% } %>
 </table>
@@ -82,16 +82,32 @@
  </div>
 <% } %>
 <% if (players.get(2).getTerritories().contains(territory)) { %>
-<span style="Color:green"><% out.write(territory.getTerritoryName()); %></span>
+	<div id="player3">
+  <form action="/app" method="POST">
+     <a  href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+   </div>
 <% } %>
 <% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
-<span style="Color:pink"><% out.write(territory.getTerritoryName()); %></span>
+	<div id="player4">
+  <form action="/app" method="POST">
+     <a  href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+   </div>
 <% } %>
 <% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
-<span style="Color:purple"><% out.write(territory.getTerritoryName()); %></span>
+	<div id="player5">
+  <form action="/app" method="POST">
+     <a  href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+   </div>
 <% } %>
 <% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
-<span style="Color:orange"><% out.write(territory.getTerritoryName()); %></span>
+	<div id="player6">
+  <form action="/app" method="POST">
+     <a  href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+   </div>
 <% } %>
 <% } %>
 </td>
