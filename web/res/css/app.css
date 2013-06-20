@@ -3,5 +3,33 @@ body {
 	
 }
 
+#player1 
+a:link {
+	color: #FF0000;
+}
+.text {
+	color: #00FF00;
+}
+
+
+#player2 a:link {
+	color: #0020C2;
+}
+
+#player3 a:link {
+	color: #0020C2;
+}
+
+#player4 a:link {
+	color: #E9AB17;
+}
+
+#player5 a:link {
+	color: #0020C2;
+}
+
+#player6 a:link {
+	color: #0020C2;
+}
 
 	

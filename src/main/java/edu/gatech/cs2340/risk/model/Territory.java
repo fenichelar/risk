@@ -49,6 +49,18 @@ public class Territory {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != Territory.class) {
+			return false;
+		}
+		if ( ((Territory) obj).getTerritoryId() == this.territoryId
+				&& ((Territory) obj).getTerritoryName().equals(this.territoryName) ) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return "[" + territoryName + ", ID: " + territoryId + "]";
 	}

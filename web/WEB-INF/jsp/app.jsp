@@ -26,7 +26,7 @@
 
  <td><% out.write("1. " + players.get(0).getPlayerName()  
 		 + " - " + players.get(0).getArmies().size() + " armies"); %>
-	<span style="Color:red">&#8226;</span>
+	<span id="player1" class="text">&#8226;</span>
 </td>
 </tr><tr>
  <td><% out.write("2. " + players.get(1).getPlayerName()  
@@ -41,7 +41,7 @@
 <% if (players.size() >= 4) { %>
  <tr><td><% out.write("4. " + players.get(3).getPlayerName()  
 		 + " - " + players.get(3).getArmies().size() + " armies"); %>
-	<span style="Color:yellow">&#8226;</span>
+	<span style="Color:#E9AB17">&#8226;</span>
 </td></tr>
 <% } %>
 <% if (players.size() >= 5) { %>
@@ -67,30 +67,31 @@
 <% for (Territory territory : territoryService.getTerritories(country.getCountryId())) { %>
 
 <td>
-<% out.write(territory.getTerritoryName()); %>
 <% if (players.get(0).getTerritories().contains(territory)) { %>
-<% System.out.println("Player 0"); %>
-<span style="Color:red"><% out.write(territory.getTerritoryName()); %></span>
+	<div id="player1">
+  <form action="/app" method="POST">
+     <a  href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+   </div>
 <% } %>
 <% if (players.get(1).getTerritories().contains(territory)) { %>
-<% System.out.println("Player 1"); %>
-<span style="Color:blue"><% out.write(territory.getTerritoryName()); %></span>
+<div id="player2">
+ <form action="/app" method="POST">
+     <a href="javascript:;" onclick="parentNode.submit();"><%=territory.getTerritoryName()%></a>
+   </form>
+ </div>
 <% } %>
 <% if (players.get(2).getTerritories().contains(territory)) { %>
-<% System.out.println("Player 2"); %>
 <span style="Color:green"><% out.write(territory.getTerritoryName()); %></span>
 <% } %>
 <% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
-<% System.out.println("Player 3"); %>
-<span style="Color:yellow"><% out.write(territory.getTerritoryName()); %></span>
+<span style="Color:pink"><% out.write(territory.getTerritoryName()); %></span>
 <% } %>
 <% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
-<% System.out.println("Player 4"); %>
 <span style="Color:purple"><% out.write(territory.getTerritoryName()); %></span>
 <% } %>
 <% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
-<% System.out.println("Player 5"); %>
-<span style="Color:purple"><% out.write(territory.getTerritoryName()); %></span>
+<span style="Color:orange"><% out.write(territory.getTerritoryName()); %></span>
 <% } %>
 <% } %>
 </td>
