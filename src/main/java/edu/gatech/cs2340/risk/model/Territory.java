@@ -10,11 +10,13 @@ public class Territory {
 	private String territoryName;
 	private Country country;
 	private Player owner;
-        private int numberOfArmies;        
+    private int numberOfArmies;        
 	
 	public Territory(int territoryId, String territoryName) {
 		this.setTerritoryId(territoryId);
 		this.territoryName = territoryName;
+		
+		setNumberOfArmies(1);
 	}
 	
 	public int getTerritoryId() {
@@ -48,15 +50,19 @@ public class Territory {
 	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
+
+    public int getNumberOfArmies(){
+    	return numberOfArmies;
+    }
+    
+    public void setNumberOfArmies(int numberOfArmies) {
+    	this.numberOfArmies = numberOfArmies;
+    }
 	
-        public void addArmy(){
-                numberOfArmies++;
-        }
-
-        public int getNumberOfArmies(){
-                return numberOfArmies;
-        }
-
+    public void addArmy() {
+    	numberOfArmies++;
+    }
+    
 	@Override
 	public boolean equals(Object obj) {
 		if (obj.getClass() != Territory.class) {
@@ -71,7 +77,7 @@ public class Territory {
 	
 	@Override
 	public String toString() {
-		return "[" + territoryName + ", ID: " + territoryId + ", Armies: " + numberOfArmies + "]";
+		return "[" + territoryName + ", ID: " + territoryId + "]";
 	}
 
 }
