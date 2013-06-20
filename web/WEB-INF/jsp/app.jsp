@@ -65,8 +65,33 @@
 <% out.write(country.getCountryName() + ":"); %>
 <br></th>
 <% for (Territory territory : territoryService.getTerritories(country.getCountryId())) { %>
+
 <td>
 <% out.write(territory.getTerritoryName()); %>
+<% if (players.get(0).getTerritories().contains(territory)) { %>
+<% System.out.println("Player 0"); %>
+<span style="Color:red"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
+<% if (players.get(1).getTerritories().contains(territory)) { %>
+<% System.out.println("Player 1"); %>
+<span style="Color:blue"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
+<% if (players.get(2).getTerritories().contains(territory)) { %>
+<% System.out.println("Player 2"); %>
+<span style="Color:green"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
+<% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
+<% System.out.println("Player 3"); %>
+<span style="Color:yellow"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
+<% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
+<% System.out.println("Player 4"); %>
+<span style="Color:purple"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
+<% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
+<% System.out.println("Player 5"); %>
+<span style="Color:purple"><% out.write(territory.getTerritoryName()); %></span>
+<% } %>
 <% } %>
 </td>
 <td></td>

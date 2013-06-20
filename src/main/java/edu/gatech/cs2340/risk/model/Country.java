@@ -51,5 +51,10 @@ public class Country {
 	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + countryName + ", ID: " + countryId + "]";
+	}
 
 }

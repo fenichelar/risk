@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import main.java.edu.gatech.cs2340.risk.model.Country;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
+import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
-import main.java.edu.gatech.cs2340.risk.util.RiskDatabaseUtil;
-
-//import org.apache.log4j.Logger; TODO figure out how to get this to work
 
 /** 
  * @author Caroline Paulus
@@ -27,10 +27,12 @@ import main.java.edu.gatech.cs2340.risk.util.RiskDatabaseUtil;
 @WebServlet("/app")
 public class AppController extends HttpServlet {
 	
-	//private static Logger log = Logger.getLogger(AppServlet.class);
+	private static Logger log = Logger.getLogger(AppController.class);
+	
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private ArmyServiceImpl armyService = new ArmyServiceImpl();
 	private CountryServiceImpl countryService = new CountryServiceImpl();
+	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 	
 	private ArrayList<Player> players; 
 	private ArrayList<Country> countries;
@@ -42,6 +44,7 @@ public class AppController extends HttpServlet {
 		players = playerService.getPlayers();
 		players = PlayerUtil.setPlayerOrder(players);
 		players = armyService.addArmies(players);
+		players = territoryService.addTerritories(players);
 		request.setAttribute("players", players);
 		
 		countries = countryService.getCountries();
