@@ -84,6 +84,18 @@ public class Player {
 	public void setPlayerColor(Color playerColor) {
 		this.playerColor = playerColor;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != Player.class) {
+			return false;
+		}
+		if ( ((Player) obj).getPlayerId() == this.playerId
+				&& ((Player) obj).getPlayerName().equals(this.playerName) ) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {
