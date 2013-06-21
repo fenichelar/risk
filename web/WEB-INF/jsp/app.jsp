@@ -29,40 +29,49 @@
 
 <td></td><td></td><td></td>
 <% System.out.println("Player name: " + currentPlayer.getPlayerName()); %>
-<th>Current player: </th><td><% out.write(" " + currentPlayer.getPlayerName()); %></td>
+<th>Current player: 
+<% switch (currentPlayer.getRollOrder()) {
+case (1): %><span id="player1"><%out.write(currentPlayer.getPlayerName());%></span><% break; 
+case (2): %><span id="player2"><%out.write(currentPlayer.getPlayerName());%></span><% break; 
+case (3): %><span id="player3"><%out.write(currentPlayer.getPlayerName());%></span><% break; 
+case (4): %><span id="player4"><%currentPlayer.getPlayerName();%></span><% break; 
+case (5): %><span id="player5"><%currentPlayer.getPlayerName();%></span><% break; 
+case (6): %><span id="player6"><%currentPlayer.getPlayerName();%></span><% break; 
+} %>
+</th>
 
 </tr>
 <tr>
 
  <td><% out.write("1. " + players.get(0).getPlayerName()  
-		 + " - " + players.get(0).getArmies().size() + " armies"); %>
+		 + " - " + players.get(0).getNumberOfArmies() + " armies"); %>
 	<span id="player1">&#8226;</span>
 </td>
 </tr><tr>
  <td><% out.write("2. " + players.get(1).getPlayerName()  
-		 + " - " + players.get(1).getArmies().size() + " armies"); %>
+		 + " - " + players.get(1).getNumberOfArmies() + " armies"); %>
 	<span id="player2">&#8226;</span>
 </td>
 </tr><tr>
  <td><% out.write("3. " + players.get(2).getPlayerName()  
-		 + " - " + players.get(2).getArmies().size() + " armies"); %>
+		 + " - " + players.get(2).getNumberOfArmies() + " armies"); %>
 	<span id="player3">&#8226;</span>
 </td></tr>
 <% if (players.size() >= 4) { %>
  <tr><td><% out.write("4. " + players.get(3).getPlayerName()  
-		 + " - " + players.get(3).getArmies().size() + " armies"); %>
+		 + " - " + players.get(3).getNumberOfArmies() + " armies"); %>
 	<span id="player4">&#8226;</span>
 </td></tr>
 <% } %>
 <% if (players.size() >= 5) { %>
  <tr><td><% out.write("5. " + players.get(4).getPlayerName()  
-		 + " - " + players.get(4).getArmies().size() + " armies"); %>
+		 + " - " + players.get(4).getNumberOfArmies() + " armies"); %>
 	<span id="player5">&#8226;</span>
 </td></tr>
 <% } %>
 <% if (players.size() == 6) { %>
  <tr><td><% out.write("6. " + players.get(5).getPlayerName()  
-		 + " - " + players.get(5).getArmies().size() + " armies"); %>
+		 + " - " + players.get(5).getNumberOfArmies() + " armies"); %>
 	<span id="player6">&#8226;</span>
 </td></tr>
 <% } %>
@@ -80,76 +89,30 @@
 <td>
 <% if (players.get(0).getTerritories().contains(territory)) { %>
 	<div id="player1">
+<% } %>
+<% if (players.get(1).getTerritories().contains(territory)) { %>
+	<div id="player2">
+<% } %>
+<% if (players.get(2).getTerritories().contains(territory)) { %>
+	<div id="player3">
+<% } %>
+<% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
+	<div id="player4">
+<% } %>
+<% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
+	<div id="player5">
+<% } %>
+<% if ( players.size() >= 6 && players.get(5).getTerritories().contains(territory) ) { %>
+	<div id="player6">
+<% } %>
   <form action="app" method="POST">
     <input type="hidden" name="operation" value="POST"/>
    <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-   <input type="hidden" name="playerId" value="0"/>
-   <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
+   <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
     <input class="territoryButton" type="submit" 
     	value="<%=territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")"%>"/>
    </form>
    </div>
-<% } %>
-<% if (players.get(1).getTerritories().contains(territory)) { %>
-<div id="player2">
- <form action="app" method="POST">
-   <input type="hidden" name="operation" value="POST"/>
-   <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-   <input type="hidden" name="playerId" value="1"/>
-     <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
-     <input class="territoryButton" type="submit" 
-    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
-   </form>
- </div>
-<% } %>
-<% if (players.get(2).getTerritories().contains(territory)) { %>
-	<div id="player3">
-  <form action="app" method="POST">
-      <input type="hidden" name="operation" value="POST"/>
-   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-      <input type="hidden" name="playerId" value="2"/>
-        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
-       <input class="territoryButton" type="submit" 
-    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
-   </form>
-   </div>
-<% } %>
-<% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
-	<div id="player4">
-  <form action="app" method="POST">
-      <input type="hidden" name="operation" value="POST"/>
-   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-      <input type="hidden" name="playerId" value="3"/>
-        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
-       <input class="territoryButton" type="submit" 
-    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
-   </form>
-   </div>
-<% } %>
-<% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
-	<div id="player5">
-  <form action="app" method="POST">
-      <input type="hidden" name="operation" value="POST"/>
-   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-      <input type="hidden" name="playerId" value="4"/>
-        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
-       <input class="territoryButton" type="submit" 
-    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
-   </form>
-   </div>
-<% } %>
-<% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
-	<div id="player6">
-  <form action="app" method="POST">
-      <input type="hidden" name="operation" value="POST"/>
-   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-      <input type="hidden" name="playerId" value="5"/>
-        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
-       <input class="territoryButton" type="submit" 
-    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
-   </form>
-   </div>
-<% } %>
 <% } %>
 </td>
 <td></td>
