@@ -19,9 +19,7 @@
 	    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	</head>
 <body>
-  <div class="container">
 
-    <div class="row">
       <div class="span12 text-center">
 <h1>Game of Risk</h1>
 
@@ -31,7 +29,7 @@
 
 <td></td><td></td><td></td>
 <% System.out.println("Player name: " + currentPlayer.getPlayerName()); %>
-<th>Current player: </th><td><% out.write(currentPlayer.getPlayerName()); %></td>
+<th>Current player: </th><td><% out.write(" " + currentPlayer.getPlayerName()); %></td>
 
 </tr>
 <tr>
@@ -42,7 +40,7 @@
 </td>
 </tr><tr>
  <td><% out.write("2. " + players.get(1).getPlayerName()  
-		 + " - " + players.get(2).getArmies().size() + " armies"); %>
+		 + " - " + players.get(1).getArmies().size() + " armies"); %>
 	<span id="player2">&#8226;</span>
 </td>
 </tr><tr>
@@ -100,7 +98,7 @@
    <input type="hidden" name="playerId" value="1"/>
      <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
      <input class="territoryButton" type="submit" 
-    	value=<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>/>
+    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
    </form>
  </div>
 <% } %>
@@ -112,32 +110,43 @@
       <input type="hidden" name="playerId" value="2"/>
         <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
        <input class="territoryButton" type="submit" 
-    	value=<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>/>
+    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
    </form>
    </div>
 <% } %>
 <% if ( players.size() >= 4 && players.get(3).getTerritories().contains(territory) ) { %>
 	<div id="player4">
-  <form action="/app" method="POST">
-     <a  href="javascript:;" onclick="parentNode.submit();">
-     	<%=territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")"%></a>
+  <form action="app" method="POST">
+      <input type="hidden" name="operation" value="POST"/>
+   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
+      <input type="hidden" name="playerId" value="3"/>
+        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
+       <input class="territoryButton" type="submit" 
+    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
    </form>
    </div>
 <% } %>
 <% if ( players.size() >= 5 && players.get(4).getTerritories().contains(territory) ) { %>
 	<div id="player5">
-  <form action="/app" method="POST">
-     <a  href="javascript:;" onclick="parentNode.submit();">
-		<%=territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")"%></a>
+  <form action="app" method="POST">
+      <input type="hidden" name="operation" value="POST"/>
+   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
+      <input type="hidden" name="playerId" value="4"/>
+        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
+       <input class="territoryButton" type="submit" 
+    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
    </form>
    </div>
 <% } %>
 <% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
 	<div id="player6">
-  <form action="/app" method="POST">
-  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
-     <a  href="javascript:;" onclick="parentNode.submit();">
-     	<%=territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")"%></a>
+  <form action="app" method="POST">
+      <input type="hidden" name="operation" value="POST"/>
+   	  <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
+      <input type="hidden" name="playerId" value="5"/>
+        <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
+       <input class="territoryButton" type="submit" 
+    	value="<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>"/>
    </form>
    </div>
 <% } %>
@@ -147,8 +156,6 @@
 </tr>
 <% } %>
 </table>
-</div>
-</div>
 </div>
 </body>
 </html>
