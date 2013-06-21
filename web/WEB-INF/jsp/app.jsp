@@ -88,7 +88,7 @@
    <input type="hidden" name="playerId" value="0"/>
    <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()-1%>"/>
     <input class="territoryButton" type="submit" 
-    	value=<%=(territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")")%>/>
+    	value="<%=territory.getTerritoryName() + " (" + territory.getNumberOfArmies() + ")"%>"/>
    </form>
    </div>
 <% } %>
