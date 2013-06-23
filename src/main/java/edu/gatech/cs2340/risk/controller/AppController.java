@@ -91,6 +91,7 @@ public class AppController extends HttpServlet {
 	       
                 // check current player owns the selected territory, and that the player
 	        // has armies left	
+		log.debug("Current player ID: " + currentPlayerId);
 		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
 				&& PlayerUtil.getPlayerById(players, currentPlayerId).getNumberOfArmies() > 0) {
 
