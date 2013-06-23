@@ -28,7 +28,7 @@
 
 <tr><th>Players: </th></tr>
 <% for (Player player : players){ %>
-     <tr><td> <% out.write(player.getPlayerId() + " - " + player.getPlayerName() + " has  " + player.getNumberOfArmies() + " armies."); %> </td></tr>
+     <tr><td> <% out.write(player.getPlayerId() + " - " + player.getPlayerName() + " has  " + player.getNumberOfArmies() + " armies."); %> <span id=<%out.write("player"+player.getPlayerId());%>> &#9679;</span>  </td></tr>
 <% } %>
 
 <tr><th>Current player: 
