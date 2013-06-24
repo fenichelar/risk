@@ -11,24 +11,25 @@ div.table-container {
 
 #player-container {
 	float: left;
-	margin: 60px;
 }
 
-
-.info-container {
-	width: 420px;
-	height: 170px;
+.container-display {
+	width: 460px;
+	height: 178px;
 	display: inline-block;
 	color: #555;
 	vertical-align: middle;
 	
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	margin-top: 10px;
+	margin-top: 13px;
+	margin-left: 45px;
+	margin-right: 45px;
 	
 	background-color: #fff;
 	border: 1px solid #ccc;
 }
+
 
 .territory-block {
 	padding-left: 2px;
@@ -38,6 +39,10 @@ div.table-container {
 
 .adjust-padding {
 	padding: 10px;
+}
+
+.adjust-padding-strong {
+	padding-left: 30px;
 }
 
 .adjust-left {

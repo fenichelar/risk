@@ -23,15 +23,14 @@
     <div class="text-center">
 <h1>Game of Risk</h1>
 
-<div class="table-container">
+<div class="table-container"><div class="container-display">
 <table id="player-container">
 <tr>
-<td class="adjust-left"></td>
-<th>Players: </th>
+<th class="adjust-padding-strong">Players: </th>
 
-<td class="adjust-left"></td>
+
 	<%-- Write Current Player heading --%>
-<th>Current player: 
+<th class="adjust-padding">Current player: 
 <span id=<%out.write("player"+currentPlayer.getRollOrder());%>>
 	<%out.write(currentPlayer.getPlayerName());%></span> 
 
@@ -41,16 +40,17 @@
 <tr>
 	<%-- Write Players and roll order --%>
 <% for (Player player : players){ %>
-     <tr><td> <% out.write(player.getRollOrder() + ". " + player.getPlayerName() 
-    		 + " has  " + player.getNumberOfArmies() + " armies."); %> 
+     <tr><td class="adjust-padding-strong"> <% out.write(player.getRollOrder() + ". " + player.getPlayerName() 
+    		 + " - " + player.getNumberOfArmies() + " armies"); %> 
      <span id=<%out.write("player"+player.getRollOrder());%>> &#9679;</span>  </td></tr>
 <% } %>
 
-</table>
-<div class="info-container"><table>
-<tr>
-<th class="adjust-padding">Current territory: </th>
-</tr>
+</table></div>
+<div class="container-display"><table>
+<tr><th class="adjust-padding">Current territory: </th></tr>
+<tr><th class="adjust-padding">Territory owner: </th></tr>
+<tr><th class="adjust-padding">Number of armies: </th></tr>
+<tr><th class="adjust-padding">Neighboring territories: </th></tr>
 </table></div>
 </div>
 
