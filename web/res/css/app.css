@@ -4,18 +4,44 @@ body {
 	position: relative;*/
 }
 
-#playerContainer {
-	display:inline-block;
+div.table-container {
+	width: 100%;
+	margin: 0 auto;
 }
 
-#territoryContainer {
-	width: 95px;
+#player-container {
+	float: left;
+	margin: 60px;
 }
 
-#neighborContainer {
-	width: 450px;
-	height: 200px;
-	border: 1px solid #000000;
+
+.info-container {
+	width: 420px;
+	height: 170px;
+	display: inline-block;
+	color: #555;
+	vertical-align: middle;
+	
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	margin-top: 10px;
+	
+	background-color: #fff;
+	border: 1px solid #ccc;
+}
+
+.territory-block {
+	padding-left: 2px;
+	padding-right: 2px;
+	text-align: center;
+}
+
+.adjust-padding {
+	padding: 10px;
+}
+
+.adjust-left {
+	width: 50px;
 }
 
 #player1 {

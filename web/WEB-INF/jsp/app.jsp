@@ -20,40 +20,50 @@
 	</head>
 <body>
 
-      <div class="span12 text-center">
+    <div class="text-center">
 <h1>Game of Risk</h1>
 
-<table>
+<div class="table-container">
+<table id="player-container">
 <tr>
+<td class="adjust-left"></td>
 <th>Players: </th>
 
-<td></td><td></td><td></td>
+<td class="adjust-left"></td>
 	<%-- Write Current Player heading --%>
-<th id="playerContainer">Current player: 
+<th>Current player: 
 <span id=<%out.write("player"+currentPlayer.getRollOrder());%>>
 	<%out.write(currentPlayer.getPlayerName());%></span> 
 
 </th>
 
-<td id="neighborContainer"></td>
 </tr>
 <tr>
 	<%-- Write Players and roll order --%>
 <% for (Player player : players){ %>
-     <tr id="playerContainer"><td> <% out.write(player.getRollOrder() + ". " + player.getPlayerName() 
+     <tr><td> <% out.write(player.getRollOrder() + ". " + player.getPlayerName() 
     		 + " has  " + player.getNumberOfArmies() + " armies."); %> 
      <span id=<%out.write("player"+player.getRollOrder());%>> &#9679;</span>  </td></tr>
 <% } %>
 
 </table>
+<div class="info-container"><table>
+<tr>
+<th class="adjust-padding">Current territory: </th>
+</tr>
+</table></div>
+</div>
+
 <br>
 <table>
-<tr>
-<% for (Country country : countries) { %>
-<th> <% out.write(country.getCountryName() + ":"); %> <br></th>
 
+	<%-- Write Country names --%>
+<% for (Country country : countries) { %>
+<tr><th> <% out.write(country.getCountryName() + ":"); %> <br></th>
+
+	<%-- Write Territories next to their respective countries --%>
 <% for (Territory territory : territoryMap.get(country.getCountryId())) { %>
-<td>
+<td class="territory-block">
 <% if (players.get(0).getTerritories().contains(territory)) { %>
 	<div id="player1">
 <% } %>
@@ -72,7 +82,7 @@
 <% if ( players.size() == 6 && players.get(5).getTerritories().contains(territory) ) { %>
 	<div id="player6">
 <% } %>
-  <form action="app" method="POST" id="territoryContainer">
+  <form action="app" method="POST">
     <input type="hidden" name="operation" value="POST"/>
    <input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
    <input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
@@ -84,7 +94,6 @@
 </td>
 </tr>
 <% } %>
-</table>
-</div>
+</table></div>
 </body>
 </html>
