@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.controller.AppController;
 import main.java.edu.gatech.cs2340.risk.dao.CountryDAO;
 import main.java.edu.gatech.cs2340.risk.model.Country;
-import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
 
 /**
