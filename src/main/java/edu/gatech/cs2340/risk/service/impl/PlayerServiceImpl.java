@@ -24,9 +24,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public ArrayList<Player> getPlayer(int playerId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player getPlayer(int playerId) {
+		return playerDAO.getPlayer(playerId);
 	}
 
 	@Override

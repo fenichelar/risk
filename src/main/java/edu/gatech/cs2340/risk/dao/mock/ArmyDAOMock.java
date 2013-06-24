@@ -17,14 +17,15 @@ public class ArmyDAOMock implements ArmyDAO {
 	@Override
 	public ArrayList<Player> addArmies(ArrayList<Player> players) {
 		
+		// determine number of armies each player should be initially assigned
 		int armyCount = 50 - (players.size() * 5);
 		log.debug("Each player receives " + armyCount + " armies");
-		int armyIdCount = 0;
 		
 		for (Player player : players) {
+			// assign the player's army count to the determined value
 			player.setNumberOfArmies(armyCount);
-			armyIdCount = armyIdCount + armyCount;
 		}
+		// return the updated list of players
 		return players;
 	}
 

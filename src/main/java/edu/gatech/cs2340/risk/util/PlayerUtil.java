@@ -16,6 +16,10 @@ public class PlayerUtil {
 	
 	private static final Random RANDOM = new Random();
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static int rollDie() {
 		return RANDOM.nextInt(6) + 1;
 	}

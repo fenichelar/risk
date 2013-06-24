@@ -22,7 +22,6 @@
 
       <div class="span12 text-center">
 <h1>Game of Risk</h1>
-
 <table>
 <tr>
 <th>Players: </th>
