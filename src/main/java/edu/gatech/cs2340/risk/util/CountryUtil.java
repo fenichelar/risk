@@ -12,7 +12,7 @@ public class CountryUtil {
 
 	public static Player getOwner(Country country){
 		ArrayList<Territory> territories = country.getTerritories();
-		Player owner = territories[0].getOwner();
+		Player owner = territories.get(0).getOwner();
 		for (Territory territory : territories) {
 			if (owner.equals(territory.getOwner())){
 				owner = territory.getOwner();
