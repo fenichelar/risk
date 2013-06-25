@@ -105,7 +105,7 @@ public class AppController extends HttpServlet {
 		// has armies left	
 		log.debug("Current player ID: " + currentPlayerId);
 		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
-				&& PlayerUtil.getPlayerById(players, currentPlayerId).getNumberOfArmies() > 0) {
+				&& PlayerUtil.getPlayerById(players, currentPlayerId).getAvailableArmies() > 0) {
 
 			log.debug("Territory belongs to player " + currentPlayer + ".");
 			int countryId = territory.getCountry().getCountryId();
@@ -118,7 +118,7 @@ public class AppController extends HttpServlet {
 				}
 			}
 			currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-			if (currentPlayer.getNumberOfArmies() == 0) {
+			if (currentPlayer.getAvailableArmies() == 0) {
 				log.debug("Entering secondary stage!");
 				secondaryStage = true;
 			}
@@ -147,7 +147,10 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		
 		log.debug("In doSecondaryStage()");
+		// determine the number of armies the player should receive 
 		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
+		
+		//currentPlayer.set
 		request.setAttribute("currentPlayer", currentPlayer);
 
 		request.setAttribute("players", players);

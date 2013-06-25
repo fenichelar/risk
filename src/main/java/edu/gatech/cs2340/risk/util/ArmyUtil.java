@@ -22,7 +22,7 @@ public class ArmyUtil {
 		
 		for (Player player : players) {
 			// assign the player's army count to the determined value
-			player.setNumberOfArmies(armyCount);
+			player.setAvailableArmies(armyCount);
 		}
 		// return the updated list of players
 		return players;
