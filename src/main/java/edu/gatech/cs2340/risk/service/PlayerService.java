@@ -22,7 +22,7 @@ public interface PlayerService {
 	 * @param playerId
 	 * @return
 	 */
-	public ArrayList<Player> getPlayer(int playerId); 
+	public Player getPlayer(int playerId); 
 	/**
 	 * Adds the player to the database of players and returns it
 	 * 

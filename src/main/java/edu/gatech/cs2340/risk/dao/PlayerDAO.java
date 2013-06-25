@@ -24,7 +24,7 @@ public interface PlayerDAO {
 	 * @param playerId
 	 * @return
 	 */
-	public ArrayList<Player> getPlayer(int playerId); // returns player with id = playerId
+	public Player getPlayer(int playerId); // returns player with id = playerId
 	/**
 	 * Adds the player to the database of players and returns it
 	 * 
