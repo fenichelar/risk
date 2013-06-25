@@ -1,24 +1,19 @@
-package main.java.edu.gatech.cs2340.risk.dao.mock;
+package main.java.edu.gatech.cs2340.risk.util;
 
-import java.util.ArrayList ;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.dao.ArmyDAO;
 import main.java.edu.gatech.cs2340.risk.model.Player;
-/**
- * @author Caroline Paulus
- *
- */
-public class ArmyDAOMock implements ArmyDAO {
-	
-	private static Logger log = Logger.getLogger(ArmyDAOMock.class);
 
-	@Override
-	public ArrayList<Player> addArmies(ArrayList<Player> players) {
+public class ArmyUtil {
+	
+	private static Logger log = Logger.getLogger(ArmyUtil.class);
+	
+	public static ArrayList<Player> addArmies(ArrayList<Player> players) {
 		
 		// determine number of armies each player should be initially assigned
-		int armyCount = 50 - (players.size() * 5);
+		int armyCount = 20 - (players.size() * 5); //TODO change back to 50
 		log.debug("Each player receives " + armyCount + " armies");
 		
 		for (Player player : players) {
@@ -27,6 +22,11 @@ public class ArmyDAOMock implements ArmyDAO {
 		}
 		// return the updated list of players
 		return players;
+	}
+
+	public static int getArmiesToAssign(Player currentPlayer) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

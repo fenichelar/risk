@@ -12,6 +12,7 @@
 <% HashMap<Integer, ArrayList<Territory>> territoryMap = 
 	(HashMap<Integer, ArrayList<Territory>>) request.getAttribute("territoryMap"); %>
 
+<% boolean armiesDistributed = false; %>
 <html>
 	<head>
 		<title>Game of Risk</title>
