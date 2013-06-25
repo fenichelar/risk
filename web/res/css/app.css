@@ -1,8 +1,5 @@
 /* Contains the CSS for the Risk Game page */
-body {
-	/*background:url(/risk/images/riskmap.png) no-repeat;
-	position: relative;*/
-}
+
 
 div.table-container {
 	width: 100%;

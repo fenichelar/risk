@@ -12,6 +12,7 @@
 <% HashMap<Integer, ArrayList<Territory>> territoryMap = 
 	(HashMap<Integer, ArrayList<Territory>>) request.getAttribute("territoryMap"); %>
 
+<% boolean armiesDistributed = false; %>
 <html>
 	<head>
 		<title>Game of Risk</title>
@@ -40,8 +41,10 @@
 <tr>
 	<%-- Write Players and roll order --%>
 <% for (Player player : players){ %>
-     <tr><td class="adjust-padding-strong"> <% out.write(player.getRollOrder() + ". " + player.getPlayerName() 
-    		 + " - " + player.getNumberOfArmies() + " armies"); %> 
+     <tr><td class="adjust-padding-strong"> <%
+ 	out.write(player.getRollOrder() + ". " + player.getPlayerName() 
+     		 + " - " + player.getAvailableArmies() + " armies");
+ %> 
      <span id=<%out.write("player"+player.getRollOrder());%>> &#9679;</span>  </td></tr>
 <% } %>
 

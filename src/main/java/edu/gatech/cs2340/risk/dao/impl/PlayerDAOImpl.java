@@ -42,7 +42,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	}
 
 	@Override
-	public ArrayList<Player> getPlayer(int playerId) {
+	public Player getPlayer(int playerId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
