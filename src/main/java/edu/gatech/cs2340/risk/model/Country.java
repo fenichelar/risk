@@ -8,14 +8,27 @@ import java.util.ArrayList;
  */
 public class Country {
 	
+	private int countryId;
 	private String countryName;
 	private ArrayList<Territory> territories;
 	private Player owner;
+	private int pointValue;
 	
-	public Country(String countryName, ArrayList<Territory> territories) {
+	public Country(int countryId, String countryName, ArrayList<Territory> territories, int pointValue) {
+		this.setCountryId(countryId);
 		this.setCountryName(countryName);
 		this.setTerritories(territories);
+		this.pointValue = pointValue;
+		
 		setOwner(null);
+	}
+
+	public int getCountryId() {
+		return countryId;
+	}
+
+	public void setCountryId(int countryId) {
+		this.countryId = countryId;
 	}
 
 	public String getCountryName() {
@@ -40,6 +53,11 @@ public class Country {
 
 	public void setOwner(Player owner) {
 		this.owner = owner;
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + countryName + ", ID: " + countryId + "]";
 	}
 
 }

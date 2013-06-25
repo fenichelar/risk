@@ -2,8 +2,6 @@ package main.java.edu.gatech.cs2340.risk.model;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.Random;
 
 /**
  * @author Caroline Paulus
@@ -14,11 +12,9 @@ public class Player {
 	private String playerName;
 	private int playerId;
 	private ArrayList<Territory> territories;
-	private ArrayList<Army> armies;
-	private int armyCount; //TODO necessary?
-	private Color playerColor; //TODO randomly generate?
-	private Random randGen = new Random();
-	private int rollOrder;
+	private int numberOfArmies;
+	private int rollOrder; 
+	
 
 	public Player( int playerId, String playerName) {
 		this.playerId = playerId;
@@ -56,27 +52,20 @@ public class Player {
 		territories.add(territory);
 	}
 
-	public ArrayList<Army> getArmies() {
-		return armies;
+	public int getNumberOfArmies() {
+		return numberOfArmies;
 	}
 
-	public void setArmies(ArrayList<Army> armies) {
-		this.armies = armies;
+	public void setNumberOfArmies(int numberOfArmies) {
+		this.numberOfArmies = numberOfArmies;
 	}
-
-	public void addArmy(Army army) {
-		if (armies == null) {
-			armies = new ArrayList<Army>();
-		}
-		armies.add(army);
+	
+	public void addArmy() {
+		numberOfArmies++;
 	}
-
-	public int getArmyCount() {
-		return armyCount;
-	}
-
-	public void setArmyCount(int armyCount) {
-		this.armyCount = armyCount;
+	
+	public void removeArmy() {
+		numberOfArmies--;
 	}
 
 	public void setRollOrder(int rollOrder) {
@@ -86,9 +75,22 @@ public class Player {
 	public int getRollOrder() {
 		return rollOrder;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != Player.class) {
+			return false;
+		}
+		if ( ((Player) obj).getPlayerId() == this.playerId
+				&& ((Player) obj).getPlayerName().equals(this.playerName) ) {
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
-		return "[Name: " + playerName + ", ID: " + playerId + "]";
+		return "[" + playerName + ", ID: " + playerId + "]";
 	}
 
 }

@@ -1,0 +1,11 @@
+{
+	"countryId": 6,
+	"countryName": "Australia",
+	"pointValue": 2,
+	"territories": [
+		{ "territoryId": 39, "territoryName":"Eastern Australia"},
+		{ "territoryId": 40, "territoryName":"Indonesia"},
+		{ "territoryId": 41, "territoryName":"New Guinea"},
+		{ "territoryId": 42, "territoryName":"Western Australia"}
+	]
+}

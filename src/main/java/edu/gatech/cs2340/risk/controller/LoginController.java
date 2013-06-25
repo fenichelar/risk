@@ -1,6 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
@@ -23,7 +26,8 @@ import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
 @WebServlet("")
 public class LoginController extends HttpServlet {
 
-	//private static Logger log = Logger.getLogger(RiskServlet.class); 
+	private static Logger log = Logger.getLogger(LoginController.class); 
+	
 	private AppController appController = new AppController();
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	ArrayList<Player> players = new ArrayList<Player>();
@@ -40,21 +44,24 @@ public class LoginController extends HttpServlet {
 		if (operation == null) {
 			// set equal to POST so we don't get a null pointer exception
 			operation = "POST";
-		}
-		// if a name has been changed, sends request to Put method
-		if (operation.equalsIgnoreCase("PUT")) {
-			doPut(request, response);
 			// if the user pressed Delete, sends request to Delete method
-		} else if (operation.equalsIgnoreCase("DELETE")) {
+		} if (operation.equalsIgnoreCase("DELETE")) {
 			doDelete(request, response);
 		} else if (operation.equalsIgnoreCase("LAUNCH")) {
+			// loads the game application at a different URL
 			appController.doGet(request, response);
 		} else {
 			String name = request.getParameter("name");
+			// create a new player
+			Player player = new Player(players.size() + 1, name);
+			log.debug("Creating player " + player);
 			
-			Player player = new Player(players.size(), name);
-			player.setRollOrder(PlayerUtil.rollDie());
-			playerService.addPlayer(player);
+			try {
+				playerService.addPlayer(player);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO add error handling
+				e.printStackTrace();
+			}
 			players.add(player); 
 
 			// send the updated list back to login.jsp
@@ -82,37 +89,34 @@ public class LoginController extends HttpServlet {
 	}
 
 	/**
-	 * 
+	 * Deletes a player name from the list of players and the database
 	 */
-	protected void doPut(HttpServletRequest request,
-			HttpServletResponse response)
-					throws IOException, ServletException {
-		System.out.println("In doPut()");
-		String name = (String) request.getParameter("name");
-		int id = getId(request);
-		
-		Player player = playerService.addPlayer(new Player(id, name));
-		players.add(player);
-		request.setAttribute("players", players);
-		RequestDispatcher dispatcher = 
-				getServletContext().getRequestDispatcher("/login.jsp");
-		dispatcher.forward(request,response);
-	}
-
 	protected void doDelete(HttpServletRequest request,
 			HttpServletResponse response)
 					throws IOException, ServletException {
-		System.out.println("In doDelete()");
+		log.debug("In doDelete()");
 		int id = getId(request);
 		players.remove(id);
-		// delete player from database
-		playerService.deletePlayer(id);
+		// delete player from list
+		// TODO this method has not been written yet
+		try {
+			playerService.deletePlayer(id);
+		} catch (ClassNotFoundException | SQLException e) {
+			// Add error handling
+			e.printStackTrace();
+		}
 		request.setAttribute("players", players);
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/login.jsp");
 		dispatcher.forward(request,response);
 	}
-
+	
+	/**
+	 * Returns the number at the end of the URL corresponding to current player ID
+	 * 
+	 * @param request
+	 * @return
+	 */
 	private int getId(HttpServletRequest request) {
 		String uri = request.getPathInfo();
 		// Strip off the leading slash, e.g. "/2" becomes "2"
