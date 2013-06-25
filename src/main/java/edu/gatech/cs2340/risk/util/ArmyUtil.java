@@ -6,6 +6,10 @@ import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 
+/**
+ * @author Caroline Paulus
+ *
+ */
 public class ArmyUtil {
 	
 	private static Logger log = Logger.getLogger(ArmyUtil.class);
@@ -24,9 +28,19 @@ public class ArmyUtil {
 		return players;
 	}
 
+	/**
+	 * 
+	 * @param currentPlayer
+	 * @return number of armies a player is given to distribute at the beginning of a turn
+	 */
 	public static int getArmiesToAssign(Player currentPlayer) {
-		// TODO Auto-generated method stub
-		return 0;
+		// if player has less than 9 territories, assign 3
+		int armiesFromTerritories = ( currentPlayer.getTerritories().size() < 9 
+				? 3 : currentPlayer.getTerritories().size()/3 );
+		// get armies earned from owning countries
+		int armiesFromCountries = 0; // TODO get number from countryutil
+		int totalArmies = armiesFromTerritories + armiesFromCountries;
+		return totalArmies;
 	}
 
 }
