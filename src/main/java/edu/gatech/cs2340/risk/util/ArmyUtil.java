@@ -25,7 +25,7 @@ public class ArmyUtil {
 	public static ArrayList<Player> addArmies(ArrayList<Player> players) {
 		
 		// determine number of armies each player should be initially assigned
-		int armyCount = 20 - (players.size() * 5); //FIXME change back to 50
+		int armyCount = 50 - (players.size() * 5); 
 		log.debug("Each player receives " + armyCount + " armies");
 		
 		for (Player player : players) {
