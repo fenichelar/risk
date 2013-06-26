@@ -2,5 +2,8 @@
 	"territoryId": 32,
 	"territoryName": "Kamchatka",
 	"country": { "countryId": 5, "countryName": "Asia" },
-	"numberOfArmies": 1
+	"numberOfArmies": 1,
+	"neighboringTerritories": [
+		{ "territoryId": 1, "territoryName": "Alaska" },
+	]
 }

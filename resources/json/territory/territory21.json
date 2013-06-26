@@ -2,5 +2,8 @@
 	"territoryId": 21,
 	"territoryName": "Iceland",
 	"country": { "countryId": 4, "countryName": "Europe" },
-	"numberOfArmies": 1	
+	"numberOfArmies": 1,
+	"neighboringTerritories" [
+		{ "territoryId": 5, "territoryName": "Greenland" }
+	]
 }
