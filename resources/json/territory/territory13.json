@@ -5,5 +5,7 @@
 	"numberOfArmies": 1,
 	"neighboringTerritories": [
 		{ "territoryId": 3, "territoryName": "Central America" },
+		{ "territoryId": 11, "territoryName": "Brazil" },
+		{ "territoryId": 12, "territoryName": "Peru" }
 	]
 }
