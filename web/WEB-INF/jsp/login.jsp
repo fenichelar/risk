@@ -29,13 +29,13 @@
           <% for (int id = 0; id < players.size(); id ++) { %>
           <div class="span4">
             <% Player player = players.get(id); %>
-            <form action="/risk<%= id %>" method="POST" class="prevSubmissionName">
+            <form action="/risk" method="POST" class="prevSubmissionName">
               <!-- hidden operation element to simulate HTTP PUT method in server -->
               <input type="hidden" name="operation" value="PUT"/>
               <input type="hidden" name="name" value="<%= player.getPlayerName() %>"/>
               <span class="input-large uneditable-input"><%= player.getPlayerName() %></span>
             </form>
-            <form action="/risk<%= id %>" method="POST">
+            <form action="/risk" method="POST">
               <!-- hidden operation element to simulate HTTP DELETE method in server -->
               <input type="hidden" name="operation" value="DELETE"/>
               <input class="btn btn-danger span2 offset1" type="submit" value="Delete"/>

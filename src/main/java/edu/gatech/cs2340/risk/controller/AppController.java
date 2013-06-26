@@ -1,7 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.io.IOException; 
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,10 +16,10 @@ import org.apache.log4j.Logger;
 import main.java.edu.gatech.cs2340.risk.model.Country;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
-import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
+import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 
 /** 
@@ -34,7 +33,6 @@ public class AppController extends HttpServlet {
 	private static Logger log = Logger.getLogger(AppController.class);
 
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
-	private ArmyServiceImpl armyService = new ArmyServiceImpl();
 	private CountryServiceImpl countryService = new CountryServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 
@@ -42,7 +40,9 @@ public class AppController extends HttpServlet {
 	private Player currentPlayer;
 	private ArrayList<Country> countries;
 	private HashMap<Integer, ArrayList<Territory>> territoryMap;
-	
+
+	private boolean secondaryStage = false;
+
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -52,18 +52,18 @@ public class AppController extends HttpServlet {
 		log.debug("In doGet()");
 		players = playerService.getPlayers();
 		players = PlayerUtil.setPlayerOrder(players);
-		
+
 		currentPlayer = players.get(0);
 		log.debug("Current player: " + currentPlayer);
 		request.setAttribute("currentPlayer", currentPlayer);
-		
-		players = armyService.addArmies(players);
+
+		players = ArmyUtil.addArmies(players);
 		players = territoryService.addTerritories(players);
 		request.setAttribute("players", players);
 
 		countries = countryService.getCountries();
 		request.setAttribute("countries", countries);
-		
+
 		territoryMap = new HashMap<Integer, ArrayList<Territory>>();
 		for (Country country : countries) {
 			ArrayList<Territory> territories = 
@@ -83,17 +83,29 @@ public class AppController extends HttpServlet {
 					throws IOException, ServletException {
 
 		log.debug("In doPost()");
+		if (! secondaryStage) {
+			doInitialStage(request, response);
+		}
+		else {
+			doSecondaryStage(request, response);
+		}
+	}
+
+	protected void doInitialStage(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		log.debug("In doInitialStage()");
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = territoryService.getTerritory(territoryId);
 		log.debug("Current territory: " + territory);
-                
+
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-	       
-                // check current player owns the selected territory, and that the player
-	        // has armies left	
+
+		// check current player owns the selected territory, and that the player
+		// has armies left	
 		log.debug("Current player ID: " + currentPlayerId);
 		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
-				&& PlayerUtil.getPlayerById(players, currentPlayerId).getNumberOfArmies() > 0) {
+				&& PlayerUtil.getPlayerById(players, currentPlayerId).getAvailableArmies() > 0) {
 
 			log.debug("Territory belongs to player " + currentPlayer + ".");
 			int countryId = territory.getCountry().getCountryId();
@@ -105,27 +117,55 @@ public class AppController extends HttpServlet {
 					PlayerUtil.getPlayerById(players, currentPlayerId).removeArmy();
 				}
 			}
-                       currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-                       currentPlayerId = currentPlayer.getPlayerId();
+			currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
+			if (currentPlayer.getAvailableArmies() == 0) {
+				log.debug("Entering secondary stage!");
+				secondaryStage = true;
+			}
+			currentPlayerId = currentPlayer.getPlayerId();
 
 		}
 		else {
 			log.debug("Territory does not belong to player");
 		}
 
-
 		log.debug("New current player: " + currentPlayer);
 		request.setAttribute("currentPlayer", currentPlayer);
-		
+
 		request.setAttribute("players", players);
-		
+
 		// send the updated list back to login.jsp
 		request.setAttribute("countries", countries);
 		request.setAttribute("territoryMap", territoryMap);
 		request.setAttribute("currentPlayerId", currentPlayerId);
-                RequestDispatcher dispatcher = 
+		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
+	
+	protected void doSecondaryStage(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		log.debug("In doSecondaryStage()");
+		// determine the number of armies the player should receive 
+		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
+		
+		//currentPlayer.set
+		request.setAttribute("currentPlayer", currentPlayer);
+
+		request.setAttribute("players", players);
+
+		// send the updated list back to login.jsp
+		request.setAttribute("countries", countries);
+		request.setAttribute("territoryMap", territoryMap);
+		
+		int currentPlayerId = currentPlayer.getPlayerId();
+		request.setAttribute("currentPlayerId", currentPlayerId);
+		
+		RequestDispatcher dispatcher = 
+				getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
+	}
+
 
 }
