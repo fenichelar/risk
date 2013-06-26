@@ -7,10 +7,6 @@
 <% ArrayList<Player> players = 
 (ArrayList<Player>) request.getAttribute("players"); %>
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
-<% ArrayList<Country> countries = 
-(ArrayList<Country>) request.getAttribute("countries"); %>
-<% HashMap<Integer, ArrayList<Territory>> territoryMap = 
-(HashMap<Integer, ArrayList<Territory>>) request.getAttribute("territoryMap"); %>
 
 <html>
 <head>
@@ -43,7 +39,7 @@
 		<div class="<% if (oddOffset && i == 0) out.write("offset1 "); out.write(span); %> player <% out.write("player" + i); %> <% if (currentPlayer.equals(players.get(i))) out.write("active"); %>">
 			<% out.write(
 			"<h3>" + players.get(i).getPlayerName()  + "</h3>"
-		  + "<h4>" + players.get(i).getNumberOfArmies() + " armies</h4>"); %>
+		  + "<h4>" + players.get(i).getAvailableArmies() + " armies</h4>"); %>
 		</div>
 
 	<% } %>

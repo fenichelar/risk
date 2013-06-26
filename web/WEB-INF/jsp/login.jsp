@@ -38,6 +38,7 @@
             <form action="/risk" method="POST">
               <!-- hidden operation element to simulate HTTP DELETE method in server -->
               <input type="hidden" name="operation" value="DELETE"/>
+              <input type="hidden" name="id" value="<%= id %>"/>
               <input class="btn btn-danger span2 offset1" type="submit" value="Delete"/>
             </form>
           </div>

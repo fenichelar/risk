@@ -15,10 +15,17 @@ public class ArmyUtil {
 	
 	private static Logger log = Logger.getLogger(ArmyUtil.class);
 	
+	/**
+	 * Calculates number of armies to assign based on number of players 
+	 * Updates each player's availableArmies and returns all players
+	 * 
+	 * @param players
+	 * @return list of players with armies assigned
+	 */
 	public static ArrayList<Player> addArmies(ArrayList<Player> players) {
 		
 		// determine number of armies each player should be initially assigned
-		int armyCount = 20 - (players.size() * 5); //TODO change back to 50
+		int armyCount = 50 - (players.size() * 5); 
 		log.debug("Each player receives " + armyCount + " armies");
 		
 		for (Player player : players) {
@@ -30,6 +37,7 @@ public class ArmyUtil {
 	}
 
 	/**
+	 * Determines the number of armies a player has earned and returns it
 	 * 
 	 * @param currentPlayer
 	 * @return number of armies a player is given to distribute at the beginning of a turn
