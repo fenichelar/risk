@@ -45,7 +45,7 @@
 
           <div class="span4">
             <% if (players.size() < 6) { %>
-            <form action="/risk" method="POST" class="newSubmissionName">
+            <form action="/risk" method="POST" class="newSubmissionName" name="newPlayer">
               <input class="input-large" type="text" name="name"/>
               <input class="btn btn-primary span2 offset1" type="submit" value="Add"/>
             </form>
@@ -61,8 +61,7 @@
 
 
           <form action="risk/app" method="GET" class="span12 text-center">
-            <a class="btn btn-success btn-large" id="btnStart" href="javascript:;"
-            	 onclick="parentNode.submit();"><%="Start Game"%></a>
+            <a class="btn btn-success btn-large" id="btnStart" href="javascript:;" onclick="parentNode.submit();"><%="Start Game"%></a>
           </form>
         </div>
 
@@ -74,4 +73,9 @@
     </div>
   </div>
 </body>
+
+<script type="text/javascript" language="JavaScript">
+    document.forms['newPlayer'].elements['name'].focus();
+</script>
+
 </html>

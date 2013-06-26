@@ -76,6 +76,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 				if (territories.size() > 0) {
 					int territoryId = rand.nextInt(territories.size());
 					player.addTerritory(territories.get(territoryId));
+					territories.get(territoryId).setOwner(player);
 					territories.remove(territoryId);
 				}
 				else {
