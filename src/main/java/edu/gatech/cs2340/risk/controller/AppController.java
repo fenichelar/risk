@@ -33,13 +33,10 @@ public class AppController extends HttpServlet {
 	private static Logger log = Logger.getLogger(AppController.class);
 
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
-	private CountryServiceImpl countryService = new CountryServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 
 	private ArrayList<Player> players; 
 	private Player currentPlayer;
-	private ArrayList<Country> countries;
-	private HashMap<Integer, ArrayList<Territory>> territoryMap;
 
 	private boolean secondaryStage = false;
 
@@ -60,17 +57,6 @@ public class AppController extends HttpServlet {
 		players = ArmyUtil.addArmies(players);
 		players = territoryService.addTerritories(players);
 		request.setAttribute("players", players);
-
-		countries = countryService.getCountries();
-		request.setAttribute("countries", countries);
-
-		territoryMap = new HashMap<Integer, ArrayList<Territory>>();
-		for (Country country : countries) {
-			ArrayList<Territory> territories = 
-					territoryService.getTerritories(country.getCountryId());
-			territoryMap.put(country.getCountryId(), territories);
-		}
-		request.setAttribute("territoryMap", territoryMap);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -110,7 +96,7 @@ public class AppController extends HttpServlet {
 			log.debug("Territory belongs to player " + currentPlayer + ".");
 			int countryId = territory.getCountry().getCountryId();
 			log.debug("Country ID: " + countryId);
-			for ( Territory t : territoryMap.get(countryId) ) {
+			for ( Territory t : currentPlayer.getTerritories() ) {
 				if (t.equals(territory)) {
 					log.debug("Adding army to territory " + territory);
 					t.addArmy();
@@ -121,6 +107,8 @@ public class AppController extends HttpServlet {
 			if (currentPlayer.getAvailableArmies() == 0) {
 				log.debug("Entering secondary stage!");
 				secondaryStage = true;
+				 doSecondaryStage(request, response);
+				 return;
 			}
 			currentPlayerId = currentPlayer.getPlayerId();
 
@@ -135,8 +123,6 @@ public class AppController extends HttpServlet {
 		request.setAttribute("players", players);
 
 		// send the updated list back to login.jsp
-		request.setAttribute("countries", countries);
-		request.setAttribute("territoryMap", territoryMap);
 		request.setAttribute("currentPlayerId", currentPlayerId);
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -150,14 +136,10 @@ public class AppController extends HttpServlet {
 		// determine the number of armies the player should receive 
 		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
 		
-		//currentPlayer.set
+		currentPlayer.setAvailableArmies(armiesToAssign);
 		request.setAttribute("currentPlayer", currentPlayer);
 
 		request.setAttribute("players", players);
-
-		// send the updated list back to login.jsp
-		request.setAttribute("countries", countries);
-		request.setAttribute("territoryMap", territoryMap);
 		
 		int currentPlayerId = currentPlayer.getPlayerId();
 		request.setAttribute("currentPlayerId", currentPlayerId);
