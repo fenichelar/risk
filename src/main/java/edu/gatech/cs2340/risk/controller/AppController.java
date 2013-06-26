@@ -121,6 +121,8 @@ public class AppController extends HttpServlet {
 			if (currentPlayer.getAvailableArmies() == 0) {
 				log.debug("Entering secondary stage!");
 				secondaryStage = true;
+				 doSecondaryStage(request, response);
+				 return;
 			}
 			currentPlayerId = currentPlayer.getPlayerId();
 
@@ -150,7 +152,7 @@ public class AppController extends HttpServlet {
 		// determine the number of armies the player should receive 
 		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
 		
-		//currentPlayer.set
+		currentPlayer.setAvailableArmies(armiesToAssign);
 		request.setAttribute("currentPlayer", currentPlayer);
 
 		request.setAttribute("players", players);

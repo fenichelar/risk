@@ -67,10 +67,10 @@ public class PlayerDAOMock implements PlayerDAO {
 	}
 
 	@Override
-	public Player deletePlayer(int playerId) throws SQLException,
+	public void deletePlayer(int playerId) throws SQLException,
 			ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		RiskMockUtil.deleteJsonFromPackage(playerId);
 	}
 
 }
