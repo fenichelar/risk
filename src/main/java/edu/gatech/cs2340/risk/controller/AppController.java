@@ -40,6 +40,8 @@ public class AppController extends HttpServlet {
 
 	private boolean secondaryStage = false;
 
+	private Integer directionsList;
+
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -57,6 +59,10 @@ public class AppController extends HttpServlet {
 		players = ArmyUtil.addArmies(players);
 		players = territoryService.addTerritories(players);
 		request.setAttribute("players", players);
+
+		directionsList = 1;
+		request.setAttribute("directionsList", directionsList);
+
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -79,6 +85,9 @@ public class AppController extends HttpServlet {
 
 	protected void doInitialStage(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		directionsList = 0;
+		request.setAttribute("directionsList", directionsList);
 
 		log.debug("In doInitialStage()");
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
