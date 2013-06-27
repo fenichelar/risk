@@ -4,6 +4,8 @@
 	"country": { "countryId": 4, "countryName": "Europe" },
 	"numberOfArmies": 1,
 	"neighboringTerritories" [
-		{ "territoryId": 5, "territoryName": "Greenland" }
+		{ "territoryId": 5, "territoryName": "Greenland" },
+		{ "territoryId": 20, "territoryName": "Great Britain" },
+		{ "territoryId": 23, "territoryName": "Scandinavia" }
 	]
 }

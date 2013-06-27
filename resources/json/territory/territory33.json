@@ -4,6 +4,8 @@
 	"country": { "countryId": 5, "countryName": "Asia" },
 	"numberOfArmies": 1,
 	"neighboringTerritories": [
-		{ "territoryId": 16, "territoryName": "Egypt" }
+		{ "territoryId": 16, "territoryName": "Egypt" },
+		{ "territoryId": 24, "territoryName": "Southern Europe" },
+		{ "territoryId": 25, "territoryName": "Ukraine" }
 	]
 }
