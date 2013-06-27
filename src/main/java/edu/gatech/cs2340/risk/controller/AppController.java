@@ -2,8 +2,6 @@ package main.java.edu.gatech.cs2340.risk.controller;
 
 import java.io.IOException; 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.model.Country;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
-import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
@@ -108,13 +104,13 @@ public class AppController extends HttpServlet {
 				}
 			}
 			currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-			if (currentPlayer.getAvailableArmies() == 0) {
+			currentPlayerId = currentPlayer.getPlayerId();
+			if (currentPlayer.getAvailableArmies() < 1) {
 				log.debug("Entering secondary stage!");
 				stage = 2;
 				 assignSecondaryArmies(request, response);
 				 return;
 			}
-			currentPlayerId = currentPlayer.getPlayerId();
 
 		}
 		else {
@@ -136,7 +132,7 @@ public class AppController extends HttpServlet {
 	protected void assignSecondaryArmies(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		// determine the number of armies the player should receive 
+		// determine the number of armies the player should receive
 		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
 		
 		currentPlayer.setAvailableArmies(armiesToAssign);
@@ -176,9 +172,6 @@ public class AppController extends HttpServlet {
 				stage = 3;
 			}
 		}
-		request.setAttribute("currentPlayer", currentPlayer);
-
-		request.setAttribute("players", players);
 		
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -233,6 +226,5 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
-
 
 }
