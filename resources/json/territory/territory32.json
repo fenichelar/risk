@@ -5,5 +5,9 @@
 	"numberOfArmies": 1,
 	"neighboringTerritories": [
 		{ "territoryId": 1, "territoryName": "Alaska" },
+		{ "territoryId": 30, "territoryName": "Irkutsk" },
+		{ "territoryId": 31, "territoryName": "Japan" },
+		{ "territoryId": 34, "territoryName": "Mongolia" },
+		{ "territoryId": 38, "territoryName": "Yakutsk" }
 	]
 }
