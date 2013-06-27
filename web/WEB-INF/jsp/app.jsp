@@ -7,8 +7,10 @@
 <% ArrayList<Player> players = 
 (ArrayList<Player>) request.getAttribute("players"); %>
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
+<% int stage = (Integer) request.getAttribute("stage"); %>
 <% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
+<% String message = (String) request.getAttribute("message"); %>
 
 <html>
 <head>
@@ -47,6 +49,37 @@
 	<% } %>
 
 </div>
+<!-- This can be "cleaned up" at some point but I had wanted to get something down to test with -->
+<% if (stage == 1) { // JULIAN!! make this pretty :) %>
+<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
+ <% out.write(message); %>
+</div>
+<% } %>
+
+<% if (stage == 2) { // this one too! %>
+<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
+<% out.write(message); %>
+</div>
+<% } %>
+
+<% if (stage == 3) { 
+	// and this one!  maybe similar to http://www.game-remakes.com/play.php?id=476 ?  %>
+<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
+ <% out.write(message); %>
+</div>
+<% } %>
+
+<% if (stage == 4) { %>
+<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
+ <% out.write(message); %>
+</div>
+<% } %>
+
+<% if (stage == 5) { %>
+<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
+ <% out.write("this shouldn't be happening"); // this hasn't been written yet %>
+</div>
+<% } %>
 
 <div class="row-fluid" id="map">
 
