@@ -104,13 +104,13 @@ public class AppController extends HttpServlet {
 				}
 			}
 			currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-			if (currentPlayer.getAvailableArmies() == 0) {
+			currentPlayerId = currentPlayer.getPlayerId();
+			if (currentPlayer.getAvailableArmies() < 1) {
 				log.debug("Entering secondary stage!");
 				secondaryStage = true;
 				 doSecondaryStage(request, response);
 				 return;
 			}
-			currentPlayerId = currentPlayer.getPlayerId();
 
 		}
 		else {
@@ -134,20 +134,44 @@ public class AppController extends HttpServlet {
 		
 		log.debug("In doSecondaryStage()");
 		// determine the number of armies the player should receive 
-		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
-		
-		currentPlayer.setAvailableArmies(armiesToAssign);
 		request.setAttribute("currentPlayer", currentPlayer);
-
+		if (currentPlayer.getAvailableArmies() == 0) {
+			int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
+			currentPlayer.setAvailableArmies(armiesToAssign);
+		}
+		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
-		
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+                Territory territory = territoryService.getTerritory(territoryId);
 		int currentPlayerId = currentPlayer.getPlayerId();
 		request.setAttribute("currentPlayerId", currentPlayerId);
-		
-		RequestDispatcher dispatcher = 
-				getServletContext().getRequestDispatcher("/app.jsp");
-		dispatcher.forward(request,response);
-	}
+		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
+                                && PlayerUtil.getPlayerById(players, currentPlayerId).getAvailableArmies() > 0) {
+                        for ( Territory t : currentPlayer.getTerritories() ) {
+                                if (t.equals(territory)) {
+                                        log.debug("Adding army to territory " + territory);
+                                        t.addArmy();
+                                        PlayerUtil.getPlayerById(players, currentPlayerId).removeArmy();
+                                }
+                        }
+		        // Need to move to next player if we just placed the current player's 
+		        // last army.
+			if (currentPlayer.getAvailableArmies() == 0) {
+				currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
+				currentPlayerId = currentPlayer.getPlayerId();
+ 
+			}
 
+                }
+		request.setAttribute("currentPlayer", currentPlayer);
+                request.setAttribute("players", players);
+                request.setAttribute("currentPlayerId", currentPlayerId);
+                RequestDispatcher dispatcher =
+                                getServletContext().getRequestDispatcher("/app.jsp");
+                dispatcher.forward(request,response);
+
+
+
+	}
 
 }
