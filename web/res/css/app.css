@@ -5,13 +5,6 @@
 	margin: 0 auto;
 }
 
-/* This can be removed/replaced whenever!! Temporary placeholder */
-#temp-display-box {
-	width: 200px;
-	border: 1px solid #000;
-	margin-left: -100px;
-	padding: 6px;
-}
 
 #players div.player {
 	background: #ffffff; /* Old browsers */
@@ -380,4 +373,10 @@ div.territory.territory41 {
 div.territory.territory42 {
 	top: 490px;
 	left: 780px;
+}
+
+/* MISCELLANEOUS */
+
+form.cancelAttack {
+	display: inline;
 }

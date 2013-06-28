@@ -15,13 +15,18 @@
 		case 0: break;
 		case 1: directionsText = "Click on a Territory of Your Color to add one Army to it.";
 				break;
+		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
+								+ currentPlayer.getAvailableArmies() + " additional " 
+								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
+				break;
+		case 3: directionsText = "Select a Territory to Attack from";
+				break;
 	}
 %>
 
 <% int stage = (Integer) request.getAttribute("stage"); %>
 <% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
-<% String message = (String) request.getAttribute("message"); %>
 
 
 <html>
@@ -37,6 +42,12 @@
     		$('#directions').modal('show');
 		});
 	<% } %>
+	<% if (stage == 5) { %>
+		$(function() {
+    		$('#attackDialog').modal('show');
+		});
+	<% } %>
+
 	</script>
 </head>
 <body>
@@ -51,6 +62,27 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div>
+	</div>
+
+	<div id="attackDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="directionsLabel" aria-hidden="true">
+		<div class="modal-header">
+			<h3 id="directionsLabel">Attack a Territory</h3>
+		</div>
+		<form action="app" method="POST">
+		<div class="modal-body">
+			<h2><% if (stage == 5) out.write(attackingTerritory.getTerritoryName()); %></h2>
+			<p>Select number of armies to attack with</p>
+			<input type="text" name="numArmies">
+			<hr/>
+			<p>Select the neighboring Territory to Attack</p>
+		</div>
+		<div class="modal-footer">
+			<input type="submit" class="btn btn-primary" value="Attack!" /> 
+		</form>
+			<form class ="cancelAttack" action="app" method="POST">
+				<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
+			</form>
 		</div>
 	</div>
 
@@ -83,37 +115,7 @@
 	<% } %>
 
 </div>
-<!-- This can be "cleaned up" at some point but I had wanted to get something down to test with -->
-<% if (stage == 1) { // JULIAN!! make this pretty :) %>
-<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
- <% out.write(message); %>
-</div>
-<% } %>
 
-<% if (stage == 2) { // this one too! %>
-<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
-<% out.write(message); %>
-</div>
-<% } %>
-
-<% if (stage == 3) { 
-	// and this one!  maybe similar to http://www.game-remakes.com/play.php?id=476 ?  %>
-<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
- <% out.write(message); %>
-</div>
-<% } %>
-
-<% if (stage == 4) { %>
-<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
- <% out.write(message); %>
-</div>
-<% } %>
-
-<% if (stage == 5) { %>
-<div id="temp-display-box"> <!-- TEMPORARY DISPLAY BECAUSE I'M NOT GOOD AT CSS -->
- <% out.write("this shouldn't be happening"); // this hasn't been written yet %>
-</div>
-<% } %>
 
 <div class="row-fluid" id="map">
 
