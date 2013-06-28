@@ -36,10 +36,11 @@ public class AppController extends HttpServlet {
 	private Player currentPlayer;
 
 	private Territory attackingTerritory = null, defendingTerritory = null;
-	String message = "";
 
-	private int stage = 1;
+	private int stage;
 
+
+	private Integer directionsList;
 
 
 	@Override
@@ -66,14 +67,17 @@ public class AppController extends HttpServlet {
 		log.debug("Adding territories to players");
 		players = territoryService.addTerritories(players);
 		
-		message = currentPlayer.getPlayerName() 
-				+ ", select a territory to reinforce with additional armies.";
 
 		// set attributes to be displayed in the game
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
+
+		stage = 1;
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
+
+		directionsList = 1;
+		request.setAttribute("directionsList", directionsList);
+
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -87,15 +91,20 @@ public class AppController extends HttpServlet {
 
 		log.debug("In doPost()");
 		switch (stage) {
-		case 1: distributeInitialArmies(request, response);
-		break;
-		case 2: distributeAdditionalArmies(request, response);
-		break;
+		case 1: directionsList = 0;
+				distributeInitialArmies(request, response);
+				break;
+		case 2: directionsList = 0;
+				distributeAdditionalArmies(request, response);
+				break;
 		case 3: selectAttackingTerritory(request, response);
-		break;
-		case 4: selectDefendingTerritory(request, response);
-		break;
-		case 5: doAttack(request, response);
+				break;
+		case 4: directionsList = 0;
+				selectDefendingTerritory(request, response);
+				break;
+		case 5: directionsList = 0;
+				doAttack(request, response);
+				break;
 		}
 	}
 
@@ -111,7 +120,10 @@ public class AppController extends HttpServlet {
 	protected void distributeInitialArmies(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		request.setAttribute("directionsList", directionsList);
+
 		log.debug("In distributeInitialArmies()");
+
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = territoryService.getTerritory(territoryId);
 		log.debug("Current territory: " + territory);
@@ -150,13 +162,9 @@ public class AppController extends HttpServlet {
 
 		log.debug("New current player: " + currentPlayer);
 		request.setAttribute("currentPlayer", currentPlayer);
-		
-		message = currentPlayer.getPlayerName() 
-				+ ", select a territory to reinforce with additional armies.";
 
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -180,15 +188,12 @@ public class AppController extends HttpServlet {
 				+ armiesToAssign + " additional armies");
 
 		currentPlayer.setAvailableArmies(armiesToAssign);
-		
-		message = currentPlayer.getPlayerName() + ", you have " 
-				+ currentPlayer.getAvailableArmies() + " additional " 
-				+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
 
+		directionsList = 2;
+		request.setAttribute("directionsList", directionsList);
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -228,20 +233,15 @@ public class AppController extends HttpServlet {
 			}
 			if (currentPlayer.getAvailableArmies() == 0) {
 				stage = 3;
-				message = currentPlayer.getPlayerName() + ", select" 
-						+ " a territory to attack from or press the Attacks "
-						+ "Complete button (Note: need to make this button!)";
+				directionsList = 3;
 			}
-			else {
-				message = currentPlayer.getPlayerName() + ", you have " 
-						+ currentPlayer.getAvailableArmies() + " additional " 
-						+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
-			}
+			
 		}
+
+		request.setAttribute("directionsList", directionsList);
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -261,6 +261,8 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		log.debug("In selectAttackingTerritory()");
+
+		request.setAttribute("directionsList", directionsList);
 
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = territoryService.getTerritory(territoryId);
@@ -285,19 +287,16 @@ public class AppController extends HttpServlet {
 						log.debug("Attacking territory: " + t);
 						attackingTerritory = t;
 						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 4");
-						stage = 4;
+						log.debug("Changing stage to 5");
+						stage = 5;
 					}
 				}
 			}
 		}
-		message = currentPlayer.getPlayerName() + ", select a territory "
-				+ " to attack from " + attackingTerritory.getTerritoryName();
 		
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -347,14 +346,10 @@ public class AppController extends HttpServlet {
 				}
 			}
 		}
-		message = "The selected territory cannot be attacked from " 
-				+ attackingTerritory.getTerritoryName() + ". Select another " +
-						"territory or press the Attacks Complete button";
 		
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
-		request.setAttribute("message", message);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
