@@ -22,6 +22,11 @@
 	border-radius: 0 0 15px 15px;
 }
 
+span .sliderContext {
+	padding: 20px;
+	font-weight: bold;
+}
+
 /* PLAYER COLORS */
 
 #players div.player0 {
