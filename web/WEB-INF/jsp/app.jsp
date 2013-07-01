@@ -116,7 +116,6 @@
 
 </div>
 
-
 <div class="row-fluid" id="map">
 
 	<% for (Player player : players) { %>
