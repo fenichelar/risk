@@ -13,13 +13,13 @@
 	String directionsText = "";
 	switch (directionsList) {
 		case 0: break;
-		case 1: directionsText = "Click on a Territory of Your Color to add one Army to it.";
+		case 1: directionsText = "Click on a territory of your color to add one army to it.";
 				break;
 		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
 								+ currentPlayer.getAvailableArmies() + " additional " 
 								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
 				break;
-		case 3: directionsText = "Select a Territory to Attack from";
+		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
 				break;
 	}
 %>
@@ -43,7 +43,7 @@
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 5) { %>
+	<% if (stage == 4) { %>
 		$(function() {
 			//$('#attackDialog').modal('show');
 			$('#attackDialog').modal({
@@ -72,14 +72,15 @@
 		</div>
 	</div>
 
+<!-- Why is the first part necessary? -->
 	<%
-
+	
 	String territoryName = "Not Available";
 	int minArmies = 1;
 	int maxArmies = 10;
 	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
-	if (stage == 5) {
+	if (stage == 4) {
 		territoryName = attackingTerritory.getTerritoryName();
 		maxArmies = attackingTerritory.getNumberOfArmies();
 		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
@@ -118,7 +119,7 @@
 	<% 
 		String span = "span" + (12/players.size());
 		boolean oddOffset = false;
-		
+
 		if (players.size()%2 != 0) {
 			span = "span" + (10/players.size());
 			oddOffset = true;

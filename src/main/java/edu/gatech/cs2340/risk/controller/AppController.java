@@ -66,7 +66,7 @@ public class AppController extends HttpServlet {
 		// distribute territories to players
 		log.debug("Adding territories to players");
 		players = territoryService.addTerritories(players);
-		
+
 
 		// set attributes to be displayed in the game
 		request.setAttribute("currentPlayer", currentPlayer);
@@ -235,7 +235,7 @@ public class AppController extends HttpServlet {
 				stage = 3;
 				directionsList = 3;
 			}
-			
+
 		}
 
 		request.setAttribute("directionsList", directionsList);
@@ -287,13 +287,13 @@ public class AppController extends HttpServlet {
 						log.debug("Attacking territory: " + t);
 						attackingTerritory = t;
 						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 5");
-						stage = 5;
+						log.debug("Changing stage to 4");
+						stage = 4;
 					}
 				}
 			}
 		}
-		
+
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
@@ -312,8 +312,6 @@ public class AppController extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-
-	/*
 	protected void selectDefendingTerritory(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -349,7 +347,7 @@ public class AppController extends HttpServlet {
 				}
 			}
 		}
-		
+
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
@@ -358,7 +356,7 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
-	*/
+
 
 	/**
 	 * Stage 5
@@ -373,14 +371,14 @@ public class AppController extends HttpServlet {
 
 		log.debug("In doAttack()");
 		log.debug("This method has not been written yet. Moving to next player.");
-		
+
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
 		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-		
+
 		log.debug("Changing stage to Stage 2");
 		stage = 2;
 		assignAdditionalArmies(request, response);
-		
+
 	}
 
 }
