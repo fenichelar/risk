@@ -287,8 +287,8 @@ public class AppController extends HttpServlet {
 						log.debug("Attacking territory: " + t);
 						attackingTerritory = t;
 						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 5");
-						stage = 5;
+						log.debug("Changing stage to 4");
+						stage = 4;
 					}
 				}
 			}
@@ -312,8 +312,6 @@ public class AppController extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-
-	/*
 	protected void selectDefendingTerritory(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -358,7 +356,7 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
-	*/
+
 
 	/**
 	 * Stage 5
