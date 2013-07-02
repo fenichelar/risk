@@ -5,10 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Properties;
-
-import main.java.edu.gatech.cs2340.risk.exception.PackageNotFoundException;
-
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -31,6 +27,7 @@ public class RiskMockUtil {
 		Object obj = null;
 
 		try {
+			//String fileLoc = "./resources/json/" + file;
 			String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/" + file;
 			BufferedReader br = new BufferedReader(new FileReader(fileLoc));
 
@@ -85,6 +82,17 @@ public class RiskMockUtil {
 		}
 		log.debug("Number of files in " + fileLoc + ": " + count);
 		return count;
+	}
+	
+	public static void deleteJsonFromPackage(int playerId) {
+		String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/player";
+		File folder = new File(fileLoc);
+		for (File file : folder.listFiles()) {
+			if (file.getName().equals("player" + playerId)) {
+				log.debug("Deleting file " + file.toString());
+				file.delete();
+			}
+		}
 	}
 
 	public static void restoreDefaults() {
