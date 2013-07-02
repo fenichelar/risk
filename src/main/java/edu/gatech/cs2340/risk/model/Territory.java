@@ -61,11 +61,28 @@ public class Territory {
         public void setNumberOfArmies(int numberOfArmies) {
     	    this.numberOfArmies = numberOfArmies;
         }
+        
+        public boolean isOccupied(){
+        	if(numberOfArmies > 0){
+        		return true;
+        	}
+        	return false;
+        }
 	
         public void addArmy() {
         	numberOfArmies++;
         }
+        
+        public void addArmies(int a){
+        	numberOfArmies += a;
+        }
     
+        public void removeArmy(){
+        	numberOfArmies--;
+        }
+        public void removeArmies(int a){
+        	numberOfArmies -= a;
+        }
 	public ArrayList<Territory> getNeighboringTerritories() {
 		return neighboringTerritories;
 	}
