@@ -43,7 +43,7 @@
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 4) { %>
+	<% if (stage == 5) { %>
 		$(function() {
 			//$('#attackDialog').modal('show');
 			$('#attackDialog').modal({
@@ -80,7 +80,7 @@
 	int maxArmies = 10;
 	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
-	if (stage == 4) {
+	if (stage == 5) {
 		territoryName = attackingTerritory.getTerritoryName();
 		maxArmies = attackingTerritory.getNumberOfArmies();
 		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
