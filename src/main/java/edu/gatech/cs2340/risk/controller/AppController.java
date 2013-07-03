@@ -99,9 +99,9 @@ public class AppController extends HttpServlet {
 				break;
 		case 3: selectAttackingTerritory(request, response);
 				break;
-		/*case 4: directionsList = 0;
+		case 4: directionsList = 0;
 				selectDefendingTerritory(request, response);
-				break;*/
+				break;
 		case 5: directionsList = 0;
 				doAttack(request, response);
 				break;
@@ -287,8 +287,8 @@ public class AppController extends HttpServlet {
 						log.debug("Attacking territory: " + t);
 						attackingTerritory = t;
 						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 5");
-						stage = 5;
+						log.debug("Changing stage to 4");
+						stage = 4;
 					}
 				}
 			}
@@ -317,44 +317,31 @@ public class AppController extends HttpServlet {
 
 		log.debug("In selectDefendingTerritory()");
 
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory territory = territoryService.getTerritory(territoryId);
-		log.debug("Current territory: " + territory);
+		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
 
-		Player defendingPlayer = PlayerUtil.getPlayerByTerritory(players, territory);
+		if (cancelled) {
+			stage = 3;
+			directionsList = 3;
+			request.setAttribute("currentPlayer", currentPlayer);
+			request.setAttribute("players", players);
+			request.setAttribute("stage", stage);
 
-		// make sure current player is not attacking one of their own territories
-		if (! defendingPlayer.equals(currentPlayer)) {
-			// make sure current territory is a neighbor of the attacking territory
-			if (attackingTerritory.getNeighboringTerritories().contains(territory)) {
-
-				// make sure the territory being updated is the current version of the territory
-				territory = TerritoryUtil.getTerritoryById(defendingPlayer, territoryId);
-				if (territory.getNumberOfArmies() > 1) {
-
-					log.debug("Territory belongs to player " + defendingPlayer + ".");
-					for ( Territory t : defendingPlayer.getTerritories() ) {
-						if (t.equals(territory)) {
-							log.debug("Defending territory: " + t);
-							defendingTerritory = t;
-							request.setAttribute("defendingTerritory", defendingTerritory);
-							log.debug("Changing stage to 5");
-							stage = 5;
-							doAttack(request, response);
-							return;
-						}
-					}
-				}
-			}
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/app.jsp");
+			dispatcher.forward(request,response);
 		}
 
-		request.setAttribute("currentPlayer", currentPlayer);
-		request.setAttribute("players", players);
-		request.setAttribute("stage", stage);
+		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
+		Territory defendingTerritory = territoryService.getTerritory(neighboringTerritoryId);
+		log.debug("Defending territory: " + defendingTerritory);
 
-		RequestDispatcher dispatcher = 
-				getServletContext().getRequestDispatcher("/app.jsp");
-		dispatcher.forward(request,response);
+		Player defendingPlayer = PlayerUtil.getPlayerByTerritory(players, defendingTerritory);
+
+		request.setAttribute("defendingTerritory", defendingTerritory);
+		log.debug("Changing stage to 5");
+		stage = 5;
+		doAttack(request, response);
+
+		return;
 	}
 
 

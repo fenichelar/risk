@@ -25,51 +25,51 @@
 
 /* PLAYER COLORS */
 
-#players div.player0 {
+#players div.player1 {
 	border-bottom-color: #a5d5a8;
 }
 
-#players div.player0.active {
+#players div.player1.active {
 	border-bottom-color: #38B00A;
 }
 
-#players div.player1 {
+#players div.player2 {
 	border-bottom-color: #87AFC7;
 }
 
-#players div.player1.active {
+#players div.player2.active {
 	border-bottom-color: #126fc6;
 }
 
-#players div.player2 {
+#players div.player3 {
 	border-bottom-color: #d5a5a5;
 }
 
-#players div.player2.active {
+#players div.player3.active {
 	border-bottom-color: #da0000;
 }
 
-#players div.player3 {
+#players div.player4 {
 	border-bottom-color: #FFF68F;
 }
 
-#players div.player3.active {
+#players div.player4.active {
 	border-bottom-color: #FFF00A;
 }
 
-#players div.player4 {
+#players div.player5 {
 	border-bottom-color: #947EC4;
 }
 
-#players div.player4.active {
+#players div.player5.active {
 	border-bottom-color: #7408BC;
 }
 
-#players div.player5 {
+#players div.player6 {
 	border-bottom-color: #b6ebea;
 }
 
-#players div.player5.active {
+#players div.player6.active {
 	border-bottom-color: #00d7da;
 }
 
@@ -103,64 +103,64 @@ div.territory form .territoryButton{
 	box-shadow:         0px 1px 5px rgba(50, 50, 50, 0.75);
 }
 
-div.territory.player0 form{
+div.territory.player1 form{
 	height: 52px;
 	width: 35px;
 	background: url('../img/greenPlayer.png');
 }
 
-div.territory.player0 form .territoryButton {
-	background: #24c612;
-}
-
-div.territory.player1 form{
-	height: 52px;
-	width: 35px;
-	background: url('../img/bluePlayer.png');
-}
-
 div.territory.player1 form .territoryButton {
-	background: #126fc6;
+	background: #24c612;
 }
 
 div.territory.player2 form{
 	height: 52px;
 	width: 35px;
-	background: url('../img/redPlayer.png');
+	background: url('../img/bluePlayer.png');
 }
 
 div.territory.player2 form .territoryButton {
-	background: #c61216;
+	background: #126fc6;
 }
 
 div.territory.player3 form{
+	height: 52px;
+	width: 35px;
+	background: url('../img/redPlayer.png');
+}
+
+div.territory.player3 form .territoryButton {
+	background: #c61216;
+}
+
+div.territory.player4 form{
 	height: 52px;
 	width: 35px;
 	background: url('../img/yellowPlayer.png');
 }
 
 
-div.territory.player3 form .territoryButton {
-	background: #c6b312;
-}
-
-div.territory.player4 form{
-	height: 52px;
-	width: 35px;
-	background: url('../img/purplePlayer.png');
-}
-
 div.territory.player4 form .territoryButton {
-	background: #7e12c6;
+	background: #c6b312;
 }
 
 div.territory.player5 form{
 	height: 52px;
 	width: 35px;
-	background: url('../img/cyanPlayer.png');
+	background: url('../img/purplePlayer.png');
 }
 
 div.territory.player5 form .territoryButton {
+	background: #7e12c6;
+}
+
+div.territory.player6 form{
+	height: 52px;
+	width: 35px;
+	background: url('../img/cyanPlayer.png');
+}
+
+div.territory.player6 form .territoryButton {
 	background: #12c692;
 }
 
@@ -379,12 +379,52 @@ div.territory.territory42 {
 
 /* ATTACK DIALOG */
 
-form.cancelAttack {
+#attackDialog form.cancelAttack {
 	display: inline;
 }
 
 
-span.sliderContext {
+#attackDialog span.sliderContext {
 	padding: 20px;
 	font-weight: bold;
+}
+
+
+#attackDialog .modal-footer {
+    margin-bottom: -20px;
+}
+
+#attackDialog label.radio {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 15px 10px 30px;
+    background: #CCC;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    color: #FFF;
+	text-shadow: #000 0px 0px 5px;
+}
+
+#attackDialog label.radio.owner1 {
+	background: #24c612;
+}
+
+#attackDialog label.radio.owner2 {
+	background: #126fc6;
+}
+
+#attackDialog label.radio.owner3 {
+	background: #c61216;
+}
+
+#attackDialog label.radio.owner4 {
+	background: #c6b312;
+}
+
+#attackDialog label.radio.owner5 {
+	background: #7e12c6;
+}
+
+#attackDialog label.radio.owner6 {
+	background: #12c692;
 }

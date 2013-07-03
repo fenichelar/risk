@@ -40,6 +40,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 			// add territories to list 
 			territories.add(territory);
 		}
+
 		log.debug("Returning territories " + territories);
 		return territories;
 	}
@@ -96,6 +97,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 					Territory territory = territories.get(territoryIndex);
 					
 					// add the territory located at that index to the player's list of territories
+					territory.setOwner(player);
 					player.addTerritory(territory);
 					// remove that territory from the list of territories
 					territories.remove(territoryIndex);
@@ -115,6 +117,17 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		// return the updated list of players 
 		return players;
 	}
+
+	/*
+	public ArrayList<Territory> setNeighboringTerritories(ArrayList<Territory> territories) {
+		for (Territory territory : territories) {
+			for (Territory neighboringTerritory : territory.getNeighboringTerritories()) {
+				neighboringTerritory = TerritoryUtil.getTerritoryById(territories, neighboringTerritory.getTerritoryId());
+			}
+		}
+		return territories;
+	}
+	*/
 
 	@Override
 	public Player addTerritories(Player player) {

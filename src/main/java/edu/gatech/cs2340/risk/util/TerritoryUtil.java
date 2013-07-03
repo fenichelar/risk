@@ -31,4 +31,14 @@ public class TerritoryUtil {
 		}
 		return null;
 	}
+
+	public static Territory getTerritoryById(ArrayList<Territory> territories, int territoryId) {
+
+		for (Territory territory : territories) {
+			if (territory.getTerritoryId() == territoryId) {
+				return territory;
+			}
+		}
+		return null;
+	}
 }

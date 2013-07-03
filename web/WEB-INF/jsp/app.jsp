@@ -1,5 +1,6 @@
 <%@ page import="main.java.edu.gatech.cs2340.risk.model.*" %>
 <%@ page import="main.java.edu.gatech.cs2340.risk.service.impl.*" %>
+<%@ page import="main.java.edu.gatech.cs2340.risk.util.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 
@@ -13,19 +14,20 @@
 	String directionsText = "";
 	switch (directionsList) {
 		case 0: break;
-		case 1: directionsText = "Click on a territory of your color to add one army to it.";
+		case 1: directionsText = "Click on a Territory of Your Color to add one Army to it.";
 				break;
 		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
 								+ currentPlayer.getAvailableArmies() + " additional " 
 								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
 				break;
-		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
+		case 3: directionsText = "Select a Territory to Attack from";
 				break;
 	}
 %>
 
 <% int stage = (Integer) request.getAttribute("stage"); %>
 <% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
+<% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
 
 
 <html>
@@ -38,12 +40,12 @@
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap-slider.js" ></script>
 	<script type="text/javascript">
-	<% if (directionsList != 0 && stage != 5) { %>
+	<% if (directionsList != 0 && stage != 4) { %>
 		$(function() {
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 5) { %>
+	<% if (stage == 4) { %>
 		$(function() {
 			//$('#attackDialog').modal('show');
 			$('#attackDialog').modal({
@@ -72,15 +74,14 @@
 		</div>
 	</div>
 
-<!-- Why is the first part necessary? -->
 	<%
-	
+
 	String territoryName = "Not Available";
 	int minArmies = 1;
 	int maxArmies = 10;
 	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
-	if (stage == 5) {
+	if (stage == 4) {
 		territoryName = attackingTerritory.getTerritoryName();
 		maxArmies = attackingTerritory.getNumberOfArmies();
 		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
@@ -101,11 +102,29 @@
 			<span class="sliderContext maxArmies"><%= maxArmies %></span>
 			<hr/>
 			<p>Select the neighboring Territory to Attack</p>
+
+			<% for (Player player : players) { %>
+				<% if (!player.equals(currentPlayer)) { %>
+					<% for (Territory neighboringTerritory : neighboringTerritories) { %>
+
+						<% neighboringTerritory = TerritoryUtil.getTerritoryById(player, neighboringTerritory.getTerritoryId()); %>
+
+						<% if (neighboringTerritory != null) { %>
+							<label class="radio neighboringTerritory<%= neighboringTerritory.getTerritoryId() %> owner<%= player.getPlayerId() %>">
+		  						<input type="radio" name="neighboringTerritoryId" value="<%= neighboringTerritory.getTerritoryId() %>" checked>
+		  						<span><%= neighboringTerritory.getTerritoryName() %> (<%= neighboringTerritory.getNumberOfArmies() %>)</span>
+							</label>
+						<% } %>
+					<% } %>
+				<% } %>
+			<% } %>
 		</div>
 		<div class="modal-footer">
+			<input type="hidden" name="cancelled" value="false" />
 			<input type="submit" class="btn btn-primary" value="Attack!" /> 
 		</form>
 			<form class ="cancelAttack" action="app" method="POST">
+				<input type="hidden" name="cancelled" value="true" />
 				<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
 			</form>
 		</div>
@@ -119,7 +138,7 @@
 	<% 
 		String span = "span" + (12/players.size());
 		boolean oddOffset = false;
-
+		
 		if (players.size()%2 != 0) {
 			span = "span" + (10/players.size());
 			oddOffset = true;
@@ -129,7 +148,7 @@
 	%>
 	<% for (Player player : players) { %>
 
-		<div class="<% if (oddOffset) out.write("offset1 "); out.write(span); %> player <% out.write("player" + (player.getPlayerId()-1)); %> <% if (currentPlayer.equals(player)) out.write("active"); %>">
+		<div class="<% if (oddOffset) out.write("offset1 "); out.write(span); %> player <% out.write("player" + (player.getPlayerId())); %> <% if (currentPlayer.equals(player)) out.write("active"); %>">
 			<% out.write(
 			"<h3>" + player.getPlayerName()  + "</h3>"
 		  + "<h4>" + player.getAvailableArmies() + " armies</h4>"); %>
@@ -145,7 +164,7 @@
 
 	<% for (Player player : players) { %>
 		<% for (Territory territory : player.getTerritories()) { %>
-			<div class="territory <% out.write("player" + (player.getPlayerId()-1)); %> <% out.write("territory" + territory.getTerritoryId()); %>">
+			<div class="territory <% out.write("player" + (player.getPlayerId())); %> <% out.write("territory" + territory.getTerritoryId()); %>">
 				<form action="app" method="POST">
 					<input type="hidden" name="operation" value="POST"/>
 					<input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>
