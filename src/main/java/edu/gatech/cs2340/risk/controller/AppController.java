@@ -287,8 +287,8 @@ public class AppController extends HttpServlet {
 						log.debug("Attacking territory: " + t);
 						attackingTerritory = t;
 						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 4");
-						stage = 4;
+						log.debug("Changing stage to 5");
+						stage = 5;
 					}
 				}
 			}

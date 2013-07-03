@@ -22,10 +22,6 @@
 	border-radius: 0 0 15px 15px;
 }
 
-span .sliderContext {
-	padding: 20px;
-	font-weight: bold;
-}
 
 /* PLAYER COLORS */
 
@@ -381,8 +377,14 @@ div.territory.territory42 {
 	left: 780px;
 }
 
-/* MISCELLANEOUS */
+/* ATTACK DIALOG */
 
 form.cancelAttack {
 	display: inline;
+}
+
+
+span.sliderContext {
+	padding: 20px;
+	font-weight: bold;
 }
