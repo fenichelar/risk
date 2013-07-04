@@ -36,6 +36,7 @@ public class AppController extends HttpServlet {
 	private Player currentPlayer;
 
 	private Territory attackingTerritory = null, defendingTerritory = null;
+	private int attackingArmyNum = 0;
 
 	private int stage;
 
@@ -332,12 +333,12 @@ public class AppController extends HttpServlet {
 		}
 
 		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		Territory defendingTerritory = territoryService.getTerritory(neighboringTerritoryId);
+		defendingTerritory = territoryService.getTerritory(neighboringTerritoryId);
 		log.debug("Defending territory: " + defendingTerritory);
 
-		Player defendingPlayer = PlayerUtil.getPlayerByTerritory(players, defendingTerritory);
+		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
+		//log.debug("Attacking Army Number: " + attackingArmyNum);
 
-		request.setAttribute("defendingTerritory", defendingTerritory);
 		log.debug("Changing stage to 5");
 		stage = 5;
 		doAttack(request, response);
@@ -358,6 +359,8 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		log.debug("In doAttack()");
+		
+		/*
 		log.debug("This method has not been written yet. Moving to next player.");
 
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
@@ -366,6 +369,45 @@ public class AppController extends HttpServlet {
 		log.debug("Changing stage to Stage 2");
 		stage = 2;
 		assignAdditionalArmies(request, response);
+		*/
+
+		int[] attackingArmyDice = PlayerUtil.rollDice(Math.min(attackingArmyNum, 3));
+		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
+
+		int attackingDiceMax = 0;
+		int defendingDiceMax = 0;
+
+		for (int i = 0; i < Math.max(attackingArmyDice.length, defendingArmyDice.length); i++) {
+			if (i < defendingArmyDice.length) {
+				if (defendingArmyDice[i] > defendingDiceMax) {
+					defendingDiceMax = defendingArmyDice[i];
+				}
+			}
+			if (i < attackingArmyDice.length) {
+				if (attackingArmyDice[i] > attackingDiceMax) {
+					attackingDiceMax = attackingArmyDice[i];
+				}
+			}
+		}
+
+		boolean attackerWin = attackingDiceMax > defendingDiceMax;
+		String attackResultsMessage = "";
+
+		if (attackerWin) {
+			attackResultsMessage = "Attacker Wins!";
+			log.debug(attackResultsMessage);
+		} else {
+			attackResultsMessage = "Attack Unsuccessful.";
+			log.debug(attackResultsMessage);
+		}
+
+		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
+		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
+
+		log.debug("Changing stage to Stage 2");
+		stage = 2;
+		assignAdditionalArmies(request, response);
+
 
 	}
 

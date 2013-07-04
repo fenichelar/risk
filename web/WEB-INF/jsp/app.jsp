@@ -78,12 +78,12 @@
 
 	String territoryName = "Not Available";
 	int minArmies = 1;
-	int maxArmies = 10;
+	int maxArmies = 2;
 	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
 	if (stage == 4) {
 		territoryName = attackingTerritory.getTerritoryName();
-		maxArmies = attackingTerritory.getNumberOfArmies();
+		maxArmies = attackingTerritory.getNumberOfArmies() - 1;
 		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
 	}
 
@@ -98,7 +98,7 @@
 			<h2><%= territoryName %></h2>
 			<p>Select number of armies to attack with</p>
 			<span class="sliderContext minArmies"><%= minArmies %></span>
-			<input type="text" class="slider" value="" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
+			<input type="text" name="attackingArmyNum" class="slider" value="" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
 			<span class="sliderContext maxArmies"><%= maxArmies %></span>
 			<hr/>
 			<p>Select the neighboring Territory to Attack</p>
