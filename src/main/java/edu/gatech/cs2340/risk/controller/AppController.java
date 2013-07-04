@@ -322,6 +322,7 @@ public class AppController extends HttpServlet {
 		if (cancelled) {
 			stage = 3;
 			directionsList = 3;
+			request.setAttribute("directionsList", directionsList);
 			request.setAttribute("currentPlayer", currentPlayer);
 			request.setAttribute("players", players);
 			request.setAttribute("stage", stage);

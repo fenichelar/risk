@@ -120,10 +120,12 @@
 			<% } %>
 		</div>
 		<div class="modal-footer">
+			<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
 			<input type="hidden" name="cancelled" value="false" />
 			<input type="submit" class="btn btn-primary" value="Attack!" /> 
 		</form>
 			<form class ="cancelAttack" action="app" method="POST">
+				<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
 				<input type="hidden" name="cancelled" value="true" />
 				<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
 			</form>
