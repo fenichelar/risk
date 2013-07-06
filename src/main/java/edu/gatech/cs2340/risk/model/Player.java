@@ -48,7 +48,17 @@ public class Player {
 		if (territories == null) {
 			territories = new ArrayList<Territory>();
 		}
+		territory.setOwner(this);
 		territories.add(territory);
+	}
+
+	public void removeTerritory(Territory territory) {
+		for (int i = 0; i < territories.size(); i++) {
+			if (territories.get(i).equals(territory)) {
+				territories.remove(i);
+				break;
+			}
+		}
 	}
 
 	public int getAvailableArmies() {

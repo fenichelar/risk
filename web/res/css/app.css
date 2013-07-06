@@ -377,16 +377,17 @@ div.territory.territory42 {
 	left: 780px;
 }
 
+/* SLIDER */
+
+span.sliderContext {
+	padding: 20px;
+	font-weight: bold;
+}
+
 /* ATTACK DIALOG */
 
 #attackDialog form.cancelAttack {
 	display: inline;
-}
-
-
-#attackDialog span.sliderContext {
-	padding: 20px;
-	font-weight: bold;
 }
 
 

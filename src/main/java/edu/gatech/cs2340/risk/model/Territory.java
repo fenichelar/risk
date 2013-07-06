@@ -58,8 +58,13 @@ public class Territory {
     	    return numberOfArmies;
         }
     
+
         public void setNumberOfArmies(int numberOfArmies) {
     	    this.numberOfArmies = numberOfArmies;
+        }
+
+        public void removeNumberOfArmies(int numberOfArmies) {
+        	this.numberOfArmies -= numberOfArmies;
         }
 	
         public void addArmy() {
@@ -88,7 +93,7 @@ public class Territory {
 	
 	@Override
 	public String toString() {
-		return "[" + territoryName + ", ID: " + territoryId + "]";
+		return "[" + territoryName + ", ID: " + territoryId + ", OWNER: " + owner + "]";
 	}
 
 }

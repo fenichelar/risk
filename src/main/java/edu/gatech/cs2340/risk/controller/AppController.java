@@ -37,10 +37,9 @@ public class AppController extends HttpServlet {
 
 	private Territory attackingTerritory = null, defendingTerritory = null;
 	private int attackingArmyNum = 0;
+	private int defendingArmyNum = 0;
 
 	private int stage;
-
-
 	private Integer directionsList;
 
 
@@ -107,6 +106,10 @@ public class AppController extends HttpServlet {
 				stage = 2;
 				assignAdditionalArmies(request, response);
 				break;
+		case 6: directionsList = 0;
+				stage = 6;
+				selectDefendingNumberOfArmies(request, response);
+				break;
 		}
 	}
 
@@ -126,28 +129,23 @@ public class AppController extends HttpServlet {
 
 		log.debug("In distributeInitialArmies()");
 
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory territory = territoryService.getTerritory(territoryId);
-		log.debug("Current territory: " + territory);
-
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-
-		// check current player owns the selected territory, and that the player
-		// has armies left	
+		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
+	
 		log.debug("Current player ID: " + currentPlayerId);
 
-		// player's list of territories contains the territory AND player has armies left 
-		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
-				&& PlayerUtil.getPlayerById(players, currentPlayerId).getAvailableArmies() > 0) {
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
+		
 
-			log.debug("Territory belongs to player " + currentPlayer + ".");
-			for ( Territory t : currentPlayer.getTerritories() ) {
-				if (t.equals(territory)) {
-					log.debug("Adding army to territory " + territory);
-					t.addArmy();
-					PlayerUtil.getPlayerById(players, currentPlayerId).removeArmy();
-				}
-			}
+		// player's list of territories contains the territory AND player has armies left 
+		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
+			
+			log.debug("Current territory: " + territory);
+			
+			territory.addArmy();
+			currentPlayer.removeArmy();
+
 			currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
 			currentPlayerId = currentPlayer.getPlayerId();
 			if (currentPlayer.getAvailableArmies() < 1) {
@@ -157,8 +155,7 @@ public class AppController extends HttpServlet {
 				return;
 			}
 
-		}
-		else {
+		} else {
 			log.debug("Territory does not belong to player");
 		}
 
@@ -215,29 +212,27 @@ public class AppController extends HttpServlet {
 
 		log.debug("In distributeAdditionalArmies()");
 
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory territory = territoryService.getTerritory(territoryId);
-		log.debug("Current territory: " + territory);
-
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
+		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
+	
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
 
 		// player's list of territories contains the territory AND player has armies left
-		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
-				&& PlayerUtil.getPlayerById(players, currentPlayerId).getAvailableArmies() > 0) {
+		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
 
-			log.debug("Territory belongs to player " + currentPlayer + ".");
-			for ( Territory t : currentPlayer.getTerritories() ) {
-				if (t.equals(territory)) {
-					log.debug("Adding army to territory " + territory);
-					t.addArmy();
-					PlayerUtil.getPlayerById(players, currentPlayerId).removeArmy();
-				}
-			}
+			log.debug("Current territory: " + territory);
+			
+			territory.addArmy();
+			currentPlayer.removeArmy();
+
 			if (currentPlayer.getAvailableArmies() == 0) {
 				stage = 3;
 				directionsList = 3;
 			}
 
+		} else {
+			log.debug("Territory does not belong to player");
 		}
 
 		request.setAttribute("directionsList", directionsList);
@@ -266,34 +261,24 @@ public class AppController extends HttpServlet {
 
 		request.setAttribute("directionsList", directionsList);
 
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory territory = territoryService.getTerritory(territoryId);
-		log.debug("Current territory: " + territory);
-
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
+		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
+	
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
 
-		// check current player owns the selected territory, and that the territory
-		// has armies left	
-		log.debug("Current player ID: " + currentPlayerId);
-		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)) {
+		if (territory != null && territory.getNumberOfArmies() > 1) {
 
-			// make sure the territory being updated is the current version of the territory
-			territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
+			log.debug("Current territory: " + territory);
 
-			// make sure territory has enough armies to attack with
-			if (territory.getNumberOfArmies() > 1) {
-
-				log.debug("Territory belongs to player " + currentPlayer + ".");
-				for ( Territory t : currentPlayer.getTerritories() ) {
-					if (t.equals(territory)) {
-						log.debug("Attacking territory: " + t);
-						attackingTerritory = t;
-						request.setAttribute("attackingTerritory", attackingTerritory);
-						log.debug("Changing stage to 4");
-						stage = 4;
-					}
-				}
-			}
+			attackingTerritory = territory;
+			log.debug("Attacking territory: " + attackingTerritory);
+			request.setAttribute("attackingTerritory", attackingTerritory);
+			log.debug("Changing stage to 4");
+			stage = 4;
+			
+		} else {
+			log.debug("Territory not satisfactory");
 		}
 
 		request.setAttribute("currentPlayer", currentPlayer);
@@ -340,11 +325,16 @@ public class AppController extends HttpServlet {
 		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
 		//log.debug("Attacking Army Number: " + attackingArmyNum);
 
-		log.debug("Changing stage to 5");
-		stage = 5;
-		doAttack(request, response);
+		log.debug("Changing stage to 6");
+		stage = 6;
+		request.setAttribute("defendingTerritory", defendingTerritory);
+		request.setAttribute("directionsList", directionsList);
+		request.setAttribute("currentPlayer", currentPlayer);
+		request.setAttribute("players", players);
+		request.setAttribute("stage", stage);
 
-		return;
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
 	}
 
 
@@ -360,30 +350,13 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		log.debug("In doAttack()");
-		
-		/*
-		log.debug("This method has not been written yet. Moving to next player.");
-
-		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-
-		log.debug("Changing stage to Stage 2");
-		stage = 2;
-		assignAdditionalArmies(request, response);
-		*/
 
 		int[] attackingArmyDice = PlayerUtil.rollDice(Math.min(attackingArmyNum, 3));
-		log.debug("Attacking Armies: " + attackingArmyNum);
 		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
-		log.debug("Defending Army Num: " + defendingTerritory.getNumberOfArmies());
 
-		for (int dieValue : attackingArmyDice) {
-			log.debug("Attack Die: " + dieValue);
-		}
+		log.debug("Attacking Armies " + attackingTerritory.getNumberOfArmies());
+		log.debug("Defending Armies " + defendingTerritory.getNumberOfArmies());
 
-		for (int dieValue : defendingArmyDice) {
-			log.debug("Defending Die: " + dieValue);
-		}
 
 		int attackingDiceMax = 0;
 		int defendingDiceMax = 0;
@@ -405,12 +378,36 @@ public class AppController extends HttpServlet {
 		String attackResultsMessage = "";
 
 		if (attackerWin) {
-			attackResultsMessage = "Attacker Wins!";
+			attackResultsMessage = "Attacker wins! ";
+			if (defendingArmyNum > 1) {
+				defendingTerritory.removeNumberOfArmies(2);
+				attackResultsMessage += "Two Armies Removed.";
+			} else {
+				defendingTerritory.removeNumberOfArmies(1);
+				attackResultsMessage += "One Army Removed.";
+			}
+			if (defendingTerritory.getNumberOfArmies() < 1) {
+				attackResultsMessage += "Territory acquired.";
+				defendingTerritory.getOwner().removeTerritory(defendingTerritory);
+				attackingTerritory.getOwner().addTerritory(defendingTerritory);
+				defendingTerritory.setNumberOfArmies(attackingArmyNum);
+				attackingTerritory.removeNumberOfArmies(attackingArmyNum);
+			} 
 			log.debug(attackResultsMessage);
 		} else {
-			attackResultsMessage = "Attack Unsuccessful.";
+			attackResultsMessage = "Attack unsuccessful. ";
+			if (attackingArmyNum > 1) {
+				attackingTerritory.removeNumberOfArmies(2);
+				attackResultsMessage += "Two Armies Removed.";
+			} else {
+				attackingTerritory.removeNumberOfArmies(1);
+				attackResultsMessage += "One Army Removed.";
+
+			}
 			log.debug(attackResultsMessage);
 		}
+
+
 
 		request.setAttribute("directionsList", directionsList);
 		request.setAttribute("currentPlayer", currentPlayer);
@@ -424,6 +421,28 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 
+
+	}
+
+	/**
+	 * Stage 6
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected void selectDefendingNumberOfArmies(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		defendingArmyNum = Integer.parseInt(request.getParameter("defendingArmyNum"));
+
+		log.debug("Changing stage to 5");
+		stage = 5;
+		doAttack(request, response);
+		
+
+		return;
 
 	}
 
