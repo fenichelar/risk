@@ -428,3 +428,73 @@ div.territory.territory42 {
 #attackDialog label.radio.owner6 {
 	background: #12c692;
 }
+
+/* ATTACK RESULTS */
+
+h4#attackResultsMessage {
+	float: left;
+}
+
+div.dice {
+	padding: 0px 20px;
+}
+
+.dice div {
+	width: 120px;
+	height: 120px;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	box-shadow: #888 0px 0px 5px;
+	-webkit-box-shadow: #888 0px 0px 5px;
+    -moz-box-shadow: #888 0px 0px 5px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.attackRolls div.value1 {
+	background: url("../img/diceRed.jpg");
+}
+
+.defenceRolls div.value1 {
+	background: url("../img/diceWhite.jpg");
+}
+
+.attackRolls div.value2 {
+	background: url("../img/diceRed.jpg") 242px 0px;
+}
+
+.defenceRolls div.value2 {
+	background: url("../img/diceWhite.jpg") 242px 0px;
+}
+
+.attackRolls div.value3 {
+	background: url("../img/diceRed.jpg") 120px 0px;
+}
+
+.defenceRolls div.value3 {
+	background: url("../img/diceWhite.jpg") 120px 0px; 
+}
+
+.attackRolls div.value4 {
+	background: url("../img/diceRed.jpg") 0px 120px;
+}
+
+.defenceRolls div.value4 {
+	background: url("../img/diceWhite.jpg") 0px 120px;
+}
+
+.attackRolls div.value5 {
+	background: url("../img/diceRed.jpg") 243px 120px;
+}
+
+.defenceRolls div.value5 {
+	background: url("../img/diceWhite.jpg") 243px 120px;
+}
+
+.attackRolls div.value6 {
+	background: url("../img/diceRed.jpg") 120px 120px;
+}
+
+.defenceRolls div.value6 {
+	background: url("../img/diceWhite.jpg") 120px 120px;
+}

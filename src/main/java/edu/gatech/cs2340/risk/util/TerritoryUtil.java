@@ -32,12 +32,11 @@ public class TerritoryUtil {
 		return null;
 	}
 
-	public static Territory getTerritoryById(ArrayList<Territory> territories, int territoryId) {
-
-		for (Territory territory : territories) {
-			if (territory.getTerritoryId() == territoryId) {
-				return territory;
-			}
+	public static Territory getTerritoryById(ArrayList<Player> players, int territoryId) {
+		Territory territory;
+		for (Player player : players) {
+			territory = getTerritoryById(player, territoryId);
+			if (territory != null) return territory;
 		}
 		return null;
 	}

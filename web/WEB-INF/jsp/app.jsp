@@ -40,7 +40,7 @@
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap-slider.js" ></script>
 	<script type="text/javascript">
-	<% if (directionsList != 0 && stage != 4) { %>
+	<% if (!( stage > 3) && (directionsList != 0 )) { %>
 		$(function() {
     		$('#directions').modal('show');
 		});
@@ -54,6 +54,16 @@
 
 			});
     		$('.slider').slider();
+		});
+	<% } %>
+	<% if (stage == 5) { %>
+		$(function() {
+			//$('#attackDialog').modal('show');
+			$('#attackResultsDialog').modal({
+  				keyboard : false,
+  				show : true
+
+			});
 		});
 	<% } %>
 
@@ -89,7 +99,7 @@
 
 	%>
 
-	<div id="attackDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="directionsLabel" aria-hidden="true">
+	<div id="attackDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="directionsLabel" aria-hidden="true" data-backdrop="static">
 		<div class="modal-header">
 			<h3 id="directionsLabel">Attack a Territory</h3>
 		</div>
@@ -98,7 +108,7 @@
 			<h2><%= territoryName %></h2>
 			<p>Select number of armies to attack with</p>
 			<span class="sliderContext minArmies"><%= minArmies %></span>
-			<input type="text" name="attackingArmyNum" class="slider" value="" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
+			<input type="text" name="attackingArmyNum" class="slider" value="1" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
 			<span class="sliderContext maxArmies"><%= maxArmies %></span>
 			<hr/>
 			<p>Select the neighboring Territory to Attack</p>
@@ -128,6 +138,44 @@
 				<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
 				<input type="hidden" name="cancelled" value="true" />
 				<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
+			</form>
+		</div>
+	</div>
+
+	<% int[] attackingArmyDice = new int[0]; %>
+	<% int[] defendingArmyDice = new int[0]; %>
+	<% String attackResultsMessage = ""; %>
+
+	<% 
+		if (stage == 5) {
+			attackingArmyDice = (int[])request.getAttribute("attackingArmyDice");
+			defendingArmyDice = (int[])request.getAttribute("defendingArmyDice");
+			attackResultsMessage = (String)request.getAttribute("attackResultsMessage");
+		}
+	%>
+
+	<div id="attackResultsDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="directionsLabel" aria-hidden="true" data-backdrop="static">
+		<div class="modal-header">
+			<h3 id="directionsLabel">Attack Results</h3>
+		</div>
+		<div class="modal-body">
+			<!--<h2>Attacker Rolled</h2>-->
+			<div class="row attackRolls dice">
+				<% for (int dieValue : attackingArmyDice) { %>
+					<div class="value<%= dieValue %>"></div>
+				<% } %>
+			</div>
+			<!--<h2>Defender Rolled</h2>-->
+			<div class="row defenceRolls dice">
+				<% for (int dieValue : defendingArmyDice) { %>
+					<div class="value<%= dieValue %>"></div>
+				<% } %>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<h4 id="attackResultsMessage"><%= attackResultsMessage %></h4>
+			<form method="POST" action="app">
+				<input type="submit" class="btn btn-primary" value="Continue" />
 			</form>
 		</div>
 	</div>

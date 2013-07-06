@@ -104,7 +104,8 @@ public class AppController extends HttpServlet {
 				selectDefendingTerritory(request, response);
 				break;
 		case 5: directionsList = 0;
-				doAttack(request, response);
+				stage = 2;
+				assignAdditionalArmies(request, response);
 				break;
 		}
 	}
@@ -333,7 +334,7 @@ public class AppController extends HttpServlet {
 		}
 
 		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		defendingTerritory = territoryService.getTerritory(neighboringTerritoryId);
+		defendingTerritory = TerritoryUtil.getTerritoryById(players, neighboringTerritoryId);
 		log.debug("Defending territory: " + defendingTerritory);
 
 		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
@@ -372,7 +373,17 @@ public class AppController extends HttpServlet {
 		*/
 
 		int[] attackingArmyDice = PlayerUtil.rollDice(Math.min(attackingArmyNum, 3));
+		log.debug("Attacking Armies: " + attackingArmyNum);
 		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
+		log.debug("Defending Army Num: " + defendingTerritory.getNumberOfArmies());
+
+		for (int dieValue : attackingArmyDice) {
+			log.debug("Attack Die: " + dieValue);
+		}
+
+		for (int dieValue : defendingArmyDice) {
+			log.debug("Defending Die: " + dieValue);
+		}
 
 		int attackingDiceMax = 0;
 		int defendingDiceMax = 0;
@@ -401,12 +412,17 @@ public class AppController extends HttpServlet {
 			log.debug(attackResultsMessage);
 		}
 
-		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
+		request.setAttribute("directionsList", directionsList);
+		request.setAttribute("currentPlayer", currentPlayer);
+		request.setAttribute("players", players);
+		request.setAttribute("stage", stage);
+		request.setAttribute("attackingArmyDice", attackingArmyDice);
+		request.setAttribute("defendingArmyDice", defendingArmyDice);
+		request.setAttribute("attackResultsMessage", attackResultsMessage);
 
-		log.debug("Changing stage to Stage 2");
-		stage = 2;
-		assignAdditionalArmies(request, response);
+		RequestDispatcher dispatcher = 
+				getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
 
 
 	}
