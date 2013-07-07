@@ -46,8 +46,7 @@
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 5) { 
-	System.out.println("Stage is 5"); %>
+	<% if (stage == 5) { %>
 	
 		$(function() {
 			//$('#attackDialog').modal('show');
@@ -102,7 +101,8 @@
 			<h2><%= territoryName %></h2>
 			<p>Select number of armies to attack with</p>
 			<span class="sliderContext minArmies"><%= minArmies %></span>
-			<input type="text" class="slider" value="" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
+			<input type="text" class="slider" value="" data-slider-min="<%= minArmies %>"
+				 data-slider-max="<%= maxArmies %>" data-slider-value="1">
 			<span class="sliderContext maxArmies"><%= maxArmies %></span>
 		</div>
 		<div class="modal-footer">

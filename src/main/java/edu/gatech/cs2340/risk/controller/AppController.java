@@ -363,6 +363,8 @@ public class AppController extends HttpServlet {
 	protected void selectNumberOfArmiesToAttackWith(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		log.debug("in SelectNumberOfArmiesToAttackWith()");
+		
+		log.debug(request.getParameter("numberOfArmies"));
 	}
 
 	/**
