@@ -9,6 +9,9 @@
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
 
 <% Integer directionsList = (Integer) request.getAttribute("directionsList"); %>
+
+<% int stage = (Integer) request.getAttribute("stage"); %>
+<% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <%  
 	String directionsText = "";
 	switch (directionsList) {
@@ -21,11 +24,11 @@
 				break;
 		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
 				break;
+		case 4: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack.";
+				break;
 	}
 %>
 
-<% int stage = (Integer) request.getAttribute("stage"); %>
-<% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 
 
 <html>
@@ -38,12 +41,14 @@
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap-slider.js" ></script>
 	<script type="text/javascript">
-	<% if (directionsList != 0 && stage != 5) { %>
+	<% if (directionsList != 0) { %>
 		$(function() {
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 4) { %>
+	<% if (stage == 5) { 
+	System.out.println("Stage is 5"); %>
+	
 		$(function() {
 			//$('#attackDialog').modal('show');
 			$('#attackDialog').modal({
@@ -68,7 +73,7 @@
 			<p id="directions-body"><%= directionsText %></p>
 		</div>
 		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Okay</button>
 		</div>
 	</div>
 
@@ -80,7 +85,7 @@
 	int maxArmies = 10;
 	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
-	if (stage == 4) {
+	if (stage == 5) {
 		territoryName = attackingTerritory.getTerritoryName();
 		maxArmies = attackingTerritory.getNumberOfArmies();
 		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
@@ -99,8 +104,6 @@
 			<span class="sliderContext minArmies"><%= minArmies %></span>
 			<input type="text" class="slider" value="" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
 			<span class="sliderContext maxArmies"><%= maxArmies %></span>
-			<hr/>
-			<p>Select the neighboring Territory to Attack</p>
 		</div>
 		<div class="modal-footer">
 			<input type="submit" class="btn btn-primary" value="Attack!" /> 

@@ -99,11 +99,11 @@ public class AppController extends HttpServlet {
 				break;
 		case 3: selectAttackingTerritory(request, response);
 				break;
-		/*case 4: directionsList = 0;
+		case 4: directionsList = 0;
 				selectDefendingTerritory(request, response);
-				break;*/
+				break;
 		case 5: directionsList = 0;
-				doAttack(request, response);
+				selectNumberOfArmiesToAttackWith(request, response);
 				break;
 		}
 	}
@@ -289,6 +289,7 @@ public class AppController extends HttpServlet {
 						request.setAttribute("attackingTerritory", attackingTerritory);
 						log.debug("Changing stage to 4");
 						stage = 4;
+						directionsList = 4;
 					}
 				}
 			}
@@ -297,6 +298,7 @@ public class AppController extends HttpServlet {
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
+		request.setAttribute("directionsList", directionsList);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
@@ -326,6 +328,7 @@ public class AppController extends HttpServlet {
 		// make sure current player is not attacking one of their own territories
 		if (! defendingPlayer.equals(currentPlayer)) {
 			// make sure current territory is a neighbor of the attacking territory
+			log.debug("Attacking territory has neighboring territories " + attackingTerritory.getNeighboringTerritories());
 			if (attackingTerritory.getNeighboringTerritories().contains(territory)) {
 
 				// make sure the territory being updated is the current version of the territory
@@ -340,26 +343,30 @@ public class AppController extends HttpServlet {
 							request.setAttribute("defendingTerritory", defendingTerritory);
 							log.debug("Changing stage to 5");
 							stage = 5;
-							doAttack(request, response);
-							return;
 						}
 					}
 				}
 			}
 		}
 
+		request.setAttribute("attackingTerritory", attackingTerritory);
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
+		request.setAttribute("directionsList", directionsList);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
 
+	protected void selectNumberOfArmiesToAttackWith(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		log.debug("in SelectNumberOfArmiesToAttackWith()");
+	}
 
 	/**
-	 * Stage 5
+	 * Stage 6
 	 * 
 	 * @param request
 	 * @param response
@@ -370,14 +377,16 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		log.debug("In doAttack()");
+		/*
 		log.debug("This method has not been written yet. Moving to next player.");
 
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
 		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-
+		
 		log.debug("Changing stage to Stage 2");
 		stage = 2;
 		assignAdditionalArmies(request, response);
+		*/
 
 	}
 
