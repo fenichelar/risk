@@ -74,6 +74,15 @@
 			});
 		});
 	<% } %>
+	<% if (stage == 7) { %>
+		$(function() {
+			$('#optionsDialog').modal({
+  				keyboard : false,
+  				show : true
+
+			});
+		});
+	<% } %>
 
 	</script>
 </head>
@@ -183,12 +192,10 @@
 	<% } %>
 
 	<% 
-	
 	if (stage == 6) {
 		String territoryName = defendingTerritory.getTerritoryName();
 		int minArmies = 1;
 		int maxArmies = defendingTerritory.getNumberOfArmies();
-
 	%>
 
 		<div id="defendingArmyNumDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="defendingArmyNumLabel" aria-hidden="true" data-backdrop="static">
@@ -205,6 +212,32 @@
 			</div>
 			<div class="modal-footer">
 					<input type="submit" class="btn btn-primary" value="Continue" />
+				</form>
+			</div>
+		</div>
+
+	<% } %>
+
+	<% 
+	if (stage == 7) {
+	%>
+
+		<div id="optionsDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="optionsLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="optionsLabel">Select Your Next Move</h3>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="attack"/>
+					<input type="submit" class="optionBtn btn btn-large btn-primary" value="Attack">
+				</form>
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="fortify"/>
+					<input type="submit" class="optionBtn btn btn-large btn-success" value="Fortify">
+				</form>
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="end turn"/>
+					<input type="submit" class="optionBtn btn btn-large btn-danger" value="End Turn">
 				</form>
 			</div>
 		</div>

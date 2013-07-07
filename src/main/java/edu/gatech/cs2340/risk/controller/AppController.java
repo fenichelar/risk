@@ -103,12 +103,16 @@ public class AppController extends HttpServlet {
 				selectDefendingTerritory(request, response);
 				break;
 		case 5: directionsList = 0;
-				stage = 2;
-				assignAdditionalArmies(request, response);
+				stage = 7;
+				selectOptions(request, response);
 				break;
 		case 6: directionsList = 0;
 				stage = 6;
 				selectDefendingNumberOfArmies(request, response);
+				break;
+		case 7: directionsList = 0;
+				stage = 7;
+				selectOptions(request, response);
 				break;
 		}
 	}
@@ -227,8 +231,8 @@ public class AppController extends HttpServlet {
 			currentPlayer.removeArmy();
 
 			if (currentPlayer.getAvailableArmies() == 0) {
-				stage = 3;
-				directionsList = 3;
+				stage = 7;
+				directionsList = 0;
 			}
 
 		} else {
@@ -325,8 +329,17 @@ public class AppController extends HttpServlet {
 		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
 		//log.debug("Attacking Army Number: " + attackingArmyNum);
 
-		log.debug("Changing stage to 6");
-		stage = 6;
+		if (defendingTerritory.getNumberOfArmies() > 1) {
+			log.debug("Changing stage to 6");
+			stage = 6;
+		} else {
+			defendingArmyNum = 1;
+
+			log.debug("Changing stage to 5");
+			stage = 5;
+			doAttack(request, response);
+			return;
+		}
 		request.setAttribute("defendingTerritory", defendingTerritory);
 		request.setAttribute("directionsList", directionsList);
 		request.setAttribute("currentPlayer", currentPlayer);
@@ -387,7 +400,7 @@ public class AppController extends HttpServlet {
 				attackResultsMessage += "One Army Removed.";
 			}
 			if (defendingTerritory.getNumberOfArmies() < 1) {
-				attackResultsMessage += "Territory acquired.";
+				attackResultsMessage = "Attacker wins! Territory acquired.";
 				defendingTerritory.getOwner().removeTerritory(defendingTerritory);
 				attackingTerritory.getOwner().addTerritory(defendingTerritory);
 				defendingTerritory.setNumberOfArmies(attackingArmyNum);
@@ -443,6 +456,47 @@ public class AppController extends HttpServlet {
 		
 
 		return;
+
+	}
+
+	/**
+	 * Stage 7
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected void selectOptions(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		String option = request.getParameter("option");
+
+		if (option != null) {
+			switch (option) {
+				case "attack":		stage = 3;
+									directionsList = 3;	
+									break;
+
+				case "fortify":		//MUST BE WRITTEN --> MOVING TO NEXT PLAYER
+
+				case "end turn":	directionsList = 0;
+									stage = 2;
+									currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayer.getPlayerId());
+									log.debug("New Current Player: " + currentPlayer);
+									assignAdditionalArmies(request, response);
+									break;
+			}
+		}
+
+		request.setAttribute("directionsList", directionsList);
+		request.setAttribute("currentPlayer", currentPlayer);
+		request.setAttribute("players", players);
+		request.setAttribute("stage", stage);
+
+		RequestDispatcher dispatcher = 
+				getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
 
 	}
 

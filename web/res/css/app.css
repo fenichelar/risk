@@ -384,6 +384,13 @@ span.sliderContext {
 	font-weight: bold;
 }
 
+/* OPTION DIALOG */
+
+input.optionBtn {
+	width: 200px;
+	margin: auto 150px;
+}
+
 /* ATTACK DIALOG */
 
 #attackDialog form.cancelAttack {
