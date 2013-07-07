@@ -5,10 +5,6 @@ import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 
-/**
- * @author Caroline Paulus
- *
- */
 public interface PlayerService {
 	/**
 	 * Returns list of all players currently participating in the game

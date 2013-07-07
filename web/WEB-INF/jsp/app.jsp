@@ -1,5 +1,6 @@
 <%@ page import="main.java.edu.gatech.cs2340.risk.model.*" %>
 <%@ page import="main.java.edu.gatech.cs2340.risk.service.impl.*" %>
+<%@ page import="main.java.edu.gatech.cs2340.risk.util.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 
@@ -9,26 +10,24 @@
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
 
 <% Integer directionsList = (Integer) request.getAttribute("directionsList"); %>
-
-<% int stage = (Integer) request.getAttribute("stage"); %>
-<% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <%  
 	String directionsText = "";
 	switch (directionsList) {
 		case 0: break;
-		case 1: directionsText = "Click on a territory of your color to add one army to it.";
+		case 1: directionsText = "Click on a Territory of Your Color to add one Army to it.";
 				break;
 		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
 								+ currentPlayer.getAvailableArmies() + " additional " 
 								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
 				break;
-		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
-				break;
-		case 4: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack.";
+		case 3: directionsText = "Select a Territory to Attack from";
 				break;
 	}
 %>
 
+<% int stage = (Integer) request.getAttribute("stage"); %>
+<% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
+<% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
 
 
 <html>
@@ -41,21 +40,47 @@
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap-slider.js" ></script>
 	<script type="text/javascript">
-	<% if (directionsList != 0) { %>
+	<% if (!( stage > 3) && (directionsList != 0 )) { %>
 		$(function() {
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 5) { %>
-	
+	<% if (stage == 4) { %>
 		$(function() {
-			//$('#attackDialog').modal('show');
 			$('#attackDialog').modal({
   				keyboard : false,
   				show : true
 
 			});
     		$('.slider').slider();
+		});
+	<% } %>
+	<% if (stage == 6) { %>
+		$(function() {
+			$('#defendingArmyNumDialog').modal({
+  				keyboard : false,
+  				show : true
+
+			});
+			$('.slider').slider();
+		});
+	<% } %>
+	<% if (stage == 5) { %>
+		$(function() {
+			$('#attackResultsDialog').modal({
+  				keyboard : false,
+  				show : true
+
+			});
+		});
+	<% } %>
+	<% if (stage == 7) { %>
+		$(function() {
+			$('#optionsDialog').modal({
+  				keyboard : false,
+  				show : true
+
+			});
 		});
 	<% } %>
 
@@ -72,47 +97,152 @@
 			<p id="directions-body"><%= directionsText %></p>
 		</div>
 		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Okay</button>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 		</div>
 	</div>
 
-<!-- Why is the first part necessary? -->
 	<%
-	
-	String territoryName = "Not Available";
-	int minArmies = 1;
-	int maxArmies = 10;
-	ArrayList<Territory> neighboringTerritories = currentPlayer.getTerritories();
 
-	if (stage == 5) {
-		territoryName = attackingTerritory.getTerritoryName();
-		maxArmies = attackingTerritory.getNumberOfArmies();
-		neighboringTerritories = attackingTerritory.getNeighboringTerritories();
-	}
+	if (stage == 4) {
+		String territoryName = attackingTerritory.getTerritoryName();
+		int minArmies = 1;
+		int maxArmies = attackingTerritory.getNumberOfArmies() - 1;
+		ArrayList<Territory> neighboringTerritories = attackingTerritory.getNeighboringTerritories();
 
 	%>
 
-	<div id="attackDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="directionsLabel" aria-hidden="true">
-		<div class="modal-header">
-			<h3 id="directionsLabel">Attack a Territory</h3>
-		</div>
-		<form action="app" method="POST">
-		<div class="modal-body">
-			<h2><%= territoryName %></h2>
-			<p>Select number of armies to attack with</p>
-			<span class="sliderContext minArmies"><%= minArmies %></span>
-			<input type="text" class="slider" value="" data-slider-min="<%= minArmies %>"
-				 data-slider-max="<%= maxArmies %>" data-slider-value="1">
-			<span class="sliderContext maxArmies"><%= maxArmies %></span>
-		</div>
-		<div class="modal-footer">
-			<input type="submit" class="btn btn-primary" value="Attack!" /> 
-		</form>
-			<form class ="cancelAttack" action="app" method="POST">
-				<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
+		<div id="attackDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="attackLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="attackLabel">Attack a Territory</h3>
+			</div>
+			<form action="app" method="POST">
+			<div class="modal-body">
+				<h2><%= territoryName %></h2>
+				<p>Select number of armies to attack with</p>
+				<span class="sliderContext minArmies"><%= minArmies %></span>
+				<input type="text" name="attackingArmyNum" class="slider" value="1" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
+				<span class="sliderContext maxArmies"><%= maxArmies %></span>
+				<hr/>
+				<p>Select the neighboring Territory to Attack</p>
+
+				<% for (Player player : players) { %>
+					<% if (!player.equals(currentPlayer)) { %>
+						<% for (Territory neighboringTerritory : neighboringTerritories) { %>
+
+							<% neighboringTerritory = TerritoryUtil.getTerritoryById(player, neighboringTerritory.getTerritoryId()); %>
+
+							<% if (neighboringTerritory != null) { %>
+								<label class="radio neighboringTerritory<%= neighboringTerritory.getTerritoryId() %> owner<%= player.getPlayerId() %>">
+			  						<input type="radio" name="neighboringTerritoryId" value="<%= neighboringTerritory.getTerritoryId() %>" checked>
+			  						<span><%= neighboringTerritory.getTerritoryName() %> (<%= neighboringTerritory.getNumberOfArmies() %>)</span>
+								</label>
+							<% } %>
+						<% } %>
+					<% } %>
+				<% } %>
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
+				<input type="hidden" name="cancelled" value="false" />
+				<input type="submit" class="btn btn-primary" value="Attack!" /> 
 			</form>
+				<form class ="cancelAttack" action="app" method="POST">
+					<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>
+					<input type="hidden" name="cancelled" value="true" />
+					<input type="submit" class="btn btn-danger" value="Cancel Attack" /> 
+				</form>
+			</div>
 		</div>
-	</div>
+
+	<% } %>
+
+	<% 
+		if (stage == 5) {
+			int[] attackingArmyDice = (int[])request.getAttribute("attackingArmyDice");
+			int[] defendingArmyDice = (int[])request.getAttribute("defendingArmyDice");
+			String attackResultsMessage = (String)request.getAttribute("attackResultsMessage");
+	%>
+
+		<div id="attackResultsDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="attackResultsLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="attackResultsLabel">Attack Results</h3>
+			</div>
+			<div class="modal-body">
+				<!--<h2>Attacker Rolled</h2>-->
+				<div class="row attackRolls dice">
+					<% for (int dieValue : attackingArmyDice) { %>
+						<div class="value<%= dieValue %>"></div>
+					<% } %>
+				</div>
+				<!--<h2>Defender Rolled</h2>-->
+				<div class="row defenceRolls dice">
+					<% for (int dieValue : defendingArmyDice) { %>
+						<div class="value<%= dieValue %>"></div>
+					<% } %>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<h4 id="attackResultsMessage"><%= attackResultsMessage %></h4>
+				<form method="POST" action="app">
+					<input type="submit" class="btn btn-primary" value="Continue" />
+				</form>
+			</div>
+		</div>
+
+	<% } %>
+
+	<% 
+	if (stage == 6) {
+		String territoryName = defendingTerritory.getTerritoryName();
+		int minArmies = 1;
+		int maxArmies = defendingTerritory.getNumberOfArmies();
+	%>
+
+		<div id="defendingArmyNumDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="defendingArmyNumLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="defendingArmyNumLabel">Attack Results</h3>
+			</div>
+			<div class="modal-body">
+				<h2><%= territoryName %></h2>
+				<form method="POST" action="app">
+				<p>Select number of armies to defend with</p>
+				<span class="sliderContext minArmies"><%= minArmies %></span>
+				<input type="text" name="defendingArmyNum" class="slider" value="<%= maxArmies %>" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="<%= maxArmies %>">
+				<span class="sliderContext maxArmies"><%= maxArmies %></span>
+			</div>
+			<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" value="Continue" />
+				</form>
+			</div>
+		</div>
+
+	<% } %>
+
+	<% 
+	if (stage == 7) {
+	%>
+
+		<div id="optionsDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="optionsLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="optionsLabel">Select Your Next Move</h3>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="attack"/>
+					<input type="submit" class="optionBtn btn btn-large btn-primary" value="Attack">
+				</form>
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="fortify"/>
+					<input type="submit" class="optionBtn btn btn-large btn-success" value="Fortify">
+				</form>
+				<form method="POST" action="app">
+					<input type="hidden" name="option" value="end turn"/>
+					<input type="submit" class="optionBtn btn btn-large btn-danger" value="End Turn">
+				</form>
+			</div>
+		</div>
+
+	<% } %>
 
 <div id="wrap" class="container-fluid">
 
@@ -132,7 +262,7 @@
 	%>
 	<% for (Player player : players) { %>
 
-		<div class="<% if (oddOffset) out.write("offset1 "); out.write(span); %> player <% out.write("player" + (player.getPlayerId()-1)); %> <% if (currentPlayer.equals(player)) out.write("active"); %>">
+		<div class="<% if (oddOffset) out.write("offset1 "); out.write(span); %> player <% out.write("player" + (player.getPlayerId())); %> <% if (currentPlayer.equals(player)) out.write("active"); %>">
 			<% out.write(
 			"<h3>" + player.getPlayerName()  + "</h3>"
 		  + "<h4>" + player.getAvailableArmies() + " armies</h4>"); %>
@@ -148,7 +278,7 @@
 
 	<% for (Player player : players) { %>
 		<% for (Territory territory : player.getTerritories()) { %>
-			<div class="territory <% out.write("player" + (player.getPlayerId()-1)); %> <% out.write("territory" + territory.getTerritoryId()); %>">
+			<div class="territory <% out.write("player" + (player.getPlayerId())); %> <% out.write("territory" + territory.getTerritoryId()); %>">
 				<form action="app" method="POST">
 					<input type="hidden" name="operation" value="POST"/>
 					<input type="hidden" name="territoryId" value="<%= territory.getTerritoryId() %>"/>

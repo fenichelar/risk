@@ -6,10 +6,6 @@ import main.java.edu.gatech.cs2340.risk.dao.mock.PlayerDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.PlayerService;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class PlayerServiceImpl implements PlayerService {
 	
 	private PlayerDAOMock playerDAO = new PlayerDAOMock();

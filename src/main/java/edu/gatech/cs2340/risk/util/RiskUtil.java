@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 
-public class RiskMockUtil {
+public class RiskUtil {
 
-	private static Logger log = Logger.getLogger(RiskMockUtil.class);
+	private static Logger log = Logger.getLogger(RiskUtil.class);
 
 	private static Gson gson = new Gson();
 	private static final String RELATIVE_LOCATION = System

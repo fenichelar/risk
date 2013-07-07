@@ -2,10 +2,6 @@ package main.java.edu.gatech.cs2340.risk.model;
 
 import java.util.ArrayList;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class Territory {
 	
 	private int territoryId;
@@ -58,8 +54,13 @@ public class Territory {
     	    return numberOfArmies;
         }
     
+
         public void setNumberOfArmies(int numberOfArmies) {
     	    this.numberOfArmies = numberOfArmies;
+        }
+
+        public void removeNumberOfArmies(int numberOfArmies) {
+        	this.numberOfArmies -= numberOfArmies;
         }
 	
         public void addArmy() {
@@ -88,7 +89,7 @@ public class Territory {
 	
 	@Override
 	public String toString() {
-		return "[" + territoryName + ", ID: " + territoryId + "]";
+		return "[" + territoryName + ", ID: " + territoryId + ", OWNER: " + owner + "]";
 	}
 
 }
