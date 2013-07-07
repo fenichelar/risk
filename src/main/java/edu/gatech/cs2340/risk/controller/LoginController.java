@@ -15,10 +15,9 @@ import org.apache.log4j.Logger;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
-import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 
 /** 
- * @author Caroline Paulus
  *
  * This class receives and handles user input for the home page
  * Responsible for initializing database and adding players
@@ -81,7 +80,7 @@ public class LoginController extends HttpServlet {
 			HttpServletResponse response)
 					throws IOException, ServletException {
 		
-		RiskMockUtil.restoreDefaults();
+		RiskUtil.restoreDefaults();
 		players = new ArrayList<Player>();
 		request.setAttribute("players", players);
 		RequestDispatcher dispatcher = 

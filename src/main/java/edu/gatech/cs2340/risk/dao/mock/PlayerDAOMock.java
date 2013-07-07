@@ -7,11 +7,8 @@ import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.dao.PlayerDAO;
 import main.java.edu.gatech.cs2340.risk.model.Player;
-import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
-/**
- * @author Caroline Paulus
- *
- */
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
+
 public class PlayerDAOMock implements PlayerDAO {
 	
 	private static Logger log = Logger.getLogger(PlayerDAOMock.class);
@@ -24,7 +21,7 @@ public class PlayerDAOMock implements PlayerDAO {
 		ArrayList<Player> players = new ArrayList<Player>();
 		
 		// get existing number of players in player package
-		int numPlayers = RiskMockUtil.getFileCountInPackage("player");
+		int numPlayers = RiskUtil.getFileCountInPackage("player");
 		log.debug("Current player count in player json package: " + numPlayers);
 		
 		for (int i = 1; i <= numPlayers; i++) {
@@ -34,7 +31,7 @@ public class PlayerDAOMock implements PlayerDAO {
 			String fileName = PLAYER_FILE_PATH + i + ".json";  
 			
 			// create a player object from the player json file
-			Player player = (Player) RiskMockUtil.convertJsonFileToObject(fileName, Player.class);
+			Player player = (Player) RiskUtil.convertJsonFileToObject(fileName, Player.class);
 			players.add(player);
 		}
 		return players;
@@ -46,7 +43,7 @@ public class PlayerDAOMock implements PlayerDAO {
 		String fileName = PLAYER_FILE_PATH + playerId + ".json";
 		// create a player object from the player json file
 		Player player = (Player) 
-				RiskMockUtil.convertJsonFileToObject(fileName, Player.class);
+				RiskUtil.convertJsonFileToObject(fileName, Player.class);
 		
 		log.debug("Returning country " + player); 
 		return player;
@@ -59,7 +56,7 @@ public class PlayerDAOMock implements PlayerDAO {
 		// create file for new player at a location designated by the player's ID
 		String newFile = PLAYER_FILE_PATH + player.getPlayerId() + ".json";
 		log.debug("Creating new json file for player at " + newFile);
-		RiskMockUtil.createFileFromJson(newFile, player);
+		RiskUtil.createFileFromJson(newFile, player);
 		
 		// return the same player that was passed as a parameter
 		log.debug("Returning player " + player);
@@ -70,7 +67,7 @@ public class PlayerDAOMock implements PlayerDAO {
 	public void deletePlayer(int playerId) throws SQLException,
 			ClassNotFoundException {
 		
-		RiskMockUtil.deleteJsonFromPackage(playerId);
+		RiskUtil.deleteJsonFromPackage(playerId);
 	}
 
 }

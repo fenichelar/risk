@@ -20,7 +20,6 @@ import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /** 
- * @author Caroline Paulus
  * 
  * This class receives and handles user input for the Risk game UI
  */
@@ -135,18 +134,18 @@ public class AppController extends HttpServlet {
 
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
 		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
-	
+
 		log.debug("Current player ID: " + currentPlayerId);
 
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
-		
+
 
 		// player's list of territories contains the territory AND player has armies left 
 		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
-			
+
 			log.debug("Current territory: " + territory);
-			
+
 			territory.addArmy();
 			currentPlayer.removeArmy();
 
@@ -218,7 +217,7 @@ public class AppController extends HttpServlet {
 
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
 		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
-	
+
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
 
@@ -226,7 +225,7 @@ public class AppController extends HttpServlet {
 		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
 
 			log.debug("Current territory: " + territory);
-			
+
 			territory.addArmy();
 			currentPlayer.removeArmy();
 
@@ -267,7 +266,7 @@ public class AppController extends HttpServlet {
 
 		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
 		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
-	
+
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
 		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
 
@@ -280,7 +279,7 @@ public class AppController extends HttpServlet {
 			request.setAttribute("attackingTerritory", attackingTerritory);
 			log.debug("Changing stage to 4");
 			stage = 4;
-			
+
 		} else {
 			log.debug("Territory not satisfactory");
 		}
@@ -453,7 +452,7 @@ public class AppController extends HttpServlet {
 		log.debug("Changing stage to 5");
 		stage = 5;
 		doAttack(request, response);
-		
+
 
 		return;
 

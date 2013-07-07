@@ -252,7 +252,7 @@
 	<% 
 		String span = "span" + (12/players.size());
 		boolean oddOffset = false;
-		
+
 		if (players.size()%2 != 0) {
 			span = "span" + (10/players.size());
 			oddOffset = true;

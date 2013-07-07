@@ -1,9 +1,5 @@
 package main.java.edu.gatech.cs2340.risk.util;
 
-/**
- * @author Caroline Paulus
- *
- */
 public interface RiskConstants {
 	
 	public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  

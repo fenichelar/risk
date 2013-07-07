@@ -10,10 +10,6 @@ import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.service.TerritoryService;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class TerritoryServiceImpl implements TerritoryService {
 	
 	private static Logger log = Logger.getLogger(TerritoryServiceImpl.class);

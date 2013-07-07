@@ -7,10 +7,6 @@ import org.apache.log4j.Logger;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.util.CountryUtil;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class ArmyUtil {
 	
 	private static Logger log = Logger.getLogger(ArmyUtil.class);
