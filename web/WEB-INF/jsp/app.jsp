@@ -125,21 +125,15 @@
 				<hr/>
 				<p>Select the neighboring Territory to Attack</p>
 
-				<% for (Player player : players) { %>
-					<% if (!player.equals(currentPlayer)) { %>
-						<% for (Territory neighboringTerritory : neighboringTerritories) { %>
-
-							<% neighboringTerritory = TerritoryUtil.getTerritoryById(player, neighboringTerritory.getTerritoryId()); %>
-
-							<% if (neighboringTerritory != null) { %>
-								<label class="radio neighboringTerritory<%= neighboringTerritory.getTerritoryId() %> owner<%= player.getPlayerId() %>">
-			  						<input type="radio" name="neighboringTerritoryId" value="<%= neighboringTerritory.getTerritoryId() %>" checked>
-			  						<span><%= neighboringTerritory.getTerritoryName() %> (<%= neighboringTerritory.getNumberOfArmies() %>)</span>
-								</label>
-							<% } %>
-						<% } %>
+				<% for (Territory neighboringTerritory : attackingTerritory.getNeighboringTerritories()) { %>
+					<% if (!neighboringTerritory.getOwner().equals(currentPlayer)) { %>
+						<label class="radio neighboringTerritory<%= neighboringTerritory.getTerritoryId() %> owner<%= neighboringTerritory.getOwner().getPlayerId() %>">
+	  						<input type="radio" name="neighboringTerritoryId" value="<%= neighboringTerritory.getTerritoryId() %>" checked>
+	  						<span><%= neighboringTerritory.getTerritoryName() %> (<%= neighboringTerritory.getNumberOfArmies() %>)</span>
+						</label>
 					<% } %>
 				<% } %>
+
 			</div>
 			<div class="modal-footer">
 				<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>"/>

@@ -40,4 +40,14 @@ public class TerritoryUtil {
 		}
 		return null;
 	}
+
+	public static Territory getTerritoryFromNeighborById (Territory territory, int neighboringTerritoryId) {
+		for (Territory neighboringTerritory : territory.getNeighboringTerritories()) {
+			if (neighboringTerritory.getTerritoryId() == neighboringTerritoryId) {
+				return neighboringTerritory;
+			}
+		}
+		return null;
+	}
+
 }

@@ -272,7 +272,7 @@ public class AppController extends HttpServlet {
 		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
 
 		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		defendingTerritory = TerritoryUtil.getTerritoryById(players, neighboringTerritoryId);
+		defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(attackingTerritory, neighboringTerritoryId);
 		log.debug("Defending territory: " + defendingTerritory);
 
 		if (defendingTerritory.getNumberOfArmies() > 1) {
