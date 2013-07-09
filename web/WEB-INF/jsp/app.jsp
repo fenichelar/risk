@@ -118,11 +118,16 @@
 			<form action="app" method="POST">
 			<div class="modal-body">
 				<h2><%= territoryName %></h2>
-				<p>Select number of armies to attack with</p>
-				<span class="sliderContext minArmies"><%= minArmies %></span>
-				<input type="text" name="attackingArmyNum" class="slider" value="1" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
-				<span class="sliderContext maxArmies"><%= maxArmies %></span>
-				<hr/>
+				<% if (maxArmies > 1) { %>
+					<p>Select number of armies to attack with</p>
+					<span class="sliderContext minArmies"><%= minArmies %></span>
+					<input type="text" name="attackingArmyNum" class="slider" value="1" data-slider-min="<%= minArmies %>" data-slider-max="<%= maxArmies %>" data-slider-value="1">
+					<span class="sliderContext maxArmies"><%= maxArmies %></span>
+					<hr/>
+				<% } else { %>
+					<input type="hidden" name="attackingArmyNum" value="1" />
+				<% } %>
+
 				<p>Select the neighboring Territory to Attack</p>
 
 				<% for (Territory neighboringTerritory : attackingTerritory.getNeighboringTerritories()) { %>
@@ -221,10 +226,14 @@
 				<h3 id="optionsLabel">Select Your Next Move</h3>
 			</div>
 			<div class="modal-body">
-				<form method="POST" action="app">
-					<input type="hidden" name="option" value="attack"/>
-					<input type="submit" class="optionBtn btn btn-large btn-primary" value="Attack">
-				</form>
+				<% if (TerritoryUtil.canAttack(currentPlayer)) {  %>
+					<form method="POST" action="app">
+						<input type="hidden" name="option" value="attack"/>
+						<input type="submit" class="optionBtn btn btn-large btn-primary " value="Attack">
+					</form>
+				<% } else { %>
+					<a href="#" class="optionBtn btn btn-large btn-primary disabled">Attack</a>
+				<% } %>
 				<form method="POST" action="app">
 					<input type="hidden" name="option" value="fortify"/>
 					<input type="submit" class="optionBtn btn btn-large btn-success" value="Fortify">

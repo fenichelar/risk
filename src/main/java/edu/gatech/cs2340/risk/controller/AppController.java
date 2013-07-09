@@ -228,7 +228,7 @@ public class AppController extends HttpServlet {
 
 		Territory territory = getPostedTerritory(request);
 
-		if (territory != null && territory.getNumberOfArmies() > 1) {
+		if (TerritoryUtil.validAttackTerritory(territory)) {
 
 			log.debug("Current territory: " + territory);
 
@@ -262,8 +262,8 @@ public class AppController extends HttpServlet {
 		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
 
 		if (cancelled) {
-			stage = 3;
-			directionsList = 3;
+			stage = 7;
+			directionsList = 0;
 
 			dispatch(request, response);
 			return;
@@ -305,7 +305,7 @@ public class AppController extends HttpServlet {
 		log.debug("In doAttack()");
 
 		int[] attackingArmyDice = PlayerUtil.rollDice(Math.min(attackingArmyNum, 3));
-		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
+		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingArmyNum, 2));
 
 		boolean attackerWin = PlayerUtil.calculateAttackWinner(attackingArmyDice, defendingArmyDice);
 		String attackResultsMessage = PlayerUtil.doAttack(attackerWin, attackingArmyNum, defendingArmyNum, attackingTerritory, defendingTerritory);

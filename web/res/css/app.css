@@ -391,6 +391,12 @@ input.optionBtn {
 	margin: auto 150px;
 }
 
+
+a.optionBtn {
+    margin: 10px 150px 20px 150px;
+    width: 160px
+}
+
 /* ATTACK DIALOG */
 
 #attackDialog form.cancelAttack {
