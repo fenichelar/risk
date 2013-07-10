@@ -10,13 +10,9 @@ import main.java.edu.gatech.cs2340.risk.dao.TerritoryDAO;
 import main.java.edu.gatech.cs2340.risk.model.Country;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
-import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class TerritoryDAOMock implements TerritoryDAO {
 	
 	private static Logger log = Logger.getLogger(TerritoryDAOMock.class);
@@ -36,10 +32,11 @@ public class TerritoryDAOMock implements TerritoryDAO {
 			log.debug("Territory file path: " + fileName);
 			// create a territory object from each territory json file
 			Territory territory = (Territory) 
-					RiskMockUtil.convertJsonFileToObject(fileName, Territory.class);
+					RiskUtil.convertJsonFileToObject(fileName, Territory.class);
 			// add territories to list 
 			territories.add(territory);
 		}
+
 		log.debug("Returning territories " + territories);
 		return territories;
 	}
@@ -50,7 +47,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		String fileName = COUNTRY_FILE_PATH + countryId + ".json";
 		// create a country object from the country's json file
 		Country country = (Country) 
-				RiskMockUtil.convertJsonFileToObject(fileName, Country.class);
+				RiskUtil.convertJsonFileToObject(fileName, Country.class);
 		
 		ArrayList<Territory> territories = new ArrayList<Territory>();
 		
@@ -72,7 +69,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		String fileName = TERRITORY_FILE_PATH + territoryId + ".json";
 		// create a territory object from the territory's json file
 		Territory territory = (Territory) 
-				RiskMockUtil.convertJsonFileToObject(fileName, Territory.class);
+				RiskUtil.convertJsonFileToObject(fileName, Territory.class);
 		
 		log.debug("Returning territory " + territory);
 		return territory;
@@ -82,6 +79,8 @@ public class TerritoryDAOMock implements TerritoryDAO {
 	public ArrayList<Player> addTerritories(ArrayList<Player> players) {
 		// get all territories from jsons
 		ArrayList<Territory> territories = getTerritories();
+		cleanUpNeighboringTerritories(territories);
+
 		Random rand = new Random();
 		
 		// continue until all territories have been assigned to players
@@ -115,6 +114,18 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		// return the updated list of players 
 		return players;
 	}
+
+	private static void cleanUpNeighboringTerritories(ArrayList<Territory> territories) {
+		ArrayList<Territory> tempNeighboringTerritories;
+		for (Territory territory : territories) {
+			tempNeighboringTerritories = new ArrayList<Territory>();
+			for (Territory neighboringTerritory : territory.getNeighboringTerritories()) {
+				tempNeighboringTerritories.add(territories.get(neighboringTerritory.getTerritoryId()-1));
+			}
+			territory.setNeighboringTerritories(tempNeighboringTerritories);
+		}
+	}
+
 
 	@Override
 	public Player addTerritories(Player player) {
