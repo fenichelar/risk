@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 
-public class RiskMockUtil {
+public class RiskUtil {
 
-	private static Logger log = Logger.getLogger(RiskMockUtil.class);
+	private static Logger log = Logger.getLogger(RiskUtil.class);
 
 	private static Gson gson = new Gson();
 	private static final String RELATIVE_LOCATION = System
@@ -27,6 +27,7 @@ public class RiskMockUtil {
 		Object obj = null;
 
 		try {
+			//String fileLoc = "./resources/json/" + file;
 			String fileLoc = RELATIVE_LOCATION + "/webapps/risk/json/" + file;
 			BufferedReader br = new BufferedReader(new FileReader(fileLoc));
 
@@ -106,4 +107,6 @@ public class RiskMockUtil {
 			folder.mkdirs();
 		}
 	}
+
+
 }
