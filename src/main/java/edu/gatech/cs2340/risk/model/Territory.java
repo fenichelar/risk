@@ -3,21 +3,21 @@ package main.java.edu.gatech.cs2340.risk.model;
 import java.util.ArrayList;
 
 public class Territory {
-	
+
 	private int territoryId;
 	private String territoryName;
 	private Country country;
 	private Player owner;
         private int numberOfArmies; 
         private ArrayList<Territory> neighboringTerritories;
-	
+
 	public Territory(int territoryId, String territoryName) {
 		this.setTerritoryId(territoryId);
 		this.territoryName = territoryName;
-		
+
 		setNumberOfArmies(1);
 	}
-	
+
 	public int getTerritoryId() {
 		return territoryId;
 	}
@@ -29,7 +29,7 @@ public class Territory {
 	public String getTerritoryName() {
 		return territoryName;
 	}
-	
+
 	public void setTerritoryName(String territoryName) {
 		this.territoryName = territoryName;
 	}
@@ -62,7 +62,7 @@ public class Territory {
         public void removeNumberOfArmies(int numberOfArmies) {
         	this.numberOfArmies -= numberOfArmies;
         }
-	
+
         public void addArmy() {
         	numberOfArmies++;
         }
@@ -86,7 +86,7 @@ public class Territory {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "[" + territoryName + ", ID: " + territoryId + ", OWNER: " + owner + "]";
