@@ -6,10 +6,6 @@ import java.util.AbstractCollection;
 import main.java.edu.gatech.cs2340.risk.model.*;
 import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
 
-/**
- * @author Brittany Wood
- *
- */
 public class CountryUtil {
 	private static CountryServiceImpl countryService = new CountryServiceImpl();
 

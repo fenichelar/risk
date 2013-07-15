@@ -10,7 +10,6 @@
 		{ "territoryId": 24, "territoryName": "Southern Europe" },
 		{ "territoryId": 27, "territoryName": "Afghanistan" },
 		{ "territoryId": 33, "territoryName": "Middle East" },
-		{ "territoryId": 37, "territoryName": "Ural" },
-		
+		{ "territoryId": 37, "territoryName": "Ural" }
 	]
 }

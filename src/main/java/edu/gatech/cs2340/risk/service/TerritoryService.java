@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 
-/**
- * @author Caroline Paulus
- *
- */
 public interface TerritoryService {
 	/**
 	 * Returns a list of all territories in the game
