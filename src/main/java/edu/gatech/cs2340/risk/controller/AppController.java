@@ -352,7 +352,7 @@ public class AppController extends HttpServlet {
 
 
 	/**
-	 * Stage 5 TODO THIS IS NOT WORKING CORRECTLY
+	 * Stage 5
 	 * 
 	 * @param request
 	 * @param response
@@ -367,7 +367,7 @@ public class AppController extends HttpServlet {
 		// get sorted lists of dice for attacking and defending armies
 		int[] attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		int[] defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
-
+		
 		// TODO why is this here?
 		log.debug("Attacking Armies " + attackingTerritory.getNumberOfArmies());
 		log.debug("Defending Armies " + defendingTerritory.getNumberOfArmies());

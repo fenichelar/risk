@@ -37,7 +37,7 @@ public class DiceUtil {
 		for (int i = 0; i < count; i++){
 			rollResults[i] = rollDie();
 		}
-		sort(rollResults);
+		rollResults = sort(rollResults);
 		return rollResults;
 	}
 	
