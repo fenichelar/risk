@@ -14,13 +14,13 @@
 	String directionsText = "";
 	switch (directionsList) {
 		case 0: break;
-		case 1: directionsText = "Click on a Territory of Your Color to add one Army to it.";
+		case 1: directionsText = "When it is your turn, click on any territory belonging to you to add an army to it.";
 				break;
 		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
 								+ currentPlayer.getAvailableArmies() + " additional " 
 								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
 				break;
-		case 3: directionsText = "Select a Territory to Attack from";
+		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
 				break;
 	}
 %>
@@ -99,7 +99,7 @@
 			<p id="directions-body"><%= directionsText %></p>
 		</div>
 		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Okay</button>
 		</div>
 	</div>
 
