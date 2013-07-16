@@ -352,7 +352,7 @@ public class AppController extends HttpServlet {
 
 
 	/**
-	 * Stage 5
+	 * Stage 5 TODO THIS IS NOT WORKING CORRECTLY
 	 * 
 	 * @param request
 	 * @param response
@@ -364,6 +364,7 @@ public class AppController extends HttpServlet {
 
 		log.debug("In doAttack()");
 
+		// get sorted lists of dice for attacking and defending armies
 		int[] attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		int[] defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
 
@@ -371,21 +372,8 @@ public class AppController extends HttpServlet {
 		log.debug("Defending Armies " + defendingTerritory.getNumberOfArmies());
 
 
-		int attackingDiceMax = 0;
-		int defendingDiceMax = 0;
-
-		for (int i = 0; i < Math.max(attackingArmyDice.length, defendingArmyDice.length); i++) {
-			if (i < defendingArmyDice.length) {
-				if (defendingArmyDice[i] > defendingDiceMax) {
-					defendingDiceMax = defendingArmyDice[i];
-				}
-			}
-			if (i < attackingArmyDice.length) {
-				if (attackingArmyDice[i] > attackingDiceMax) {
-					attackingDiceMax = attackingArmyDice[i];
-				}
-			}
-		}
+		int attackingDiceMax = attackingArmyDice[0];
+		int defendingDiceMax = defendingArmyDice[0];
 
 		boolean attackerWin = attackingDiceMax > defendingDiceMax;
 		String attackResultsMessage = "";
@@ -406,7 +394,6 @@ public class AppController extends HttpServlet {
 				defendingTerritory.setNumberOfArmies(attackingArmyNum);
 				attackingTerritory.removeNumberOfArmies(attackingArmyNum);
 			} 
-			log.debug(attackResultsMessage);
 		} else {
 			attackResultsMessage = "Attack unsuccessful. ";
 			if (attackingArmyNum > 1) {
@@ -417,15 +404,14 @@ public class AppController extends HttpServlet {
 				attackResultsMessage += "One Army Removed.";
 
 			}
-			log.debug(attackResultsMessage);
+			log.debug("Setting attack results message as " + attackResultsMessage);
 		}
-
-
 
 		request.setAttribute("directionsList", directionsList);
 		request.setAttribute("currentPlayer", currentPlayer);
 		request.setAttribute("players", players);
 		request.setAttribute("stage", stage);
+		log.debug("*** STAGE: " + stage);
 		request.setAttribute("attackingArmyDice", attackingArmyDice);
 		request.setAttribute("defendingArmyDice", defendingArmyDice);
 		request.setAttribute("attackResultsMessage", attackResultsMessage);
@@ -478,7 +464,7 @@ public class AppController extends HttpServlet {
 									directionsList = 3;	
 									break;
 
-				case "fortify":		//MUST BE WRITTEN --> MOVING TO NEXT PLAYER
+				case "fortify":		//TODO MUST BE WRITTEN --> MOVING TO NEXT PLAYER
 
 				case "end turn":	directionsList = 0;
 									stage = 2;
