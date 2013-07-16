@@ -513,14 +513,14 @@ public class AppController extends HttpServlet {
 
 			log.debug("Current territory: " + territory);
 
-			attackingTerritory = territory;
-			log.debug("Fortifying territory: " + attackingTerritory);
-			request.setAttribute("attackingTerritory", attackingTerritory);
+			fortifyingTerritory = territory;
+			log.debug("Fortifying territory: " + fortifyingTerritory);
+			request.setAttribute("fortifyingTerritory", fortifyingTerritory);
 			log.debug("Changing stage to 9");
-			stage = 4;
+			stage = 9;
 
 		} else {
-			log.debug("Territory not satisfactory");
+			log.debug("Territory cannot be set to fortifyingTerritory.");
 		}
 
 		request.setAttribute("currentPlayer", currentPlayer);
@@ -530,7 +530,6 @@ public class AppController extends HttpServlet {
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
-		
 	}
 	
 	/**
@@ -545,6 +544,36 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		
 		log.debug("In selectFortifiedTerritory()");
+		request.setAttribute("directionsList", directionsList);
+
+		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
+		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
+
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
+
+		if (territory != null && territory.getNumberOfArmies() > 1) {
+
+			log.debug("Current territory: " + territory);
+
+			fortifiedTerritory = territory;
+			log.debug("Fortified territory: " + fortifiedTerritory);
+			request.setAttribute("fortifiedTerritory", fortifiedTerritory);
+			log.debug("Changing stage to 9"); //TODO what stage?
+			stage = 9; //TODO
+
+		} else {
+			log.debug("Territory cannot be set to fortifiedTerritory.");
+		}
+
+		request.setAttribute("currentPlayer", currentPlayer);
+		request.setAttribute("players", players);
+		request.setAttribute("stage", stage);
+
+		RequestDispatcher dispatcher = 
+				getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
+		
 		
 	}
 
