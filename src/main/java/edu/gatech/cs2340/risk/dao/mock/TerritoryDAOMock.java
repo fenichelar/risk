@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.controller.AppController;
 import main.java.edu.gatech.cs2340.risk.dao.TerritoryDAO;
 import main.java.edu.gatech.cs2340.risk.model.Country;
 import main.java.edu.gatech.cs2340.risk.model.Player;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.controller.AppController;
 import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;

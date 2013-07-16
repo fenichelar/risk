@@ -2,6 +2,7 @@ package main.java.edu.gatech.cs2340.risk.controller;
 
 import java.io.IOException; 
 import java.util.ArrayList;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,7 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
  * 
  * This class receives and handles user input for the Risk game UI
  */
+@SuppressWarnings("serial")
 @WebServlet("/app")
 public class AppController extends HttpServlet {
 

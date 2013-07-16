@@ -5,8 +5,7 @@
 <%@ page import="java.sql.*"%>
 
 <% TerritoryServiceImpl territoryService = new TerritoryServiceImpl(); %>
-<% ArrayList<Player> players = 
-(ArrayList<Player>) request.getAttribute("players"); %>
+<% ArrayList<Player> players = (ArrayList<Player>) request.getAttribute("players"); %>
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
 
 <% Integer directionsList = (Integer) request.getAttribute("directionsList"); %>

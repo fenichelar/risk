@@ -1,12 +1,10 @@
 package main.java.edu.gatech.cs2340.risk.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-import main.java.edu.gatech.cs2340.risk.model.Territory;
 
 import org.apache.log4j.Logger;
 
@@ -37,7 +35,7 @@ public class DiceUtil {
 		for (int i = 0; i < count; i++){
 			rollResults[i] = rollDie();
 		}
-		sort(rollResults);
+		rollResults = sort(rollResults);
 		return rollResults;
 	}
 	
