@@ -93,6 +93,7 @@
 								class="btn btn-primary span2 offset1"
 								type="submit"
 								value="Add"
+								tabindex="-1"
 							/>
 						</form>
 						<%
@@ -125,10 +126,21 @@
 		</div>
 	</div>
 </body>
+
 <script
 	type="text/javascript"
 	language="JavaScript"
 >
+	<%
+	if (players.size() < 6) {
+	%>
 	document.forms['newPlayer'].elements['name'].focus();
+	<%
+	} else {
+	%>
+	document.getElementById("btnStart").focus();
+	<%
+	}
+	%>
 </script>
 </html>
