@@ -83,9 +83,21 @@
 ></script>
 <script type="text/javascript">
 
+function showalert(message,alerttype) {
+
+    $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
+
+    setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
+
+
+      $("#alertdiv").remove();
+
+    }, 5000);
+  }
+
 <%if (!(stage > 3) && (directionsList != 0)) {%>
 	$(function() {
-		$('#directions').modal('show');
+		showalert("<%=directionsText%>","alert-info");
 	});
 <%}%>
 
@@ -134,34 +146,6 @@
 </script>
 </head>
 <body>
-	<div
-		id="directions"
-		class="modal hide fade"
-		tabindex="-1"
-		role="dialog"
-		aria-labelledby="directionsLabel"
-		aria-hidden="true"
-	>
-		<div class="modal-header">
-			<button
-				type="button"
-				class="close"
-				data-dismiss="modal"
-				aria-hidden="true"
-			>x</button>
-			<h3 id="directionsLabel">Directions</h3>
-		</div>
-		<div class="modal-body">
-			<p id="directions-body"><%=directionsText%></p>
-		</div>
-		<div class="modal-footer">
-			<button
-				class="btn"
-				data-dismiss="modal"
-				aria-hidden="true"
-			>Okay</button>
-		</div>
-	</div>
 	<%
 		if (stage == 4) {
 			String territoryName = attackingTerritory.getTerritoryName();
@@ -545,5 +529,6 @@
 			%>
 		</div>
 	</div>
+<div id="alert_placeholder"></div>
 </body>
 </html>
