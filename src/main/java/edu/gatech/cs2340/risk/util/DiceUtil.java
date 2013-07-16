@@ -37,8 +37,38 @@ public class DiceUtil {
 		for (int i = 0; i < count; i++){
 			rollResults[i] = rollDie();
 		}
-		Arrays.sort(rollResults);
+		sort(rollResults);
 		return rollResults;
+	}
+	
+	/**
+	 * Sorts dice rolls from largest to smallest
+	 * 
+	 * @param rollResults
+	 * @return
+	 */
+	public static int[] sort(int[] rollResults) {
+		
+		ArrayList<Integer> rollResultsList = new ArrayList<Integer>();
+		for (int i = 0; i < rollResults.length; i++) {
+			rollResultsList.add(rollResults[i]);
+		}
+		
+		Collections.sort(rollResultsList, new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return (i1 > i2 ? -1 : 1);
+			}
+		});
+		
+		log.debug("Sorted dice list: " + rollResultsList);
+		
+		int[] sortedRollResults = new int[rollResults.length];
+		for (int i = 0; i < sortedRollResults.length; i++) {
+			sortedRollResults[i] = rollResultsList.get(i);
+		}
+		return sortedRollResults;
 	}
 
 }

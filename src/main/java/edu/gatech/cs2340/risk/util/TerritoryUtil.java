@@ -25,7 +25,6 @@ public class TerritoryUtil {
 			}
 		});
 		return territories;
-
 	}
 
 	public static Territory getTerritoryById(Player player, int territoryId) {

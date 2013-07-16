@@ -368,12 +368,13 @@ public class AppController extends HttpServlet {
 		int[] attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		int[] defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
 
+		// TODO why is this here?
 		log.debug("Attacking Armies " + attackingTerritory.getNumberOfArmies());
 		log.debug("Defending Armies " + defendingTerritory.getNumberOfArmies());
 
-
 		int attackingDiceMax = attackingArmyDice[0];
 		int defendingDiceMax = defendingArmyDice[0];
+		log.debug("Attacking dice max: " + attackingDiceMax + ", defending dice max: " + defendingDiceMax);
 
 		boolean attackerWin = attackingDiceMax > defendingDiceMax;
 		String attackResultsMessage = "";
