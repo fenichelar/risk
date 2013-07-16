@@ -22,12 +22,18 @@
 				break;
 		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
 				break;
+		case 4: directionsText = currentPlayer.getPlayerName() + ", select a territory to fortify from.";
+				break;
+		case 5: directionsText = currentPlayer.getPlayerName() + ", select a territory to fortify.";
+				break;
 	}
 %>
 
 <% int stage = (Integer) request.getAttribute("stage"); %>
 <% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
+<% Territory fortifyingTerritory = (Territory) request.getAttribute("fortifyingTerritory"); %>
+<% Territory fortifiedTerritory = (Territory) request.getAttribute("fortifiedTerritory"); %>
 
 
 <html>
