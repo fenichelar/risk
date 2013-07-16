@@ -9,6 +9,12 @@ import main.java.edu.gatech.cs2340.risk.model.Territory;
 
 public class TerritoryUtil {
 
+	/**
+	 * Sorts territories based on their IDs
+	 * 
+	 * @param territories
+	 * @return
+	 */
 	public static ArrayList<Territory> sort(ArrayList<Territory> territories) {
 
 		Collections.sort(territories, new Comparator<Territory>() {
@@ -19,7 +25,6 @@ public class TerritoryUtil {
 			}
 		});
 		return territories;
-
 	}
 
 	public static Territory getTerritoryById(Player player, int territoryId) {

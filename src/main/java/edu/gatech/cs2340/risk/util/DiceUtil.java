@@ -1,6 +1,12 @@
 package main.java.edu.gatech.cs2340.risk.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
+
+import main.java.edu.gatech.cs2340.risk.model.Territory;
 
 import org.apache.log4j.Logger;
 
@@ -31,15 +37,38 @@ public class DiceUtil {
 		for (int i = 0; i < count; i++){
 			rollResults[i] = rollDie();
 		}
-		// sort list
-		for (int i = 0; i < count; i++) {
-			if (i+1 < count && rollResults[i] < rollResults[i+1]) {
-				int sortRoll = rollResults[i];
-				rollResults[i] = rollResults[i+1];
-				rollResults[i+1] = sortRoll;
-			}	
-		}
+		sort(rollResults);
 		return rollResults;
+	}
+	
+	/**
+	 * Sorts dice rolls from largest to smallest
+	 * 
+	 * @param rollResults
+	 * @return
+	 */
+	public static int[] sort(int[] rollResults) {
+		
+		ArrayList<Integer> rollResultsList = new ArrayList<Integer>();
+		for (int i = 0; i < rollResults.length; i++) {
+			rollResultsList.add(rollResults[i]);
+		}
+		
+		Collections.sort(rollResultsList, new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return (i1 > i2 ? -1 : 1);
+			}
+		});
+		
+		log.debug("Sorted dice list: " + rollResultsList);
+		
+		int[] sortedRollResults = new int[rollResults.length];
+		for (int i = 0; i < sortedRollResults.length; i++) {
+			sortedRollResults[i] = rollResultsList.get(i);
+		}
+		return sortedRollResults;
 	}
 
 }
