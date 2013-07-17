@@ -10,7 +10,8 @@ public class Attack {
 	int[] defendingArmyDice;
 	int attackingArmyNum;
 	int defendingArmyNum;
-	boolean attackerWin;
+	boolean attackerWinOne;
+        boolean attackerWinTwo;
 
 	public Attack (Territory attackingTerritory) {
 		this.attackingTerritory = attackingTerritory;
@@ -40,12 +41,16 @@ public class Attack {
 		return defendingArmyDice;
 	}
 
-	private void calculateAttackWinner() {
+	private void calculateAttackWinners() {
 
-		int attackingDiceMax = attackingArmyDice[0];
-		int defendingDiceMax = defendingArmyDice[0];
-
-		attackerWin = attackingDiceMax > defendingDiceMax;
+		int attackingDiceOne = attackingArmyDice[0];
+		int defendingDiceOne = defendingArmyDice[0];
+                attackerWinOne = attackingDiceOne > defendingDiceOne;
+                if (defendingArmyNum > 1) {
+                        int attackingDiceTwo = attackingArmyDice[1];
+                        int defendingDiceTwo = defendingArmyDice[1];
+                        attackerWinTwo = attackingDiceTwo > attackingDiceTwo;
+                }
 	}
 
 	public String doAttack() {
@@ -53,35 +58,38 @@ public class Attack {
 		attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
 
-		calculateAttackWinner();
+		calculateAttackWinners();
 		String attackResultsMessage = "";
-
-		if (attackerWin) {
-			attackResultsMessage = "Attacker wins! ";
-			if (defendingArmyNum > 1) {
-				defendingTerritory.removeNumberOfArmies(2);
-				attackResultsMessage += "Two Armies Removed.";
-			} else {
-				defendingTerritory.removeNumberOfArmies(1);
-				attackResultsMessage += "One Army Removed.";
+                if (defendingArmyNum > 1) {
+		        if (attackerWinOne && attackerWinTwo) {
+			        attackResultsMessage = "Attacker wins! ";
+			        defendingTerritory.removeNumberOfArmies(2);
+			        attackResultsMessage += "Two armies removed.";
+			} else if (attackerWinOne != attackerWinTwo) {
+                                attackResultsMessage = "Attacker wins one round, and defender wins one round. ";
+                                defendingTerritory.removeNumberOfArmies(1);
+                                attackResultsMessage += "Defending army removed. ";
+                                attackingTerritory.removeNumberOfArmies(1);
+                                attackResultsMessage += "Attacking army removed. ";
 			}
-			if (defendingTerritory.getNumberOfArmies() < 1) {
-				attackResultsMessage = "Attacker wins! Territory acquired.";
-				defendingTerritory.getOwner().removeTerritory(defendingTerritory);
-				attackingTerritory.getOwner().addTerritory(defendingTerritory);
-				defendingTerritory.setNumberOfArmies(attackingArmyNum);
-				attackingTerritory.removeNumberOfArmies(attackingArmyNum);
-			} 
 		} else {
-			attackResultsMessage = "Attack unsuccessful. ";
-			if (attackingArmyNum > 1) {
-				attackingTerritory.removeNumberOfArmies(2);
-				attackResultsMessage += "Two Armies Removed.";
-			} else {
-				attackingTerritory.removeNumberOfArmies(1);
-				attackResultsMessage += "One Army Removed.";
-			}
-		}
+                        if (attackerWinOne) {
+                               attackResultsMessage = "Attacker wins! ";
+                               defendingTerritory.removeNumberOfArmies(1);
+                               attackResultsMessage += "One army removed.";
+                        } else {
+                               attackResultsMessage = "Attack unsuccessful. ";
+                               attackingTerritory.removeNumberOfArmies(1);
+                               attackResultsMessage += "One army removed.";
+                        }
+                }
+                if (defendingTerritory.getNumberOfArmies() < 1) {
+                        attackResultsMessage = "Attacker wins! Territory acquired.";
+                        defendingTerritory.getOwner().removeTerritory(defendingTerritory);
+                        attackingTerritory.getOwner().addTerritory(defendingTerritory);
+                        defendingTerritory.setNumberOfArmies(attackingArmyNum);
+                        attackingTerritory.removeNumberOfArmies(attackingArmyNum);
+                }
 
 		return attackResultsMessage;
 	}
