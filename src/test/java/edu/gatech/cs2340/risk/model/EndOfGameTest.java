@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import main.java.edu.gatech.cs2340.risk.model.*;
+
 //@RunWith(Junit4.class)
 public class EndOfGameTest {
 
@@ -59,7 +61,7 @@ public class EndOfGameTest {
         Territory ukraine = new Territory(25, "Ukraine");
         Territory westernEurope = new Territory(26, "Western Europe");
         Territory afghanistan = new Territory(27, "Afghanistan");
-        player.addTerritory(greatBritian);
+        player.addTerritory(greatBritain);
         player.addTerritory(iceland);
         player.addTerritory(northernEurope);
         player.addTerritory(scandinavia);
@@ -88,7 +90,7 @@ public class EndOfGameTest {
         player.addTerritory(japan);
         player.addTerritory(kamchatka);
         player.addTerritory(middleEast);
-        player.addTerritory(monoglia);
+        player.addTerritory(mongolia);
         player.addTerritory(siam);
         player.addTerritory(siberia);
         player.addTerritory(ural);
