@@ -2,6 +2,7 @@ package main.java.edu.gatech.cs2340.risk.controller;
 
 import java.io.IOException; 
 import java.util.ArrayList;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
+import main.java.edu.gatech.cs2340.risk.model.Attack;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
@@ -23,6 +25,7 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
  * 
  * This class receives and handles user input for the Risk game UI
  */
+@SuppressWarnings("serial")
 @WebServlet("/app")
 public class AppController extends HttpServlet {
 
@@ -34,9 +37,7 @@ public class AppController extends HttpServlet {
 	private ArrayList<Player> players; 
 	private Player currentPlayer;
 
-	private Territory attackingTerritory = null, defendingTerritory = null;
-	private int attackingArmyNum = 0;
-	private int defendingArmyNum = 0;
+	private Attack attack;
 
 	private int stage;
 	private Integer directionsList;
@@ -226,13 +227,12 @@ public class AppController extends HttpServlet {
 
 		setCurrentPlayer(request);
 
-		Territory territory = getPostedTerritory(request);
+		Territory attackingTerritory = getPostedTerritory(request);
 
-		if (TerritoryUtil.validAttackTerritory(territory)) {
+		if (TerritoryUtil.validAttackTerritory(attackingTerritory)) {
 
-			log.debug("Current territory: " + territory);
-
-			attackingTerritory = territory;
+			log.debug("Current territory: " + attackingTerritory);
+			attack = new Attack(attackingTerritory);
 			log.debug("Attacking territory: " + attackingTerritory);
 			request.setAttribute("attackingTerritory", attackingTerritory);
 			log.debug("Changing stage to 4");
@@ -269,10 +269,11 @@ public class AppController extends HttpServlet {
 			return;
 		}
 
-		attackingArmyNum = Integer.parseInt(request.getParameter("attackingArmyNum"));
+		attack.setAttackingArmyNum(Integer.parseInt(request.getParameter("attackingArmyNum")));
 
 		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(attackingTerritory, neighboringTerritoryId);
+		Territory defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(attack.getAttackingTerritory(), neighboringTerritoryId);
+		attack.setDefendingTerritory(defendingTerritory);
 		log.debug("Defending territory: " + defendingTerritory);
 
 		if (defendingTerritory.getNumberOfArmies() > 1) {
@@ -280,7 +281,7 @@ public class AppController extends HttpServlet {
 			stage = 6;
 			request.setAttribute("defendingTerritory", defendingTerritory);
 		} else {
-			defendingArmyNum = 1;
+			attack.setDefendingArmyNum(1);
 			log.debug("Changing stage to 5");
 			stage = 5;
 			doAttack(request, response);
@@ -304,16 +305,12 @@ public class AppController extends HttpServlet {
 
 		log.debug("In doAttack()");
 
-		int[] attackingArmyDice = PlayerUtil.rollDice(Math.min(attackingArmyNum, 3));
-		int[] defendingArmyDice = PlayerUtil.rollDice(Math.min(defendingArmyNum, 2));
-
-		boolean attackerWin = PlayerUtil.calculateAttackWinner(attackingArmyDice, defendingArmyDice);
-		String attackResultsMessage = PlayerUtil.doAttack(attackerWin, attackingArmyNum, defendingArmyNum, attackingTerritory, defendingTerritory);
+		String attackResultsMessage = attack.doAttack();
 
 		log.debug(attackResultsMessage);
 
-		request.setAttribute("attackingArmyDice", attackingArmyDice);
-		request.setAttribute("defendingArmyDice", defendingArmyDice);
+		request.setAttribute("attackingArmyDice", attack.getAttackingArmyDice());
+		request.setAttribute("defendingArmyDice", attack.getDefendingArmyDice());
 		request.setAttribute("attackResultsMessage", attackResultsMessage);
 
 		dispatch(request, response);
@@ -331,8 +328,7 @@ public class AppController extends HttpServlet {
 	protected void selectDefendingNumberOfArmies(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		defendingArmyNum = Integer.parseInt(request.getParameter("defendingArmyNum"));
-
+		attack.setDefendingArmyNum(Integer.parseInt(request.getParameter("defendingArmyNum")));
 		log.debug("Changing stage to 5");
 		stage = 5;
 		doAttack(request, response);
