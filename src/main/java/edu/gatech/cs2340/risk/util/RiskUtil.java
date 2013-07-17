@@ -21,8 +21,7 @@ public class RiskUtil {
 		return gson.toJson(obj);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Object convertJsonFileToObject(String file, Class model) {
+	public static Object convertJsonFileToObject(String file, Class<?> model) {
 
 		Object obj = null;
 
