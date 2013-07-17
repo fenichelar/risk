@@ -6,7 +6,7 @@
 %>
 <html>
 <head>
-<title>Risk Home Page</title>
+<title>Risk - New Game</title>
 <link
 	rel="stylesheet"
 	type="text/css"

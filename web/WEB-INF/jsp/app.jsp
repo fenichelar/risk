@@ -53,7 +53,7 @@
 %>
 <html>
 <head>
-<title>Game of Risk</title>
+<title>Risk - Game</title>
 <link
 	rel="stylesheet"
 	type="text/css"
