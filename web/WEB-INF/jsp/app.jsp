@@ -46,14 +46,15 @@
 <%
 	Territory attackingTerritory = (Territory) request
 			.getAttribute("attackingTerritory");
-%>
-<%
 	Territory defendingTerritory = (Territory) request
 			.getAttribute("defendingTerritory");
 %>
+<%
+	Territory source = (Territory) request.getAttribute("source");
+%>
 <html>
 <head>
-<title>Game of Risk</title>
+<title>Risk - Game</title>
 <link
 	rel="stylesheet"
 	type="text/css"
@@ -87,7 +88,7 @@ function showalert(message,alerttype) {
     $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
     setTimeout(function() {
       $("#alertdiv").remove();
-    }, 5000);
+    }, 4000);
   }
 
 <%if (!(stage > 3) && (directionsList != 0)) {%>
@@ -123,7 +124,6 @@ function showalert(message,alerttype) {
 		$('#attackResultsDialog').modal({
 			keyboard : false,
 			show : true
-
 		});
 	});
 <%}%>
@@ -133,8 +133,17 @@ function showalert(message,alerttype) {
 		$('#optionsDialog').modal({
 			keyboard : false,
 			show : true
-
 		});
+	});
+<%}%>
+
+<%if (stage == 9) {%>
+	$(function() {
+		$('#movingArmyNumDialog').modal({
+			keyboard : false,
+			show : true
+		});
+		$('.slider').slider();
 	});
 <%}%>
 
@@ -285,7 +294,7 @@ function showalert(message,alerttype) {
 				<%
 					for (int dieValue : attackingArmyDice) {
 				%>
-				<div class="value<%=dieValue%>"></div>
+						<div class="value<%=dieValue%>"></div>
 				<%
 					}
 				%>
@@ -295,14 +304,14 @@ function showalert(message,alerttype) {
 				<%
 					for (int dieValue : defendingArmyDice) {
 				%>
-				<div class="value<%=dieValue%>"></div>
+						<div class="value<%=dieValue%>"></div>
 				<%
 					}
 				%>
 			</div>
 		</div>
 		<div class="modal-footer">
-			<h4 id="attackResultsMessage"><%=attackResultsMessage%></h4>
+			<h5 id="attackResultsMessage"><%=attackResultsMessage%></h5>
 			<form
 				method="POST"
 				action="app"
@@ -323,11 +332,6 @@ function showalert(message,alerttype) {
 			String territoryName = defendingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 2;
-			if (defendingTerritory.getNumberOfArmies() > 2) {
-				maxArmies = 2;
-			} else {
-				maxArmies = 1;
-			}
 	%>
 	<div
 		id="defendingArmyNumDialog"
@@ -339,7 +343,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="defendingArmyNumLabel">Attack Results</h3>
+			<h3 id="defendingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -446,10 +450,58 @@ function showalert(message,alerttype) {
 	<%
 		}
 	%>
+	<%
+		if (stage == 9) {
+			String territoryName = source.getTerritoryName();
+			int minArmies = 1;
+			int maxArmies = source.getNumberOfArmies() - 1;
+	%>
+	<div
+		id="movingArmyNumDialog"
+		class="modal hide fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="movingArmyNumLabel"
+		aria-hidden="true"
+		data-backdrop="static"
+	>
+		<div class="modal-header">
+			<h3 id="movingArmyNumLabel">Select Number of Armies</h3>
+		</div>
+		<div class="modal-body">
+			<h2><%=territoryName%></h2>
+			<form
+				method="POST"
+				action="app"
+			>
+				<p>Select number of armies to move to destination</p>
+				<span class="sliderContext minArmies"><%=minArmies%></span> <input
+					type="text"
+					name="numArmies"
+					class="slider"
+					value="<%=maxArmies%>"
+					data-slider-min="<%=minArmies%>"
+					data-slider-max="<%=maxArmies%>"
+					data-slider-value="<%=maxArmies%>"
+				> <span class="sliderContext maxArmies"><%=maxArmies%></span>
+		</div>
+		<div class="modal-footer">
+			<input
+				type="submit"
+				class="btn btn-primary"
+				value="Continue"
+			/>
+			</form>
+		</div>
+	</div>
+	<%
+		}
+	%>
 	<div
 		id="wrap"
 		class="container-fluid"
 	>
+
 		<!-- WRITE PLAYERS IN ROLL ORDER -->
 		<div
 			class="row-fluid text-center"
@@ -524,6 +576,6 @@ function showalert(message,alerttype) {
 			%>
 		</div>
 	</div>
-<div id="alert_placeholder"></div>
+	<div id="alert_placeholder"></div>
 </body>
 </html>

@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.model.Attack;
+import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
@@ -38,6 +39,7 @@ public class AppController extends HttpServlet {
 	private Player currentPlayer;
 
 	private Attack attack;
+	private Move move;
 
 	private int stage;
 	private Integer directionsList;
@@ -92,17 +94,23 @@ public class AppController extends HttpServlet {
 				selectDefendingTerritory(request, response);
 				break;
 		case 5: directionsList = 0;
-				stage = 7;
-				selectOptions(request, response);
+				processResults(request, response);
 				break;
 		case 6: directionsList = 0;
-				stage = 6;
 				selectDefendingNumberOfArmies(request, response);
 				break;
 		case 7: directionsList = 0;
-				stage = 7;
 				selectOptions(request, response);
 				break;
+		case 8: directionsList = 0;
+				processResults(request, response);
+				break;
+		case 9: directionsList = 0;
+				selectMovingNumberOfArmies(request, response);
+				break;
+		case 10:	directionsList = 0;
+					doAttack(request, response);
+					break;
 		}
 	}
 
@@ -306,7 +314,6 @@ public class AppController extends HttpServlet {
 		log.debug("In doAttack()");
 
 		String attackResultsMessage = attack.doAttack();
-
 		log.debug(attackResultsMessage);
 
 		request.setAttribute("attackingArmyDice", attack.getAttackingArmyDice());
@@ -370,6 +377,79 @@ public class AppController extends HttpServlet {
 
 		dispatch(request, response);
 
+	}
+
+	/**
+	 * Stage 8
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+
+	protected void processResults(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		if (attack.isConquered()) {
+
+			move = new Move(attack.getAttackingTerritory(), attack.getDefendingTerritory());
+			if (move.onlyOneMoveAvailable()) {
+				move.setNumArmies(1);
+				log.debug("Changing stage to 10");
+				stage = 10;
+				doMove(request, response);
+			} else {
+				directionsList = 0;
+				stage = 9;
+				log.debug("Changing stage to 9");
+				request.setAttribute("source", move.getSource());
+				dispatch(request, response);
+			}
+		} else {
+			directionsList = 0;
+			stage = 7;
+			log.debug("Changing stage to 7");
+			selectOptions(request, response);
+		}
+
+	}
+
+	/**
+	 * Stage 9
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+
+	protected void selectMovingNumberOfArmies(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		move.setNumArmies(Integer.parseInt(request.getParameter("numArmies")));
+		log.debug("Changing stage to 10");
+		stage = 10;
+		doMove(request, response);
+	}
+
+	/**
+	 * Stage 10
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+
+	protected void doMove(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		move.doMove();
+		directionsList = 0;
+		stage = 7;
+		log.debug("Changing stage to 7");
+		selectOptions(request, response);
 	}
 
 	private void dispatch(HttpServletRequest request,
