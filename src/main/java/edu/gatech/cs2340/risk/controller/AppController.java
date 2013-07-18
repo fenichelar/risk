@@ -444,6 +444,7 @@ public class AppController extends HttpServlet {
 
 	protected void doMove(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
 		move.doMove();
 		directionsList = 0;
 		stage = 7;

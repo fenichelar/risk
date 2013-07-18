@@ -88,7 +88,7 @@ function showalert(message,alerttype) {
     $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
     setTimeout(function() {
       $("#alertdiv").remove();
-    }, 5000);
+    }, 4000);
   }
 
 <%if (!(stage > 3) && (directionsList != 0)) {%>
@@ -311,7 +311,7 @@ function showalert(message,alerttype) {
 			</div>
 		</div>
 		<div class="modal-footer">
-			<h4 id="attackResultsMessage"><%=attackResultsMessage%></h4>
+			<h5 id="attackResultsMessage"><%=attackResultsMessage%></h5>
 			<form
 				method="POST"
 				action="app"
@@ -343,7 +343,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="defendingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="defendingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -466,7 +466,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="movingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="movingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -501,6 +501,7 @@ function showalert(message,alerttype) {
 		id="wrap"
 		class="container-fluid"
 	>
+
 		<!-- WRITE PLAYERS IN ROLL ORDER -->
 		<div
 			class="row-fluid text-center"
@@ -575,6 +576,6 @@ function showalert(message,alerttype) {
 			%>
 		</div>
 	</div>
-<div id="alert_placeholder"></div>
+	<div id="alert_placeholder"></div>
 </body>
 </html>
