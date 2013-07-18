@@ -69,13 +69,16 @@ public class Attack {
 			        attackResultsMessage = "Attacker wins! ";
 			        defendingTerritory.removeNumberOfArmies(2);
 			        attackResultsMessage += "Two armies removed.";
-			} else if (attackerWinOne != attackerWinTwo) {
+			} else if (attackerWinOne && !attackerWinTwo) {
                                 attackResultsMessage = "Attacker wins one round, and defender wins one round. ";
                                 defendingTerritory.removeNumberOfArmies(1);
                                 attackResultsMessage += "Defending army removed. ";
                                 attackingTerritory.removeNumberOfArmies(1);
                                 attackResultsMessage += "Attacking army removed. ";
-			}
+			} else if (!attackerWinOne && !attackerWinTwo) {
+                                attackResultsMessage = "Attack failed. Two armies removed.";
+                                attackingTerritory.removeNumberOfArmies(2);
+                        }
 		} else {
                         if (attackerWinOne) {
                                attackResultsMessage = "Attacker wins! ";
