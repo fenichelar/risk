@@ -88,7 +88,7 @@ function showalert(message,alerttype) {
     $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
     setTimeout(function() {
       $("#alertdiv").remove();
-    }, 99999);
+    }, 4000);
   }
 
 <%if (!(stage > 3) && (directionsList != 0)) {%>
@@ -501,6 +501,7 @@ function showalert(message,alerttype) {
 		id="wrap"
 		class="container-fluid"
 	>
+
 		<!-- WRITE PLAYERS IN ROLL ORDER -->
 		<div
 			class="row-fluid text-center"
@@ -575,6 +576,6 @@ function showalert(message,alerttype) {
 			%>
 		</div>
 	</div>
-<div id="alert_placeholder"></div>
+	<div id="alert_placeholder"></div>
 </body>
 </html>

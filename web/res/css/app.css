@@ -505,3 +505,11 @@ div.dice {
 .defenceRolls div.value6 {
 	background: url("../img/diceWhite.jpg") 120px 120px;
 }
+
+/* ALERT STYLING */
+
+div#alertdiv {
+    position: relative;
+    width = 100%;
+    top: -400px;
+}
