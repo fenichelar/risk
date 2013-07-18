@@ -436,8 +436,10 @@ a.optionBtn {
 }
 
 /* ATTACK RESULTS */
-h4#attackResultsMessage {
+
+h5#attackResultsMessage {
 	float: left;
+    font-size: 16px;
 }
 
 div.dice {

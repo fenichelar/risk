@@ -311,7 +311,7 @@ function showalert(message,alerttype) {
 			</div>
 		</div>
 		<div class="modal-footer">
-			<h4 id="attackResultsMessage"><%=attackResultsMessage%></h4>
+			<h5 id="attackResultsMessage"><%=attackResultsMessage%></h5>
 			<form
 				method="POST"
 				action="app"
@@ -343,7 +343,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="defendingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="defendingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -466,7 +466,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="movingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="movingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>

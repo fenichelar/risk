@@ -10,8 +10,6 @@ public class Attack {
 	int[] defendingArmyDice;
 	int attackingArmyNum;
 	int defendingArmyNum;
-	boolean attackerWinOne;
-        boolean attackerWinTwo;
 
 	public Attack (Territory attackingTerritory) {
 		this.attackingTerritory = attackingTerritory;
@@ -45,55 +43,66 @@ public class Attack {
 		return defendingArmyDice;
 	}
 
-	private void calculateAttackWinners() {
-
-		int attackingDiceOne = attackingArmyDice[0];
-		int defendingDiceOne = defendingArmyDice[0];
-                attackerWinOne = attackingDiceOne > defendingDiceOne;
-                if (defendingArmyNum > 1) {
-                        int attackingDiceTwo = attackingArmyDice[1];
-                        int defendingDiceTwo = defendingArmyDice[1];
-                        attackerWinTwo = attackingDiceTwo > attackingDiceTwo;
-                }
-	}
 
 	public String doAttack() {
 
 		attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
 
-		calculateAttackWinners();
-		String attackResultsMessage = "";
-                if (defendingArmyNum > 1) {
-		        if (attackerWinOne && attackerWinTwo) {
-			        attackResultsMessage = "Attacker wins! ";
-			        defendingTerritory.removeNumberOfArmies(2);
-			        attackResultsMessage += "Two armies removed.";
-			} else if (attackerWinOne != attackerWinTwo) {
-                                attackResultsMessage = "Attacker wins one round, and defender wins one round. ";
-                                defendingTerritory.removeNumberOfArmies(1);
-                                attackResultsMessage += "Defending army removed. ";
-                                attackingTerritory.removeNumberOfArmies(1);
-                                attackResultsMessage += "Attacking army removed. ";
-			}
-		} else {
-                        if (attackerWinOne) {
-                               attackResultsMessage = "Attacker wins! ";
-                               defendingTerritory.removeNumberOfArmies(1);
-                               attackResultsMessage += "One army removed.";
-                        } else {
-                               attackResultsMessage = "Attack unsuccessful. ";
-                               attackingTerritory.removeNumberOfArmies(1);
-                               attackResultsMessage += "One army removed.";
-                        }
-                }
-                if (defendingTerritory.getNumberOfArmies() < 1) {
-                        attackResultsMessage = "Attacker wins! Territory acquired.";
-                        defendingTerritory.getOwner().removeTerritory(defendingTerritory);
-				        attackingTerritory.getOwner().addTerritory(defendingTerritory);
-                }
+		int[] results = calculateAttackWinners();
+		this.removeArmies(results);
 
-		return attackResultsMessage;
+		return createResultsMessage(results);
+	}
+
+	private int[] calculateAttackWinners() {
+
+		int defendingLoss = 0;
+		int attackingLoss = 0;
+
+		for (int i = 0; i < Math.max(attackingArmyDice.length, defendingArmyDice.length); i++) {
+			if (i == Math.min(attackingArmyDice.length, defendingArmyDice.length)) {
+				break;
+			}
+			if (attackingArmyDice[i] > defendingArmyDice[i]) {
+				defendingLoss++;
+			} else {
+				attackingLoss++;
+			}
+		}
+
+		int[] results = {defendingLoss, attackingLoss};
+		return results;
+	}
+
+	private String createResultsMessage(int[] results) {
+		if (this.isConquered()) {
+			return "Attack Successful! Territory acquired.";
+		}
+		String resultsMessage = "";
+		String attackSide;
+		for (int i = 0; i < results.length; i++) {
+			attackSide = (i == 0 ? "defending" : "attacking");
+			if (results[i] > 0) {
+				resultsMessage += "" + results[i] + " " + attackSide + " arm" + (results[i] < 2 ? "y" : "ies") + " removed. ";
+			}
+		}
+
+		return resultsMessage;
+	}
+
+	private void removeArmies(int[] results) {
+		defendingTerritory.removeNumberOfArmies(results[0]);
+		attackingTerritory.removeNumberOfArmies(results[1]);
+
+		if (this.isConquered()) {
+			this.conquerTerritory();
+		}
+	}
+
+	private void conquerTerritory() {
+		defendingTerritory.getOwner().removeTerritory(defendingTerritory);
+		attackingTerritory.getOwner().addTerritory(defendingTerritory);
 	}
 
 	public boolean isConquered() {
