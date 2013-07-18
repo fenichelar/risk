@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.model.Attack;
@@ -38,6 +39,7 @@ public class AppController extends HttpServlet {
 	private Player currentPlayer;
 
 	private Attack attack;
+	private Move moveArmies = new Move();
 
 	private int stage;
 	private Integer directionsList;
@@ -154,6 +156,7 @@ public class AppController extends HttpServlet {
 
 	/**
 	 * Assign armies to player at the beginning of a turn
+	 * Stage 2
 	 * 
 	 * @param request
 	 * @param response
@@ -287,7 +290,7 @@ public class AppController extends HttpServlet {
 			doAttack(request, response);
 			return;
 		}
-		
+
 		dispatch(request, response);
 	}
 
@@ -314,7 +317,6 @@ public class AppController extends HttpServlet {
 		request.setAttribute("attackResultsMessage", attackResultsMessage);
 
 		dispatch(request, response);
-
 	}
 
 	/**
@@ -371,6 +373,89 @@ public class AppController extends HttpServlet {
 		dispatch(request, response);
 
 	}
+	
+	/**
+	 * Stage 8
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected void selectFortifyingTerritory(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		log.debug("In selectFortifyingTerritory()");
+		request.setAttribute("directionsList", directionsList);
+
+		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
+		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
+
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory territory = TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
+
+		if (territory != null && territory.getNumberOfArmies() > 1) {
+
+			log.debug("Current territory: " + territory);
+
+			moveArmies.setFortifyingTerritory(territory);
+			log.debug("Fortifying territory: " + moveArmies.getFortifyingTerritory());
+			request.setAttribute("fortifyingTerritory", moveArmies.getFortifyingTerritory());
+			log.debug("Changing stage to 9");
+			stage = 4;
+
+		} else {
+			log.debug("Territory not satisfactory");
+		}
+
+		request.setAttribute("currentPlayer", currentPlayer);
+		request.setAttribute("players", players);
+		request.setAttribute("stage", stage);
+
+		RequestDispatcher dispatcher = 
+				getServletContext().getRequestDispatcher("/app.jsp");
+		dispatcher.forward(request,response);
+
+	}
+
+	/**
+	 * Stage 9 
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected void selectFortifiedTerritory(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		log.debug("In selectFortifiedTerritory()");
+	}
+	
+	/**
+	 * Stage 10
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected void doFortify(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		log.debug("In doAttack()");
+
+		String attackResultsMessage = attack.doAttack();
+
+		log.debug(attackResultsMessage);
+
+		request.setAttribute("attackingArmyDice", attack.getAttackingArmyDice());
+		request.setAttribute("defendingArmyDice", attack.getDefendingArmyDice());
+		request.setAttribute("attackResultsMessage", attackResultsMessage);
+
+		dispatch(request, response);
+	}
+	
 
 	private void dispatch(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
