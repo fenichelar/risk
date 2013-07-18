@@ -436,10 +436,8 @@ a.optionBtn {
 }
 
 /* ATTACK RESULTS */
-
-h5#attackResultsMessage {
+h4#attackResultsMessage {
 	float: left;
-    font-size: 16px;
 }
 
 div.dice {
@@ -504,12 +502,4 @@ div.dice {
 
 .defenceRolls div.value6 {
 	background: url("../img/diceWhite.jpg") 120px 120px;
-}
-
-/* ALERT STYLING */
-
-div#alertdiv {
-    position: relative;
-    width = 100%;
-    top: -400px;
 }
