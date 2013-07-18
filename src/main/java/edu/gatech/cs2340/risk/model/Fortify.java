@@ -1,6 +1,6 @@
 package main.java.edu.gatech.cs2340.risk.model;
 
-public class Move {
+public class Fortify {
 	
 	private Territory fortifyingTerritory, fortifiedTerritory;
 

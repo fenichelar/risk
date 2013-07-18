@@ -73,6 +73,13 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		log.debug("Returning territory " + territory);
 		return territory;
 	}
+	
+
+	@Override
+	public Territory getTerritory(Player currentPlayer, int territoryId) {
+		return TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
+	}
+
 
 	@Override
 	public ArrayList<Player> addTerritories(ArrayList<Player> players) {
@@ -123,13 +130,6 @@ public class TerritoryDAOMock implements TerritoryDAO {
 			}
 			territory.setNeighboringTerritories(tempNeighboringTerritories);
 		}
-	}
-
-
-	@Override
-	public Player addTerritories(Player player) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

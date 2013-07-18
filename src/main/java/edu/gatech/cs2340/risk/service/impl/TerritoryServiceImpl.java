@@ -31,15 +31,14 @@ public class TerritoryServiceImpl implements TerritoryService {
 	}
 
 	@Override
+	public Territory getTerritory(Player currentPlayer, int territoryId) {
+		return territoryDAO.getTerritory(currentPlayer, territoryId);
+	}
+	
+	@Override
 	public ArrayList<Player> addTerritories(ArrayList<Player> players) {
 		log.debug("Adding territories to players");
 		return territoryDAO.addTerritories(players);
-	}
-
-
-	@Override
-	public Player addTerritories(Player player) {
-		return territoryDAO.addTerritories(player);
 	}
 
 }

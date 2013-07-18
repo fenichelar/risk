@@ -7,11 +7,11 @@
 <% TerritoryServiceImpl territoryService = new TerritoryServiceImpl(); %>
 <% ArrayList<Player> players = (ArrayList<Player>) request.getAttribute("players"); %>
 <% Player currentPlayer = (Player) request.getAttribute("currentPlayer"); %>
+<% Risk risk = (Risk) request.getAttribute("risk"); %>
 
-<% Integer directionsList = (Integer) request.getAttribute("directionsList"); %>
 <%  
 	String directionsText = "";
-	switch (directionsList) {
+	switch (risk.getDirectionsNum()) {
 		case 0: break;
 		case 1: directionsText = "When it is your turn, click on any territory belonging to you to add an army to it.";
 				break;
@@ -28,7 +28,6 @@
 	}
 %>
 
-<% int stage = (Integer) request.getAttribute("stage"); %>
 <% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
 <% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
 <% Territory fortifyingTerritory = (Territory) request.getAttribute("fortifyingTerritory"); %>
@@ -45,12 +44,14 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/bootstrap-slider.js"></script>
 <script type="text/javascript">
-	<% if (!( stage > 3) && (directionsList != 0 )) { %>
+<%	if (risk.getDirectionsNum() > 0 ) { %>
+	System.out.println("Displaying directions");
 		$(function() {
     		$('#directions').modal('show');
 		});
 	<% } %>
-	<% if (stage == 4) { %>
+	<% if (risk.getStage() == RiskConstants.ATTACK 
+			&& risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {  %>
 		$(function() {
 			$('#attackDialog').modal({
   				keyboard : false,
@@ -60,7 +61,8 @@
     		$('.slider').slider();
 		});
 	<% } %>
-	<% if (stage == 6) { %>
+	<% if (risk.getStage() == RiskConstants.ATTACK 
+			&& risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) { %>
 		$(function() {
 			$('#defendingArmyNumDialog').modal({
   				keyboard : false,
@@ -70,7 +72,8 @@
 			$('.slider').slider();
 		});
 	<% } %>
-	<% if (stage == 5) { %>
+	<% if (risk.getStage() == RiskConstants.ATTACK 
+			&& risk.getStep() == RiskConstants.DO_ATTACK) {  %>
 		$(function() {
 			$('#attackResultsDialog').modal({
   				keyboard : false,
@@ -79,7 +82,7 @@
 			});
 		});
 	<% } %>
-	<% if (stage == 7) { %>
+	<%  if (risk.getStep() == RiskConstants.SELECT_OPTIONS) { %>
 		$(function() {
 			$('#optionsDialog').modal({
   				keyboard : false,
@@ -110,7 +113,8 @@
 
 	<%
 
-	if (stage == 4) {
+	if (risk.getStage() == RiskConstants.ATTACK 
+			&& risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
 		String territoryName = attackingTerritory.getTerritoryName();
 		int minArmies = 1;
                 int maxArmies = 1;
@@ -176,7 +180,8 @@
 	<% } %>
 
 	<% 
-		if (stage == 5) {
+	 if (risk.getStage() == RiskConstants.ATTACK && risk.getStep() == RiskConstants.DO_ATTACK) { 
+		 
 			int[] attackingArmyDice = (int[])request.getAttribute("attackingArmyDice");
 			int[] defendingArmyDice = (int[])request.getAttribute("defendingArmyDice");
 			String attackResultsMessage = (String)request.getAttribute("attackResultsMessage");
@@ -213,7 +218,8 @@
 	<% } %>
 
 	<% 
-	if (stage == 6) {
+	 if (risk.getStage() == RiskConstants.ATTACK && risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {
+		 
 		String territoryName = defendingTerritory.getTerritoryName();
 		int minArmies = 1;
 		int maxArmies = 2;
@@ -251,7 +257,7 @@
 	<% } %>
 
 	<% 
-	if (stage == 7) {
+	if (risk.getStep() == RiskConstants.SELECT_OPTIONS) {
 	%>
 
 	<div id="optionsDialog" class="modal hide fade" tabindex="-1"
