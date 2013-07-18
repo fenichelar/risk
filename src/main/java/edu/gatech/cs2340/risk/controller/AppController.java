@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.controller.helper.AttackController;
-import main.java.edu.gatech.cs2340.risk.controller.helper.FortifyController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.MoveController;
 import main.java.edu.gatech.cs2340.risk.controller.helper.InitializeController;
-import main.java.edu.gatech.cs2340.risk.controller.helper.RotateController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.TurnController;
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
@@ -40,9 +40,9 @@ public class AppController extends HttpServlet {
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 	
 	private InitializeController initializeController = new InitializeController();
-	private RotateController rotateController = new RotateController();
+	private TurnController turnController = new TurnController();
 	private AttackController attackController = new AttackController();
-	private FortifyController fortifyController = new FortifyController();
+	private MoveController moveController = new MoveController();
 
 
 	@Override
@@ -71,7 +71,7 @@ public class AppController extends HttpServlet {
 		risk = new Risk(this, players);
 		risk.setStage(RiskConstants.INITIALIZE);
 		risk.setStep(RiskConstants.NO_STEP);
-		risk.setDirectionsNum(RiskConstants.INITIAL_DIRECTION);
+		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
 		
 		forwardUpdatedVariables(request, response, risk);
 	}
@@ -82,19 +82,19 @@ public class AppController extends HttpServlet {
 					throws IOException, ServletException {
 
 		log.debug("In doPost()");
-		risk.setDirectionsNum(RiskConstants.NO_DIRECTION);
+		risk.setDirections(RiskConstants.NO_DIRECTIONS);
 		switch (risk.getStage()) {
 			case RiskConstants.INITIALIZE: 
 				initializeController.doPost(request, response, risk);
 				break;
-			case RiskConstants.ROTATE_PLAYERS: 
-				rotateController.doPost(request, response, risk);
+			case RiskConstants.SETUP_TURN: 
+				turnController.doPost(request, response, risk);
 				break;
 			case RiskConstants.ATTACK: 
 				attackController.doPost(request, response, risk);
 				break;
-			case RiskConstants.FORTIFY: 
-				fortifyController.doPost(request, response, risk);
+			case RiskConstants.MOVE_ARMIES: 
+				moveController.doPost(request, response, risk);
 				break;
 		}
 	}
@@ -111,5 +111,7 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
+
+
 
 }

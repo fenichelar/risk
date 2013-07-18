@@ -13,26 +13,30 @@ import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
+import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
  * Stage 2
  *
  */
-public class RotateController extends HttpServlet {
+public class TurnController extends HttpServlet {
 	
-	private static Logger log = Logger.getLogger(RotateController.class);
+	private static Logger log = Logger.getLogger(TurnController.class);
 	
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 		
 		log.debug("In doPost()");
 		switch (risk.getStep()) {
-			case RiskConstants.BEGINNING_OF_TURN: 
+			case RiskConstants.BEFORE_TURN: 
 				assignAdditionalArmies(request, response, risk);
 				break;
-			case RiskConstants.SELECT_DEFENDING_TERRITORY: 
+			case RiskConstants.BEGINNING_OF_TURN: 
 				distributeAdditionalArmies(request, response, risk);
+				break;
+			case RiskConstants.DURING_TURN: 
+				determineNextMove(request, response, risk);
 				break;
 		}
 	}
@@ -48,7 +52,7 @@ public class RotateController extends HttpServlet {
 
 		risk.getCurrentPlayer().setAvailableArmies(armiesToAssign);
 		risk.setStep(RiskConstants.DURING_TURN);
-		risk.setDirectionsNum(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
+		risk.setDirections(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
@@ -73,13 +77,42 @@ public class RotateController extends HttpServlet {
 			risk.getCurrentPlayer().removeArmy();
 
 			if (risk.getCurrentPlayer().getAvailableArmies() == 0) {
-				risk.setStage(RiskConstants.SELECT_OPTIONS);
+				risk.setStage(RiskConstants.SETUP_TURN);
+				risk.setStep(RiskConstants.DURING_TURN);
 			}
 
 		} else {
 			log.debug("Territory does not belong to player");
 		}
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
+	}
+	
+	protected void determineNextMove(HttpServletRequest request,
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
+
+		String option = request.getParameter("option");
+
+		if (option != null) {
+			switch (option) {
+				case "attack":		risk.setStage(RiskConstants.ATTACK);
+									risk.setStep(RiskConstants.SELECT_ATTACKING_TERRITORY);
+									risk.setDirections(RiskConstants.SELECT_TERRITORY_DIRECTIONS);	
+									break;
+
+				case "fortify":		risk.setStage(RiskConstants.MOVE_ARMIES);
+									risk.setStep(RiskConstants.SELECT_SOURCE_TERRITORY);
+
+				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);
+									risk.setStage(RiskConstants.SETUP_TURN);
+									risk.setStep(RiskConstants.BEFORE_TURN);
+									risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
+									log.debug("New Current Player: " + risk.getCurrentPlayer());
+									assignAdditionalArmies(request, response, risk);
+									return;
+			}
+		}
+		risk.getAppController().forwardUpdatedVariables(request, response, risk);
+
 	}
 
 

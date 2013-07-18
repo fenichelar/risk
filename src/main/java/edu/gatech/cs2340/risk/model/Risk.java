@@ -14,10 +14,10 @@ public class Risk {
 	
 	private int stage;
 	private int step;
-	private int directionsNum;
+	private int directions;
 	
 	private Attack attack;
-	private Fortify fortify;
+	private Move move;
 	
 	
 	public Risk(AppController appController, ArrayList<Player> players) {
@@ -74,12 +74,12 @@ public class Risk {
 		this.step = step;
 	}
 
-	public int getDirectionsNum() {
-		return directionsNum;
+	public int getDirections() {
+		return directions;
 	}
 
-	public void setDirectionsNum(int directionsNum) {
-		this.directionsNum = directionsNum;
+	public void setDirections(int directions) {
+		this.directions = directions;
 	}
 
 	public Attack getAttack() {
@@ -90,12 +90,12 @@ public class Risk {
 		this.attack = attack;
 	}
 
-	public Fortify getFortify() {
-		return fortify;
+	public Move getMove() {
+		return move;
 	}
 
-	public void setFortify(Fortify fortify) {
-		this.fortify = fortify;
+	public void setMove(Move move) {
+		this.move = move;
 	}
 
 }

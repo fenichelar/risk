@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
-import main.java.edu.gatech.cs2340.risk.model.Fortify;
+import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
@@ -19,31 +19,31 @@ import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
  * Stage 4
  *
  */
-public class FortifyController extends HttpServlet {
+public class MoveController extends HttpServlet {
 	
-	private static Logger log = Logger.getLogger(FortifyController.class);
+	private static Logger log = Logger.getLogger(MoveController.class);
 	
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 		
 		switch (risk.getStep()) {
-			case RiskConstants.SELECT_FORTIFYING_TERRITORY: 
-				selectFortifyingTerritory(request, response, risk);
+			case RiskConstants.SELECT_SOURCE_TERRITORY: 
+				selectSourceTerritory(request, response, risk);
 				break;
-			case RiskConstants.SELECT_FORTIFIED_TERRITORY: 
-				selectFortifiedTerritory(request, response, risk);
+			case RiskConstants.SELECT_DESTINATION_TERRITORY: 
+				selectDestinationTerritory(request, response, risk);
 				break;
-			case RiskConstants.DO_FORTIFY: 
-				doFortify(request, response, risk);
+			case RiskConstants.DO_MOVE: 
+				doMove(request, response, risk);
 				break;
 		}
 	}
 	
 
-	protected void selectFortifyingTerritory(HttpServletRequest request,
+	protected void selectSourceTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
-		log.debug("In selectFortifyingTerritory()");
+		log.debug("In selectSourceTerritory()");
 
 		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 
@@ -55,31 +55,28 @@ public class FortifyController extends HttpServlet {
 
 			log.debug("Current territory: " + currentTerritory);
 
-			risk.setFortify(new Fortify());
-			risk.getFortify().setFortifyingTerritory(currentTerritory);
-			log.debug("Fortifying territory: " + risk.getFortify().getFortifyingTerritory());
-			request.setAttribute("fortifyingTerritory", risk.getFortify().getFortifyingTerritory());
+			risk.setMove(new Move(currentTerritory));
 			log.debug("Changing step to SELECT_FORTIFIED_TERRITORY");
-			risk.setStep(RiskConstants.SELECT_FORTIFIED_TERRITORY);
+			risk.setStep(RiskConstants.SELECT_DESTINATION_TERRITORY);
 
 		} else {
-			log.debug("Territory not satisfactory");
+			log.debug("Territory cannot be used as source territory");
 		}
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 
 
-	protected void selectFortifiedTerritory(HttpServletRequest request,
+	protected void selectDestinationTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
-		log.debug("In selectFortifiedTerritory()");
+		log.debug("In selectDestinationTerritory()");
 	}
 
 
-	protected void doFortify(HttpServletRequest request,
+	protected void doMove(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
-		log.debug("In doFortify()");
+		log.debug("In doMove()");
 
 	}
 }

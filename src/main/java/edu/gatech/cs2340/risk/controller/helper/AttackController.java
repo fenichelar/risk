@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Attack;
+import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
@@ -23,6 +24,9 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 public class AttackController extends HttpServlet {
 	
 	private static Logger log = Logger.getLogger(AttackController.class);
+	
+	private MoveController moveController = new MoveController();
+	private TurnController turnController = new TurnController();
 	
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
@@ -39,6 +43,9 @@ public class AttackController extends HttpServlet {
 				break;
 			case RiskConstants.DO_ATTACK: 
 				doAttack(request, response, risk);
+				break;
+			case RiskConstants.DURING_ATTACK: 
+				processAttackRequest(request, response, risk);
 				break;
 		}
 	}
@@ -81,7 +88,8 @@ public class AttackController extends HttpServlet {
 		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
 
 		if (cancelled) {
-			risk.setStage(RiskConstants.SELECT_OPTIONS);
+			risk.setStage(RiskConstants.SETUP_TURN);
+			risk.setStep(RiskConstants.DURING_TURN);
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}
@@ -135,6 +143,39 @@ public class AttackController extends HttpServlet {
 		request.setAttribute("attackResultsMessage", attackResultsMessage);
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
+	}
+	
+	protected void processAttackRequest(HttpServletRequest request,
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
+
+		if (risk.getAttack().defendingTerritoryIsConquered()) {
+
+			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), 
+					risk.getAttack().getDefendingTerritory()));
+			if (risk.getMove().onlyOneMoveAvailable()) {
+				risk.getMove().setNumArmies(1);
+				log.debug("Changing stage to ATTACK and step to DO_ATTACK");
+				risk.setStage(RiskConstants.ATTACK);
+				risk.setStep(RiskConstants.DO_ATTACK);
+				
+				moveController.doMove(request, response, risk);
+				return;
+			} else {
+				risk.setDirections(RiskConstants.NO_DIRECTIONS);
+				log.debug("Changing stage to MOVE and step to SELECT_ARMIES_TRANSFERRED");
+				risk.setStage(RiskConstants.MOVE_ARMIES);
+				risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
+				risk.getAppController().forwardUpdatedVariables(request, response, risk);
+			}
+		} else {
+			risk.setDirections(RiskConstants.NO_DIRECTIONS);
+			risk.setStage(RiskConstants.SETUP_TURN);
+			risk.setStep(RiskConstants.DURING_TURN);
+			log.debug("Changing stage to SETUP_TURN and stage to DURING_TURN");
+			turnController.determineNextMove(request, response, risk);
+			return;
+		}
+
 	}
 
 
