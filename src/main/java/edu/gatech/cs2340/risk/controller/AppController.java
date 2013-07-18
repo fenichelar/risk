@@ -295,7 +295,7 @@ public class AppController extends HttpServlet {
 			doAttack(request, response);
 			return;
 		}
-		
+
 		dispatch(request, response);
 	}
 
