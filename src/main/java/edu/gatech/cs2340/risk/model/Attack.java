@@ -44,11 +44,13 @@ public class Attack {
 	}
 
 
+
 	public String doAttack() {
 
 		attackingArmyDice = DiceUtil.rollDice(Math.min(attackingArmyNum, 3));
 		defendingArmyDice = DiceUtil.rollDice(Math.min(defendingTerritory.getNumberOfArmies(), 2));
 
+<<<<<<< HEAD
 		int[] results = calculateAttackWinners();
 		this.removeArmies(results);
 

@@ -88,7 +88,7 @@ function showalert(message,alerttype) {
     $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
     setTimeout(function() {
       $("#alertdiv").remove();
-    }, 5000);
+    }, 99999);
   }
 
 <%if (!(stage > 3) && (directionsList != 0)) {%>
