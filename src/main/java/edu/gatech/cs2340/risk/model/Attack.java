@@ -50,10 +50,10 @@ public class Attack {
 		int attackingDiceOne = attackingArmyDice[0];
 		int defendingDiceOne = defendingArmyDice[0];
                 attackerWinOne = attackingDiceOne > defendingDiceOne;
-                if (defendingArmyNum > 1) {
+                if (defendingArmyNum > 1 && attackingArmyNum > 1) {
                         int attackingDiceTwo = attackingArmyDice[1];
                         int defendingDiceTwo = defendingArmyDice[1];
-                        attackerWinTwo = attackingDiceTwo > attackingDiceTwo;
+                        attackerWinTwo = attackingDiceTwo > defendingDiceTwo;
                 }
 	}
 
@@ -64,7 +64,7 @@ public class Attack {
 
 		calculateAttackWinners();
 		String attackResultsMessage = "";
-                if (defendingArmyNum > 1) {
+                if (defendingArmyNum > 1 && attackingArmyNum > 1) {
 		        if (attackerWinOne && attackerWinTwo) {
 			        attackResultsMessage = "Attacker wins! ";
 			        defendingTerritory.removeNumberOfArmies(2);
@@ -75,7 +75,10 @@ public class Attack {
                                 attackResultsMessage += "Defending army removed. ";
                                 attackingTerritory.removeNumberOfArmies(1);
                                 attackResultsMessage += "Attacking army removed. ";
-			}
+			} else if (!attackerWinOne && !attackerWinTwo) {
+                                attackResultsMessage = "Attack failed. Two armies removed.";
+                                attackingTerritory.removeNumberOfArmies(2);
+                        }
 		} else {
                         if (attackerWinOne) {
                                attackResultsMessage = "Attacker wins! ";
@@ -90,7 +93,7 @@ public class Attack {
                 if (defendingTerritory.getNumberOfArmies() < 1) {
                         attackResultsMessage = "Attacker wins! Territory acquired.";
                         defendingTerritory.getOwner().removeTerritory(defendingTerritory);
-				        attackingTerritory.getOwner().addTerritory(defendingTerritory);
+		        attackingTerritory.getOwner().addTerritory(defendingTerritory);
                 }
 
 		return attackResultsMessage;
