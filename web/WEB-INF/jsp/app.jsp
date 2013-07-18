@@ -46,10 +46,11 @@
 <%
 	Territory attackingTerritory = (Territory) request
 			.getAttribute("attackingTerritory");
-%>
-<%
 	Territory defendingTerritory = (Territory) request
 			.getAttribute("defendingTerritory");
+%>
+<%
+	Territory source = (Territory) request.getAttribute("source");
 %>
 <html>
 <head>
@@ -123,7 +124,6 @@ function showalert(message,alerttype) {
 		$('#attackResultsDialog').modal({
 			keyboard : false,
 			show : true
-
 		});
 	});
 <%}%>
@@ -133,8 +133,17 @@ function showalert(message,alerttype) {
 		$('#optionsDialog').modal({
 			keyboard : false,
 			show : true
-
 		});
+	});
+<%}%>
+
+<%if (stage == 9) {%>
+	$(function() {
+		$('#movingArmyNumDialog').modal({
+			keyboard : false,
+			show : true
+		});
+		$('.slider').slider();
 	});
 <%}%>
 
@@ -285,7 +294,7 @@ function showalert(message,alerttype) {
 				<%
 					for (int dieValue : attackingArmyDice) {
 				%>
-				<div class="value<%=dieValue%>"></div>
+						<div class="value<%=dieValue%>"></div>
 				<%
 					}
 				%>
@@ -295,7 +304,7 @@ function showalert(message,alerttype) {
 				<%
 					for (int dieValue : defendingArmyDice) {
 				%>
-				<div class="value<%=dieValue%>"></div>
+						<div class="value<%=dieValue%>"></div>
 				<%
 					}
 				%>
@@ -323,11 +332,6 @@ function showalert(message,alerttype) {
 			String territoryName = defendingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 2;
-			if (defendingTerritory.getNumberOfArmies() > 2) {
-				maxArmies = 2;
-			} else {
-				maxArmies = 1;
-			}
 	%>
 	<div
 		id="defendingArmyNumDialog"
@@ -339,7 +343,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="defendingArmyNumLabel">Attack Results</h3>
+			<h3 id="defendingArmyNumLabel">Select Num Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -440,6 +444,53 @@ function showalert(message,alerttype) {
 					class="optionBtn btn btn-large btn-danger"
 					value="End Turn"
 				>
+			</form>
+		</div>
+	</div>
+	<%
+		}
+	%>
+	<%
+		if (stage == 9) {
+			String territoryName = source.getTerritoryName();
+			int minArmies = 1;
+			int maxArmies = source.getNumberOfArmies() - 1;
+	%>
+	<div
+		id="movingArmyNumDialog"
+		class="modal hide fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="movingArmyNumLabel"
+		aria-hidden="true"
+		data-backdrop="static"
+	>
+		<div class="modal-header">
+			<h3 id="movingArmyNumLabel">Select Num Armies</h3>
+		</div>
+		<div class="modal-body">
+			<h2><%=territoryName%></h2>
+			<form
+				method="POST"
+				action="app"
+			>
+				<p>Select number of armies to move to destination</p>
+				<span class="sliderContext minArmies"><%=minArmies%></span> <input
+					type="text"
+					name="numArmies"
+					class="slider"
+					value="<%=maxArmies%>"
+					data-slider-min="<%=minArmies%>"
+					data-slider-max="<%=maxArmies%>"
+					data-slider-value="<%=maxArmies%>"
+				> <span class="sliderContext maxArmies"><%=maxArmies%></span>
+		</div>
+		<div class="modal-footer">
+			<input
+				type="submit"
+				class="btn btn-primary"
+				value="Continue"
+			/>
 			</form>
 		</div>
 	</div>

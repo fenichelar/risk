@@ -63,6 +63,10 @@ public class Territory {
         	this.numberOfArmies -= numberOfArmies;
         }
 
+        public void addNumberOfArmies(int numberOfArmies) {
+        	this.numberOfArmies += numberOfArmies;
+        }
+
         public void addArmy() {
         	numberOfArmies++;
         }

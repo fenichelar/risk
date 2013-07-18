@@ -33,6 +33,10 @@ public class Attack {
 		return attackingTerritory;
 	}
 
+	public Territory getDefendingTerritory() {
+		return defendingTerritory;
+	}
+
 	public int[] getAttackingArmyDice() {
 		return attackingArmyDice;
 	}
@@ -86,12 +90,14 @@ public class Attack {
                 if (defendingTerritory.getNumberOfArmies() < 1) {
                         attackResultsMessage = "Attacker wins! Territory acquired.";
                         defendingTerritory.getOwner().removeTerritory(defendingTerritory);
-                        attackingTerritory.getOwner().addTerritory(defendingTerritory);
-                        defendingTerritory.setNumberOfArmies(attackingArmyNum);
-                        attackingTerritory.removeNumberOfArmies(attackingArmyNum);
+				        attackingTerritory.getOwner().addTerritory(defendingTerritory);
                 }
 
 		return attackResultsMessage;
+	}
+
+	public boolean isConquered() {
+		return defendingTerritory.getNumberOfArmies() < 1;
 	}
 
 }
