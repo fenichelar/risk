@@ -21,7 +21,6 @@
 <%
 	String directionsText = "";
 	switch (directionsList) {
-<<<<<<< HEAD
 	case 0:
 		break;
 	case 1:
@@ -39,24 +38,8 @@
 		directionsText = currentPlayer.getPlayerName()
 				+ ", select a territory to attack from.";
 		break;
-=======
-		case 0: break;
-		case 1: directionsText = "When it is your turn, click on any territory belonging to you to add an army to it.";
-				break;
-		case 2: directionsText = currentPlayer.getPlayerName() + ", you have " 
-								+ currentPlayer.getAvailableArmies() + " additional " 
-								+ (currentPlayer.getAvailableArmies() > 1 ? "armies" : "army") + " to distribute.";
-				break;
-		case 3: directionsText = currentPlayer.getPlayerName() + ", select a territory to attack from.";
-				break;
-		case 4: directionsText = currentPlayer.getPlayerName() + ", select a territory to fortify from.";
-				break;
-		case 5: directionsText = currentPlayer.getPlayerName() + ", select a territory to fortify.";
-				break;
->>>>>>> branch 'M4' of https://github.com/cepaulus/cs2340-team10.git
 	}
 %>
-<<<<<<< HEAD
 <%
 	int stage = (Integer) request.getAttribute("stage");
 %>
@@ -69,16 +52,6 @@
 <%
 	Territory source = (Territory) request.getAttribute("source");
 %>
-=======
-
-<% int stage = (Integer) request.getAttribute("stage"); %>
-<% Territory attackingTerritory = (Territory) request.getAttribute("attackingTerritory"); %>
-<% Territory defendingTerritory = (Territory) request.getAttribute("defendingTerritory"); %>
-<% Territory fortifyingTerritory = (Territory) request.getAttribute("fortifyingTerritory"); %>
-<% Territory fortifiedTerritory = (Territory) request.getAttribute("fortifiedTerritory"); %>
-
-
->>>>>>> branch 'M4' of https://github.com/cepaulus/cs2340-team10.git
 <html>
 <head>
 <title>Risk - Game</title>
@@ -131,7 +104,6 @@ function showalert(message,alerttype) {
 			show : true
 
 		});
-<<<<<<< HEAD
 		$('.slider').slider();
 	});
 <%}%>
@@ -176,11 +148,6 @@ function showalert(message,alerttype) {
 <%}%>
 
 </script>
-=======
-	<% } %>
-	
-	</script>
->>>>>>> branch 'M4' of https://github.com/cepaulus/cs2340-team10.git
 </head>
 <body>
 	<%
@@ -480,26 +447,7 @@ function showalert(message,alerttype) {
 			</form>
 		</div>
 	</div>
-<<<<<<< HEAD
 	<%
-=======
-
-	<% } %>
-	
-	<div id="wrap" class="container-fluid">
-
-		<!-- WRITE PLAYERS IN ROLL ORDER -->
-
-		<div class="row-fluid text-center" id="players">
-			<% 
-		String span = "span" + (12/players.size());
-		boolean oddOffset = false;
-
-		if (players.size()%2 != 0) {
-			span = "span" + (10/players.size());
-			oddOffset = true;
-
->>>>>>> branch 'M4' of https://github.com/cepaulus/cs2340-team10.git
 		}
 	%>
 	<%
