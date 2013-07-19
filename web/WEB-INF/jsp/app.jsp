@@ -153,7 +153,6 @@ function showalert(message,alerttype) {
 	<%
 	if (risk.getStage() == RiskConstants.ATTACK &&
 		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
-		
 			String territoryName = attackingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 1;
@@ -270,7 +269,7 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-	if (risk.getStage() == RiskConstants.ATTACK &&
+if (risk.getStage() == RiskConstants.ATTACK &&
 	risk.getStep() == RiskConstants.DO_ATTACK) {
 			int[] attackingArmyDice = (int[]) request
 					.getAttribute("attackingArmyDice");

@@ -10,11 +10,11 @@ public class Territory {
 	private Player owner;
 	private int numberOfArmies; 
 	private ArrayList<Territory> neighboringTerritories;
-	
+
 	public Territory() {
 		this.setTerritoryId(-1);
 		this.territoryName = "Null Territory";
-		
+
 		setNumberOfArmies(0);
 	}
 

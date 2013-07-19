@@ -33,12 +33,12 @@ import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 public class AppController extends HttpServlet {
 
 	private static Logger log = Logger.getLogger(AppController.class);
-	
+
 	private Risk risk;
 
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
-	
+
 	private InitializeController initializeController = new InitializeController();
 	private TurnController turnController = new TurnController();
 	private AttackController attackController = new AttackController();
@@ -72,7 +72,7 @@ public class AppController extends HttpServlet {
 		risk.setStage(RiskConstants.INITIALIZE);
 		risk.setStep(RiskConstants.NO_STEP);
 		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
-		
+
 		forwardUpdatedVariables(request, response, risk);
 	}
 
@@ -98,7 +98,7 @@ public class AppController extends HttpServlet {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Sends updated variables back to app.jsp
 	 * Called by all helper controllers
