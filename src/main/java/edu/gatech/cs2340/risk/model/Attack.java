@@ -10,6 +10,12 @@ public class Attack {
 	int[] defendingArmyDice;
 	int attackingArmyNum;
 	int defendingArmyNum;
+	
+	// null case for Attack to avoid throwing a Null Pointer Exception
+	public Attack() {
+		this.attackingTerritory = new Territory();
+		this.defendingTerritory = new Territory();
+	}
 
 	public Attack (Territory attackingTerritory) {
 		this.attackingTerritory = attackingTerritory;
@@ -28,11 +34,11 @@ public class Attack {
 	}
 
 	public Territory getAttackingTerritory() {
-		return attackingTerritory;
+		return ( attackingTerritory == null ? new Territory() : attackingTerritory );
 	}
 
 	public Territory getDefendingTerritory() {
-		return defendingTerritory;
+		return ( defendingTerritory == null ? new Territory() : defendingTerritory );
 	}
 
 	public int[] getAttackingArmyDice() {

@@ -83,7 +83,7 @@ public class Risk {
 	}
 
 	public Attack getAttack() {
-		return attack;
+		return ( attack == null ? new Attack() : attack );
 	}
 
 	public void setAttack(Attack attack) {
