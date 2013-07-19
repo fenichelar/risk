@@ -10,7 +10,7 @@ public class Attack {
 	int[] defendingArmyDice;
 	int attackingArmyNum;
 	int defendingArmyNum;
-	
+
 	// null case for Attack to avoid throwing a Null Pointer Exception
 	public Attack() {
 		this.attackingTerritory = new Territory();

@@ -8,8 +8,7 @@
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff),
-		color-stop(47%, #fbfbfb), color-stop(100%, #f7f7f7));
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(47%, #fbfbfb), color-stop(100%, #f7f7f7));
 	/* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* Chrome10+,Safari5.1+ */
@@ -19,8 +18,7 @@
 	/* IE10+ */
 	background: linear-gradient(to bottom, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(     startColorstr='#ffffff',
-		endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient(       startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
 	border: 1px solid #CCC;
 	border-bottom: 10px solid #CCC;
 	border-top: none;
@@ -438,8 +436,10 @@ a.optionBtn {
 }
 
 /* ATTACK RESULTS */
-h4#attackResultsMessage {
+
+h5#attackResultsMessage {
 	float: left;
+    font-size: 16px;
 }
 
 div.dice {
@@ -504,4 +504,12 @@ div.dice {
 
 .defenceRolls div.value6 {
 	background: url("../img/diceWhite.jpg") 120px 120px;
+}
+
+/* ALERT STYLING */
+
+div#alertdiv {
+    position: relative;
+    width = 100%;
+    top: -400px;
 }
