@@ -99,7 +99,16 @@ public class AppController extends HttpServlet {
 		}
 	}
 	
-	
+	/**
+	 * Sends updated variables back to app.jsp
+	 * Called by all helper controllers
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	public void forwardUpdatedVariables(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
