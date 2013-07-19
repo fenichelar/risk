@@ -51,7 +51,7 @@ public class TurnController extends HttpServlet {
 				+ armiesToAssign + " additional armies");
 
 		risk.getCurrentPlayer().setAvailableArmies(armiesToAssign);
-		risk.setStep(RiskConstants.SHOW_OPTIONS);
+		risk.setStep(RiskConstants.BEGINNING_OF_TURN);
 		risk.setDirections(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
@@ -90,7 +90,9 @@ public class TurnController extends HttpServlet {
 	protected void determineNextMove(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
+		log.debug("In determineNextMove");
 		String option = request.getParameter("option");
+		log.debug("Option: " + option);
 
 		if (option != null) {
 			switch (option) {
@@ -105,7 +107,7 @@ public class TurnController extends HttpServlet {
 				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);
 									risk.setStage(RiskConstants.SETUP_TURN);
 									risk.setStep(RiskConstants.BEFORE_TURN);
-									risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
+									risk.moveToNextPlayer();
 									log.debug("New Current Player: " + risk.getCurrentPlayer());
 									assignAdditionalArmies(request, response, risk);
 									return;

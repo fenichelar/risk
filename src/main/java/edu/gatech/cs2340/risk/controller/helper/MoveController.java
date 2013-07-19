@@ -23,6 +23,8 @@ public class MoveController extends HttpServlet {
 	
 	private static Logger log = Logger.getLogger(MoveController.class);
 	
+	private TurnController turnController = new TurnController();
+	
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 		
@@ -33,6 +35,8 @@ public class MoveController extends HttpServlet {
 			case RiskConstants.SELECT_DESTINATION_TERRITORY: 
 				selectDestinationTerritory(request, response, risk);
 				break;
+			case RiskConstants.SELECT_ARMIES_TRANSFERRED:
+				selectArmiesTransferred(request, response, risk);
 			case RiskConstants.DO_MOVE: 
 				doMove(request, response, risk);
 				break;
@@ -71,12 +75,27 @@ public class MoveController extends HttpServlet {
 
 		log.debug("In selectDestinationTerritory()");
 	}
+	
+	protected void selectArmiesTransferred(HttpServletRequest request,
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
+
+		risk.getMove().setNumArmies(Integer.parseInt(request.getParameter("numArmies")));
+		log.debug("Changing stage to ATTACK and step to DO ATTACK");
+		risk.setStage(RiskConstants.ATTACK);
+		risk.setStep(RiskConstants.DO_ATTACK);
+		doMove(request, response, risk);
+	}
 
 
 	protected void doMove(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In doMove()");
-
+		risk.getMove().doMove();
+		risk.setDirections(RiskConstants.NO_DIRECTIONS);
+		risk.setStage(RiskConstants.SETUP_TURN);
+		risk.setStep(RiskConstants.SHOW_OPTIONS);
+		log.debug("Changing stage to SETUP_TURN and step to SHOW_OPTIONS");
+		turnController.determineNextMove(request, response, risk);
 	}
 }

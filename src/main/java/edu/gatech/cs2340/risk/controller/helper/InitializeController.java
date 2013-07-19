@@ -57,7 +57,7 @@ public class InitializeController extends HttpServlet {
 			if (risk.getCurrentPlayer().getAvailableArmies() < 1) {
 				log.debug("Entering secondary stage!");
 				risk.setStage(RiskConstants.SETUP_TURN);
-				risk.setStep(RiskConstants.BEGINNING_OF_TURN);
+				risk.setStep(RiskConstants.BEFORE_TURN);
 				rotateController.doPost(request, response, risk);
 				return;
 			}

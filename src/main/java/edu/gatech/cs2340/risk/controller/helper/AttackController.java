@@ -42,9 +42,9 @@ public class AttackController extends HttpServlet {
 				selectDefendingNumberOfArmies(request, response, risk);
 				break;
 			case RiskConstants.DO_ATTACK: 
-				doAttack(request, response, risk);
+				processAttackRequest(request, response, risk);
 				break;
-			case RiskConstants.DURING_ATTACK: 
+			case RiskConstants.PROCESS_ATTACK: 
 				processAttackRequest(request, response, risk);
 				break;
 		}
@@ -149,10 +149,11 @@ public class AttackController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		if (risk.getAttack().defendingTerritoryIsConquered()) {
-
+			
 			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), 
 					risk.getAttack().getDefendingTerritory()));
 			if (risk.getMove().onlyOneMoveAvailable()) {
+				log.debug("(only one move available) Move: " + risk.getMove());
 				risk.getMove().setNumArmies(1);
 				log.debug("Changing stage to ATTACK and step to DO_ATTACK");
 				risk.setStage(RiskConstants.ATTACK);
@@ -161,6 +162,7 @@ public class AttackController extends HttpServlet {
 				moveController.doMove(request, response, risk);
 				return;
 			} else {
+				log.debug("Move: " + risk.getMove());
 				risk.setDirections(RiskConstants.NO_DIRECTIONS);
 				log.debug("Changing stage to MOVE and step to SELECT_ARMIES_TRANSFERRED");
 				risk.setStage(RiskConstants.MOVE_ARMIES);
@@ -171,7 +173,7 @@ public class AttackController extends HttpServlet {
 			risk.setDirections(RiskConstants.NO_DIRECTIONS);
 			risk.setStage(RiskConstants.SETUP_TURN);
 			risk.setStep(RiskConstants.SHOW_OPTIONS);
-			log.debug("Changing stage to SETUP_TURN and stage to DURING_TURN");
+			log.debug("Changing stage to SETUP_TURN and stage to SHOW_OPTIONS");
 			turnController.determineNextMove(request, response, risk);
 			return;
 		}

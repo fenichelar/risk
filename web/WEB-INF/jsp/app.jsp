@@ -458,7 +458,7 @@ function showalert(message,alerttype) {
 	<%
 	if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
 	risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {
-			String territoryName = source.getTerritoryName();
+			String territoryName = risk.getMove().getSource().getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = source.getNumberOfArmies() - 1;
 	%>

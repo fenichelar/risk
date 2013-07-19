@@ -20,7 +20,7 @@ public interface RiskConstants {
 	public static final int SELECT_DEFENDING_TERRITORY = 2;
 	public static final int SELECT_DEFENDING_ARMIES = 3;
 	public static final int DO_ATTACK = 4;
-	public static final int DURING_ATTACK = 5;
+	public static final int PROCESS_ATTACK = 5;
 	
 	// steps corresponding to stage 4 (move armies)
 	public static final int SELECT_SOURCE_TERRITORY = 1;
