@@ -35,7 +35,7 @@ public class TurnController extends HttpServlet {
 			case RiskConstants.BEGINNING_OF_TURN: 
 				distributeAdditionalArmies(request, response, risk);
 				break;
-			case RiskConstants.DURING_TURN: 
+			case RiskConstants.SHOW_OPTIONS: 
 				determineNextMove(request, response, risk);
 				break;
 		}
@@ -51,7 +51,7 @@ public class TurnController extends HttpServlet {
 				+ armiesToAssign + " additional armies");
 
 		risk.getCurrentPlayer().setAvailableArmies(armiesToAssign);
-		risk.setStep(RiskConstants.DURING_TURN);
+		risk.setStep(RiskConstants.SHOW_OPTIONS);
 		risk.setDirections(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
@@ -78,7 +78,7 @@ public class TurnController extends HttpServlet {
 
 			if (risk.getCurrentPlayer().getAvailableArmies() == 0) {
 				risk.setStage(RiskConstants.SETUP_TURN);
-				risk.setStep(RiskConstants.DURING_TURN);
+				risk.setStep(RiskConstants.SHOW_OPTIONS);
 			}
 
 		} else {

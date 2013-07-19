@@ -41,10 +41,8 @@
 	}
 %>
 <%
-	Territory attackingTerritory = (Territory) request
-			.getAttribute("attackingTerritory");
-	Territory defendingTerritory = (Territory) request
-			.getAttribute("defendingTerritory");
+	Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
+	Territory defendingTerritory = risk.getAttack().getDefendingTerritory();
 %>
 <%
 	Territory source = (Territory) request.getAttribute("source");
@@ -94,7 +92,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == 4) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {%>
 	$(function() {
 		$('#attackDialog').modal({
 			keyboard : false,
@@ -105,7 +104,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == 6) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {%>
 	$(function() {
 		$('#defendingArmyNumDialog').modal({
 			keyboard : false,
@@ -116,7 +116,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == 5) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.DO_ATTACK) {%>
 	$(function() {
 		$('#attackResultsDialog').modal({
 			keyboard : false,
@@ -125,7 +126,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == 7) {%>
+<%if (risk.getStage() == RiskConstants.SETUP_TURN &&
+		risk.getStep() == RiskConstants.SHOW_OPTIONS) {%>
 	$(function() {
 		$('#optionsDialog').modal({
 			keyboard : false,
@@ -134,7 +136,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == 9) {%>
+<%if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+		risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {%>
 	$(function() {
 		$('#movingArmyNumDialog').modal({
 			keyboard : false,
@@ -148,7 +151,9 @@ function showalert(message,alerttype) {
 </head>
 <body>
 	<%
-		if (risk.getStage() == 4) {
+	if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
+		
 			String territoryName = attackingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 1;
@@ -265,7 +270,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (risk.getStage() == 5) {
+	if (risk.getStage() == RiskConstants.ATTACK &&
+	risk.getStep() == RiskConstants.DO_ATTACK) {
 			int[] attackingArmyDice = (int[]) request
 					.getAttribute("attackingArmyDice");
 			int[] defendingArmyDice = (int[]) request
@@ -325,7 +331,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (risk.getStage() == 6) {
+	if (risk.getStage() == RiskConstants.ATTACK &&
+	risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {
 			String territoryName = defendingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 2;
@@ -372,7 +379,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (risk.getStage() == RiskConstants.SELECT_OPTIONS) {
+		if (risk.getStage() == RiskConstants.SETUP_TURN &&
+				risk.getStep() == RiskConstants.SHOW_OPTIONS) {
 	%>
 	<div
 		id="optionsDialog"
@@ -448,7 +456,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (risk.getStage() == 9) {
+	if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+	risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {
 			String territoryName = source.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = source.getNumberOfArmies() - 1;

@@ -89,7 +89,7 @@ public class AttackController extends HttpServlet {
 
 		if (cancelled) {
 			risk.setStage(RiskConstants.SETUP_TURN);
-			risk.setStep(RiskConstants.DURING_TURN);
+			risk.setStep(RiskConstants.SHOW_OPTIONS);
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}
@@ -170,7 +170,7 @@ public class AttackController extends HttpServlet {
 		} else {
 			risk.setDirections(RiskConstants.NO_DIRECTIONS);
 			risk.setStage(RiskConstants.SETUP_TURN);
-			risk.setStep(RiskConstants.DURING_TURN);
+			risk.setStep(RiskConstants.SHOW_OPTIONS);
 			log.debug("Changing stage to SETUP_TURN and stage to DURING_TURN");
 			turnController.determineNextMove(request, response, risk);
 			return;

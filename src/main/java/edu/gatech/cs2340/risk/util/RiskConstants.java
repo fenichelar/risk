@@ -13,7 +13,7 @@ public interface RiskConstants {
 	// steps corresponding to stage 2 (setup turn)
 	public static final int BEFORE_TURN = 1;
 	public static final int BEGINNING_OF_TURN = 2;
-	public static final int DURING_TURN = 3;
+	public static final int SHOW_OPTIONS = 3;
 	
 	// steps corresponding to stage 3 (attack)
 	public static final int SELECT_ATTACKING_TERRITORY = 1;
