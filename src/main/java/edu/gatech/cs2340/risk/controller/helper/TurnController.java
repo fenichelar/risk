@@ -17,7 +17,7 @@ import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
- * Stage 2
+ * Stage 2 (RiskConstants.SETUP_TURN)
  *
  */
 public class TurnController extends HttpServlet {
@@ -41,6 +41,16 @@ public class TurnController extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Determines how many armies a player should receive before their turn begins
+	 * Corresponds to Stage SETUP_TURN, Step BEFORE_TURN
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void assignAdditionalArmies(HttpServletRequest request, 
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -57,7 +67,16 @@ public class TurnController extends HttpServlet {
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 	
-
+	/**
+	 * Called when player is distributing their allotted armies at the beginning of their turn
+	 * Corresponds to Stage SETUP_TURN, Step BEGINNING_OF_TURN
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void distributeAdditionalArmies(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
@@ -87,6 +106,17 @@ public class TurnController extends HttpServlet {
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 	
+	/**
+	 * Called after player selects an option from the Option Panel
+	 * Launches Attack, Fortify, or End Turn methods based on player's input
+	 * Corresponds to Stage SETUP_TURN, Step SHOW_OPTIONS
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void determineNextMove(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -103,6 +133,7 @@ public class TurnController extends HttpServlet {
 
 				case "fortify":		risk.setStage(RiskConstants.MOVE_ARMIES);
 									risk.setStep(RiskConstants.SELECT_SOURCE_TERRITORY);
+									break;
 
 				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);
 									risk.setStage(RiskConstants.SETUP_TURN);

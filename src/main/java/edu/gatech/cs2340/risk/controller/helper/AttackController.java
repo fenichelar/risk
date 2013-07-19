@@ -18,39 +18,48 @@ import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /**
- * Stage 3
+ * Stage 3 (RiskConstants.ATTACK)
  *
  */
 public class AttackController extends HttpServlet {
-	
+
 	private static Logger log = Logger.getLogger(AttackController.class);
-	
+
 	private MoveController moveController = new MoveController();
 	private TurnController turnController = new TurnController();
-	
+
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
-		
+
 		switch (risk.getStep()) {
-			case RiskConstants.SELECT_ATTACKING_TERRITORY: 
-				selectAttackingTerritory(request, response, risk);
-				break;
-			case RiskConstants.SELECT_DEFENDING_TERRITORY: 
-				selectDefendingTerritory(request, response, risk);
-				break;
-			case RiskConstants.SELECT_DEFENDING_ARMIES: 
-				selectDefendingNumberOfArmies(request, response, risk);
-				break;
-			case RiskConstants.DO_ATTACK: 
-				processAttackRequest(request, response, risk);
-				break;
-			case RiskConstants.PROCESS_ATTACK: 
-				processAttackRequest(request, response, risk);
-				break;
+		case RiskConstants.SELECT_ATTACKING_TERRITORY: 
+			selectAttackingTerritory(request, response, risk);
+			break;
+		case RiskConstants.SELECT_DEFENDING_TERRITORY: 
+			selectDefendingTerritory(request, response, risk);
+			break;
+		case RiskConstants.SELECT_DEFENDING_ARMIES: 
+			selectDefendingNumberOfArmies(request, response, risk);
+			break;
+		case RiskConstants.DO_ATTACK: 
+			processAttackRequest(request, response, risk);
+			break;
+		case RiskConstants.PROCESS_ATTACK: 
+			processAttackRequest(request, response, risk);
+			break;
 		}
 	}
-	
 
+	/**
+	 * Called when a player has selected a territory to attack from
+	 * Corresponds to Stage ATTACK, Step SELECT_ATTACKING_TERRITORY
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void selectAttackingTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
@@ -66,10 +75,10 @@ public class AttackController extends HttpServlet {
 
 			log.debug("Current territory: " + attackingTerritory);
 			risk.setAttack(new Attack(attackingTerritory));
-			
+
 			log.debug("Attacking territory: " + attackingTerritory);
 			request.setAttribute("attackingTerritory", attackingTerritory);
-			
+
 			log.debug("Changing step to SELECT_DEFENDING_TERRITORY");
 			risk.setStep(RiskConstants.SELECT_DEFENDING_TERRITORY);
 
@@ -79,7 +88,16 @@ public class AttackController extends HttpServlet {
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 
-
+	/**
+	 * Called when a player has selected another player's territory to attack
+	 * Corresponds to Stage ATTACK, Step SELECT_DEFENDING_TERRITORY
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void selectDefendingTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -99,7 +117,7 @@ public class AttackController extends HttpServlet {
 		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
 		Territory defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(
 				risk.getAttack().getAttackingTerritory(), neighboringTerritoryId);
-		
+
 		risk.getAttack().setDefendingTerritory(defendingTerritory);
 		log.debug("Defending territory: " + defendingTerritory);
 
@@ -116,8 +134,17 @@ public class AttackController extends HttpServlet {
 		}
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
-	
 
+	/**
+	 * Called when the defending player has selected the number of armies to defend with
+	 * Corresponds to Stage ATTACK, Step SELECT_DEFENDING_ARMIES
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void selectDefendingNumberOfArmies(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -129,6 +156,16 @@ public class AttackController extends HttpServlet {
 
 	}
 
+	/**
+	 * Determines outcome of an attack by "rolling" dice and updating variables
+	 * Corresponds to Stage ATTACK, Step DO_ATTACK
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void doAttack(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -144,24 +181,37 @@ public class AttackController extends HttpServlet {
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
-	
+
+	/**
+	 * Determines player's options after 
+	 * Corresponds to Stage ATTACK, Step PROCESS_ATTACK
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void processAttackRequest(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		if (risk.getAttack().defendingTerritoryIsConquered()) {
-			
+
 			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), 
 					risk.getAttack().getDefendingTerritory()));
-			if (risk.getMove().onlyOneMoveAvailable()) {
-				log.debug("(only one move available) Move: " + risk.getMove());
-				risk.getMove().setNumArmies(1);
+			
+			// there are no armies available to be transferred
+			if (risk.getMove().oneArmyAtSourceTerritory()) {
+				log.debug("(oneArmyAtSourceTerritory) Move: " + risk.getMove());
+				risk.getMove().setNumArmies(1); //TODO is this doing what we want it to?
 				log.debug("Changing stage to ATTACK and step to DO_ATTACK");
 				risk.setStage(RiskConstants.ATTACK);
 				risk.setStep(RiskConstants.DO_ATTACK);
-				
+
 				moveController.doMove(request, response, risk);
 				return;
-			} else {
+			} 
+			else { // there is one or more armies available to be transferred
 				log.debug("Move: " + risk.getMove());
 				risk.setDirections(RiskConstants.NO_DIRECTIONS);
 				log.debug("Changing stage to MOVE and step to SELECT_ARMIES_TRANSFERRED");
@@ -169,7 +219,7 @@ public class AttackController extends HttpServlet {
 				risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
 				risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			}
-		} else {
+		} else { // attacking territory was conquered or cannot transfer armies
 			risk.setDirections(RiskConstants.NO_DIRECTIONS);
 			risk.setStage(RiskConstants.SETUP_TURN);
 			risk.setStep(RiskConstants.SHOW_OPTIONS);

@@ -16,7 +16,7 @@ import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
- * Stage 4
+ * Stage 4 (RiskConstants.MOVE_ARMIES)
  *
  */
 public class MoveController extends HttpServlet {
@@ -44,6 +44,16 @@ public class MoveController extends HttpServlet {
 	}
 	
 
+	/**
+	 * Called when armies are being transferred and player is selecting the source territory
+	 * Corresponds to Stage MOVE_ARMIES, Step SELECT_SOURCE_TERRITORY
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void selectSourceTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
@@ -69,13 +79,32 @@ public class MoveController extends HttpServlet {
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 
-
+	/**
+	 * Called when armies are being transferred and player is selecting the destination territory
+	 * Corresponds to Stage MOVE_ARMIES, Step SELECT_DESTINATION_TERRITORY
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void selectDestinationTerritory(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDestinationTerritory()");
 	}
 	
+	/**
+	 * Called when armies are being transferred and player is selecting the number of armies
+	 * Corresponds to Stage MOVE_ARMIES, Step SELECT_ARMIES_TRANSFERRED
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void selectArmiesTransferred(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
@@ -86,7 +115,16 @@ public class MoveController extends HttpServlet {
 		doMove(request, response, risk);
 	}
 
-
+	/**
+	 * Updates the variables associated with the current move
+	 * Corresponds to Stage MOVE_ARMIES, Step DO_MOVE
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void doMove(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 

@@ -15,7 +15,7 @@ import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
- * Stage 1
+ * Stage 1 (RiskConstants.INITIALIZE)
  *
  */
 public class InitializeController extends HttpServlet {
@@ -32,7 +32,16 @@ public class InitializeController extends HttpServlet {
 		return;
 	}
 	
-
+	/**
+	 * Called when players are distributing armies before game play begins
+	 * Corresponds to Stage INITIALIZE, Step NO_STEP
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void distributeInitialArmies(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
@@ -64,7 +73,6 @@ public class InitializeController extends HttpServlet {
 		} else {
 			log.debug("Territory does not belong to player");
 		}
-
 		log.debug("New current player: " + risk.getCurrentPlayer());
 
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
