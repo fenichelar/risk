@@ -36,9 +36,13 @@ public class Move {
 		return source.getNumberOfArmies() > 1;
 	}
 
-	public boolean onlyOneMoveAvailable() {
+	public boolean oneArmyAtSourceTerritory() {
 		return source.getNumberOfArmies() == 1;
 	}
 
-}
+	@Override
+	public String toString() {
+		return "[Source: " + source + ", destination: " + destination + "]";
+	}
 
+}

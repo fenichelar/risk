@@ -1,4 +1,4 @@
-package edu.gatech.cs2340.risk.service;
+package test.java.edu.gatech.cs2340.risk.model;
 
 import static org.junit.Assert.*; 
 

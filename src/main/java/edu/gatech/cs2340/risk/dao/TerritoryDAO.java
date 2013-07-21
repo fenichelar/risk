@@ -26,6 +26,9 @@ public interface TerritoryDAO {
 	 * @return
 	 */
 	public Territory getTerritory(int territoryId);
+	
+	public Territory getTerritory(Player currentPlayer, int territoryId);
+	
 	/**
 	 * Adds a randomly selected set of territories to each player and returns all players
 	 * 
@@ -33,12 +36,7 @@ public interface TerritoryDAO {
 	 * @return
 	 */
 	public ArrayList<Player> addTerritories(ArrayList<Player> players);
-	/**
-	 * Adds a randomly selected set of territories to the player and returns it
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public Player addTerritories(Player player);
+	
+	
 
 }

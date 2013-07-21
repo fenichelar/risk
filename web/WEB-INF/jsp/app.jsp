@@ -15,12 +15,12 @@
 			.getAttribute("currentPlayer");
 %>
 <%
-	Integer directionsList = (Integer) request
-			.getAttribute("directionsList");
+	Risk risk = (Risk) request
+			.getAttribute("risk");
 %>
 <%
 	String directionsText = "";
-	switch (directionsList) {
+	switch (risk.getDirections()) {
 	case 0:
 		break;
 	case 1:
@@ -41,13 +41,8 @@
 	}
 %>
 <%
-	int stage = (Integer) request.getAttribute("stage");
-%>
-<%
-	Territory attackingTerritory = (Territory) request
-			.getAttribute("attackingTerritory");
-	Territory defendingTerritory = (Territory) request
-			.getAttribute("defendingTerritory");
+	Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
+	Territory defendingTerritory = risk.getAttack().getDefendingTerritory();
 %>
 <%
 	Territory source = (Territory) request.getAttribute("source");
@@ -88,16 +83,17 @@ function showalert(message,alerttype) {
     $('#alert_placeholder').append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
     setTimeout(function() {
       $("#alertdiv").remove();
-    }, 5000);
+    }, 4000);
   }
 
-<%if (!(stage > 3) && (directionsList != 0)) {%>
+<%if (risk.getDirections() != 0) {%>
 	$(function() {
 		showalert("<%=directionsText%>","alert-info");
 	});
 <%}%>
 
-<%if (stage == 4) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {%>
 	$(function() {
 		$('#attackDialog').modal({
 			keyboard : false,
@@ -108,7 +104,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (stage == 6) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {%>
 	$(function() {
 		$('#defendingArmyNumDialog').modal({
 			keyboard : false,
@@ -119,7 +116,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (stage == 5) {%>
+<%if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.DO_ATTACK) {%>
 	$(function() {
 		$('#attackResultsDialog').modal({
 			keyboard : false,
@@ -128,7 +126,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (stage == 7) {%>
+<%if (risk.getStage() == RiskConstants.SETUP_TURN &&
+		risk.getStep() == RiskConstants.SHOW_OPTIONS) {%>
 	$(function() {
 		$('#optionsDialog').modal({
 			keyboard : false,
@@ -137,7 +136,8 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (stage == 9) {%>
+<%if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+		risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {%>
 	$(function() {
 		$('#movingArmyNumDialog').modal({
 			keyboard : false,
@@ -151,7 +151,8 @@ function showalert(message,alerttype) {
 </head>
 <body>
 	<%
-		if (stage == 4) {
+	if (risk.getStage() == RiskConstants.ATTACK &&
+		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
 			String territoryName = attackingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 1;
@@ -268,7 +269,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (stage == 5) {
+if (risk.getStage() == RiskConstants.ATTACK &&
+	risk.getStep() == RiskConstants.DO_ATTACK) {
 			int[] attackingArmyDice = (int[]) request
 					.getAttribute("attackingArmyDice");
 			int[] defendingArmyDice = (int[]) request
@@ -311,7 +313,7 @@ function showalert(message,alerttype) {
 			</div>
 		</div>
 		<div class="modal-footer">
-			<h4 id="attackResultsMessage"><%=attackResultsMessage%></h4>
+			<h5 id="attackResultsMessage"><%=attackResultsMessage%></h5>
 			<form
 				method="POST"
 				action="app"
@@ -328,7 +330,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (stage == 6) {
+	if (risk.getStage() == RiskConstants.ATTACK &&
+	risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {
 			String territoryName = defendingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 2;
@@ -343,7 +346,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="defendingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="defendingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -375,7 +378,8 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (stage == 7) {
+		if (risk.getStage() == RiskConstants.SETUP_TURN &&
+				risk.getStep() == RiskConstants.SHOW_OPTIONS) {
 	%>
 	<div
 		id="optionsDialog"
@@ -451,8 +455,9 @@ function showalert(message,alerttype) {
 		}
 	%>
 	<%
-		if (stage == 9) {
-			String territoryName = source.getTerritoryName();
+	if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+	risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {
+			String territoryName = risk.getMove().getSource().getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = source.getNumberOfArmies() - 1;
 	%>
@@ -466,7 +471,7 @@ function showalert(message,alerttype) {
 		data-backdrop="static"
 	>
 		<div class="modal-header">
-			<h3 id="movingArmyNumLabel">Select Num Armies</h3>
+			<h3 id="movingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
 			<h2><%=territoryName%></h2>
@@ -501,6 +506,7 @@ function showalert(message,alerttype) {
 		id="wrap"
 		class="container-fluid"
 	>
+
 		<!-- WRITE PLAYERS IN ROLL ORDER -->
 		<div
 			class="row-fluid text-center"
@@ -575,6 +581,6 @@ function showalert(message,alerttype) {
 			%>
 		</div>
 	</div>
-<div id="alert_placeholder"></div>
+	<div id="alert_placeholder"></div>
 </body>
 </html>

@@ -12,15 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import main.java.edu.gatech.cs2340.risk.controller.helper.AttackController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.MoveController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.InitializeController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.TurnController;
 import main.java.edu.gatech.cs2340.risk.model.Player;
-import main.java.edu.gatech.cs2340.risk.model.Territory;
-import main.java.edu.gatech.cs2340.risk.model.Attack;
-import main.java.edu.gatech.cs2340.risk.model.Move;
+import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
-import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /** 
  * 
@@ -32,17 +34,15 @@ public class AppController extends HttpServlet {
 
 	private static Logger log = Logger.getLogger(AppController.class);
 
+	private Risk risk;
+
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 
-	private ArrayList<Player> players; 
-	private Player currentPlayer;
-
-	private Attack attack;
-	private Move move;
-
-	private int stage;
-	private Integer directionsList;
+	private InitializeController initializeController = new InitializeController();
+	private TurnController turnController = new TurnController();
+	private AttackController attackController = new AttackController();
+	private MoveController moveController = new MoveController();
 
 
 	@Override
@@ -53,26 +53,27 @@ public class AppController extends HttpServlet {
 		log.debug("In doGet()");
 
 		// get players from jsons
-		players = playerService.getPlayers();
+		ArrayList<Player> players = playerService.getPlayers();
 		// put players in a random order
 		players = PlayerUtil.setPlayerOrder(players);
-
-		// determine the current player
-		currentPlayer = players.get(0);
-		log.debug("Current player: " + currentPlayer);
+		log.debug("players after setPlayerOrder: " + players);
 
 		// distribute armies to players
 		log.debug("Adding armies to players");
 		players = ArmyUtil.addArmies(players);
+		log.debug("players after addArmies: " + players);
 
 		// distribute territories to players
 		log.debug("Adding territories to players");
 		players = territoryService.addTerritories(players);
+		log.debug("players after addTerritories: " + players);
 
-		stage = 1;
-		directionsList = 1;
+		risk = new Risk(this, players);
+		risk.setStage(RiskConstants.INITIALIZE);
+		risk.setStep(RiskConstants.NO_STEP);
+		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
 
-		dispatch(request, response);
+		forwardUpdatedVariables(request, response, risk);
 	}
 
 	@Override
@@ -81,401 +82,45 @@ public class AppController extends HttpServlet {
 					throws IOException, ServletException {
 
 		log.debug("In doPost()");
-		switch (stage) {
-		case 1: directionsList = 0;
-				distributeInitialArmies(request, response);
+		risk.setDirections(RiskConstants.NO_DIRECTIONS);
+		switch (risk.getStage()) {
+			case RiskConstants.INITIALIZE: 
+				initializeController.doPost(request, response, risk);
 				break;
-		case 2: directionsList = 0;
-				distributeAdditionalArmies(request, response);
+			case RiskConstants.SETUP_TURN: 
+				turnController.doPost(request, response, risk);
 				break;
-		case 3: selectAttackingTerritory(request, response);
+			case RiskConstants.ATTACK: 
+				attackController.doPost(request, response, risk);
 				break;
-		case 4: directionsList = 0;
-				selectDefendingTerritory(request, response);
+			case RiskConstants.MOVE_ARMIES: 
+				moveController.doPost(request, response, risk);
 				break;
-		case 5: directionsList = 0;
-				processResults(request, response);
-				break;
-		case 6: directionsList = 0;
-				selectDefendingNumberOfArmies(request, response);
-				break;
-		case 7: directionsList = 0;
-				selectOptions(request, response);
-				break;
-		case 8: directionsList = 0;
-				processResults(request, response);
-				break;
-		case 9: directionsList = 0;
-				selectMovingNumberOfArmies(request, response);
-				break;
-		case 10:	directionsList = 0;
-					doAttack(request, response);
-					break;
 		}
 	}
 
 	/**
-	 * Players assign all their starting armies to territories
-	 * Stage 1
+	 * Sends updated variables back to app.jsp
+	 * Called by all helper controllers
 	 * 
 	 * @param request
 	 * @param response
-	 * @throws ServletException
+	 * @param risk  Risk object containing variables for the current game session
 	 * @throws IOException
-	 */
-	protected void distributeInitialArmies(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		request.setAttribute("directionsList", directionsList);
-
-		log.debug("In distributeInitialArmies()");
-
-		setCurrentPlayer(request);
-		log.debug("Current player: " + currentPlayer);
-
-		Territory territory = getPostedTerritory(request);
-
-		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
-
-			log.debug("Current territory: " + territory);
-
-			territory.addArmy();
-			currentPlayer.removeArmy();
-
-			nextPlayer();
-
-			if (currentPlayer.getAvailableArmies() < 1) {
-				log.debug("Entering secondary stage!");
-				stage = 2;
-				assignAdditionalArmies(request, response);
-				return;
-			}
-
-		} else {
-			log.debug("Territory does not belong to player");
-		}
-
-		log.debug("New current player: " + currentPlayer);
-
-		dispatch(request, response);
-	}
-
-	/**
-	 * Assign armies to player at the beginning of a turn
-	 * 
-	 * @param request
-	 * @param response
 	 * @throws ServletException
-	 * @throws IOException
 	 */
-	protected void assignAdditionalArmies(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
+	public void forwardUpdatedVariables(HttpServletRequest request,
+			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
-		// determine the number of armies the player should receive
-		int armiesToAssign = ArmyUtil.getArmiesToAssign(currentPlayer);
-		log.debug("Player " + currentPlayer + " is receiving " 
-				+ armiesToAssign + " additional armies");
-
-		currentPlayer.setAvailableArmies(armiesToAssign);
-
-		directionsList = 2;
-
-		dispatch(request, response);
-	}
-
-	/**
-	 * Stage 2
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void distributeAdditionalArmies(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		log.debug("In distributeAdditionalArmies()");
-
-		setCurrentPlayer(request);
-
-		Territory territory = getPostedTerritory(request);
-
-		if (territory != null && currentPlayer.getAvailableArmies() > 0) {
-
-			log.debug("Current territory: " + territory);
-
-			territory.addArmy();
-			currentPlayer.removeArmy();
-
-			if (currentPlayer.getAvailableArmies() == 0) {
-				stage = 7;
-				directionsList = 0;
-			}
-
-		} else {
-			log.debug("Territory does not belong to player");
-		}
-
-		dispatch(request, response);
-	}
-
-
-	/**
-	 * Stage 3
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void selectAttackingTerritory(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		log.debug("In selectAttackingTerritory()");
-
-		setCurrentPlayer(request);
-
-		Territory attackingTerritory = getPostedTerritory(request);
-
-		if (TerritoryUtil.validAttackTerritory(attackingTerritory)) {
-
-			log.debug("Current territory: " + attackingTerritory);
-			attack = new Attack(attackingTerritory);
-			log.debug("Attacking territory: " + attackingTerritory);
-			request.setAttribute("attackingTerritory", attackingTerritory);
-			log.debug("Changing stage to 4");
-			stage = 4;
-
-		} else {
-			log.debug("Territory not satisfactory");
-		}
-
-		dispatch(request, response);
-	}
-
-
-	/**
-	 * Stage 4
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void selectDefendingTerritory(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		log.debug("In selectDefendingTerritory()");
-
-		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
-
-		if (cancelled) {
-			stage = 7;
-			directionsList = 0;
-
-			dispatch(request, response);
-			return;
-		}
-
-		attack.setAttackingArmyNum(Integer.parseInt(request.getParameter("attackingArmyNum")));
-
-		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		Territory defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(attack.getAttackingTerritory(), neighboringTerritoryId);
-		attack.setDefendingTerritory(defendingTerritory);
-		log.debug("Defending territory: " + defendingTerritory);
-
-		if (defendingTerritory.getNumberOfArmies() > 1) {
-			log.debug("Changing stage to 6");
-			stage = 6;
-			request.setAttribute("defendingTerritory", defendingTerritory);
-		} else {
-			attack.setDefendingArmyNum(1);
-			log.debug("Changing stage to 5");
-			stage = 5;
-			doAttack(request, response);
-			return;
-		}
-		
-		dispatch(request, response);
-	}
-
-
-	/**
-	 * Stage 5
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void doAttack(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		log.debug("In doAttack()");
-
-		String attackResultsMessage = attack.doAttack();
-		log.debug(attackResultsMessage);
-
-		request.setAttribute("attackingArmyDice", attack.getAttackingArmyDice());
-		request.setAttribute("defendingArmyDice", attack.getDefendingArmyDice());
-		request.setAttribute("attackResultsMessage", attackResultsMessage);
-
-		dispatch(request, response);
-
-	}
-
-	/**
-	 * Stage 6
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void selectDefendingNumberOfArmies(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		attack.setDefendingArmyNum(Integer.parseInt(request.getParameter("defendingArmyNum")));
-		log.debug("Changing stage to 5");
-		stage = 5;
-		doAttack(request, response);
-
-
-		return;
-
-	}
-
-	/**
-	 * Stage 7
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void selectOptions(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		String option = request.getParameter("option");
-
-		if (option != null) {
-			switch (option) {
-				case "attack":		stage = 3;
-									directionsList = 3;	
-									break;
-
-				case "fortify":		//MUST BE WRITTEN --> MOVING TO NEXT PLAYER
-
-				case "end turn":	directionsList = 0;
-									stage = 2;
-									nextPlayer();
-									log.debug("New Current Player: " + currentPlayer);
-									assignAdditionalArmies(request, response);
-									break;
-			}
-		}
-
-		dispatch(request, response);
-
-	}
-
-	/**
-	 * Stage 8
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-
-	protected void processResults(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		if (attack.isConquered()) {
-
-			move = new Move(attack.getAttackingTerritory(), attack.getDefendingTerritory());
-			if (move.onlyOneMoveAvailable()) {
-				move.setNumArmies(1);
-				log.debug("Changing stage to 10");
-				stage = 10;
-				doMove(request, response);
-			} else {
-				directionsList = 0;
-				stage = 9;
-				log.debug("Changing stage to 9");
-				request.setAttribute("source", move.getSource());
-				dispatch(request, response);
-			}
-		} else {
-			directionsList = 0;
-			stage = 7;
-			log.debug("Changing stage to 7");
-			selectOptions(request, response);
-		}
-
-	}
-
-	/**
-	 * Stage 9
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-
-	protected void selectMovingNumberOfArmies(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		move.setNumArmies(Integer.parseInt(request.getParameter("numArmies")));
-		log.debug("Changing stage to 10");
-		stage = 10;
-		doMove(request, response);
-	}
-
-	/**
-	 * Stage 10
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-
-	protected void doMove(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		move.doMove();
-		directionsList = 0;
-		stage = 7;
-		log.debug("Changing stage to 7");
-		selectOptions(request, response);
-	}
-
-	private void dispatch(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		request.setAttribute("directionsList", directionsList);
-		request.setAttribute("currentPlayer", currentPlayer);
-		request.setAttribute("players", players);
-		request.setAttribute("stage", stage);
+		request.setAttribute("currentPlayer", risk.getCurrentPlayer());
+		request.setAttribute("players", risk.getPlayers());
+		request.setAttribute("risk", risk);
 
 		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
 
-	private void setCurrentPlayer(HttpServletRequest request) {
-		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-		currentPlayer = PlayerUtil.getPlayerById(players, currentPlayerId);
-	}
 
-	private void nextPlayer() {
-		currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayer.getPlayerId());
-	}
-
-	private Territory getPostedTerritory(HttpServletRequest request) {
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		return TerritoryUtil.getTerritoryById(currentPlayer, territoryId);
-	}
 
 }
