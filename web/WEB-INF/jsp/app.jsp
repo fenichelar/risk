@@ -101,7 +101,6 @@ function showalert(message,alerttype) {
 		$('#attackDialog').modal({
 			keyboard : false,
 			show : true
-
 		});
 		$('.slider').slider();
 	});

@@ -98,10 +98,6 @@ public class MoveController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDestinationTerritory()");
-<<<<<<< HEAD
-
-
-=======
 		
 		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
 
@@ -121,7 +117,7 @@ public class MoveController extends HttpServlet {
 		log.debug("Changing step to SELECT_ARMIES_TRANSFERRED");
 		risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
->>>>>>> 6265f11ba4867c72d771b9f53c45e320953afa66
+
 	}
 	
 	/**
