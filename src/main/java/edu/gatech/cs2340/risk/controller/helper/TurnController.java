@@ -13,7 +13,6 @@ import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
-import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
@@ -133,6 +132,7 @@ public class TurnController extends HttpServlet {
 
 				case "fortify":		risk.setStage(RiskConstants.MOVE_ARMIES);
 									risk.setStep(RiskConstants.SELECT_SOURCE_TERRITORY);
+									risk.setDirections(RiskConstants.SELECT_SOURCE_DIRECTIONS);
 									break;
 
 				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);

@@ -41,4 +41,9 @@ public class TerritoryServiceImpl implements TerritoryService {
 		return territoryDAO.addTerritories(players);
 	}
 
+	@Override
+	public ArrayList<Player> addWinCaseTerritories(ArrayList<Player> players) {
+		return territoryDAO.addWinCaseTerritories(players);
+	}
+
 }

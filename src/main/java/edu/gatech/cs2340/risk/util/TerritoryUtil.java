@@ -75,5 +75,30 @@ public class TerritoryUtil {
 		}
 		return false;
 	}
+	
+	public static boolean hasValidNeighboringTerritory(Player currentPlayer, Territory territory) {
+		
+		for (Territory playerTerritory : currentPlayer.getTerritories()) {
+			for (Territory neighborTerritory : territory.getNeighboringTerritories()) {
+				if (playerTerritory.equals(neighborTerritory)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean validAttacksExist(Player currentPlayer) {
+		for (Territory territory : currentPlayer.getTerritories()) {
+			if (territory.getNumberOfArmies() > 1) {
+				for (Territory neighborTerritory : territory.getNeighboringTerritories()) {
+					if (! currentPlayer.getTerritories().contains(neighborTerritory) ) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 }

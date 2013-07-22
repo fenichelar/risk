@@ -14,6 +14,7 @@ import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /**
  * Stage 4 (RiskConstants.MOVE_ARMIES)
@@ -37,6 +38,7 @@ public class MoveController extends HttpServlet {
 				break;
 			case RiskConstants.SELECT_ARMIES_TRANSFERRED:
 				selectArmiesTransferred(request, response, risk);
+				break;
 			case RiskConstants.DO_MOVE: 
 				doMove(request, response, risk);
 				break;
@@ -66,13 +68,17 @@ public class MoveController extends HttpServlet {
 				Integer.parseInt(request.getParameter("territoryId")));
 
 		if (currentTerritory != null && currentTerritory.getNumberOfArmies() > 1) {
-
-			log.debug("Current territory: " + currentTerritory);
-
-			risk.setMove(new Move(currentTerritory));
-			log.debug("Changing step to SELECT_FORTIFIED_TERRITORY");
-			risk.setStep(RiskConstants.SELECT_DESTINATION_TERRITORY);
-
+			
+			if (TerritoryUtil.hasValidNeighboringTerritory(risk.getCurrentPlayer(), currentTerritory) ) {
+				log.debug("Current territory: " + currentTerritory);
+	
+				risk.setMove(new Move(currentTerritory));
+				log.debug("Changing step to SELECT_DESTINATION_TERRITORY");
+				risk.setStep(RiskConstants.SELECT_DESTINATION_TERRITORY);
+			}
+			else {
+				log.debug("Territory does not have any valid neighboring territories");
+			}
 		} else {
 			log.debug("Territory cannot be used as source territory");
 		}
@@ -93,6 +99,25 @@ public class MoveController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDestinationTerritory()");
+		
+		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
+
+		if (cancelled) {
+			risk.setStage(RiskConstants.SETUP_TURN);
+			risk.setStep(RiskConstants.SHOW_OPTIONS);
+			risk.getAppController().forwardUpdatedVariables(request, response, risk);
+			return;
+		}// TODO parameter name?
+		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
+		Territory destinationTerritory = TerritoryUtil.getTerritoryFromNeighborById(
+				risk.getMove().getSource(), neighboringTerritoryId);
+
+		risk.getMove().setDestination(destinationTerritory);
+		log.debug("Destination territory: " + destinationTerritory);
+
+		log.debug("Changing step to SELECT_ARMIES_TRANSFERRED");
+		risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
+		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 	
 	/**
