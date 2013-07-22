@@ -4,10 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
-/**
- * @author Caroline Paulus
- *
- */
+
 public interface PlayerDAO {
 	/**
 	 * Returns list of all players currently participating in the game
@@ -24,7 +21,7 @@ public interface PlayerDAO {
 	 * @param playerId
 	 * @return
 	 */
-	public ArrayList<Player> getPlayer(int playerId); // returns player with id = playerId
+	public Player getPlayer(int playerId); // returns player with id = playerId
 	/**
 	 * Adds the player to the database of players and returns it
 	 * 
@@ -39,10 +36,9 @@ public interface PlayerDAO {
 	 * Deletes the player from the database of players and returns it
 	 * 
 	 * @param playerId
-	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public Player deletePlayer(int playerId) 
+	public void deletePlayer(int playerId) 
 			throws SQLException, ClassNotFoundException;
 }

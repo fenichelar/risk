@@ -1,10 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,35 +11,41 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.model.Country;
+import main.java.edu.gatech.cs2340.risk.controller.helper.AttackController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.MoveController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.InitializeController;
+import main.java.edu.gatech.cs2340.risk.controller.helper.TurnController;
 import main.java.edu.gatech.cs2340.risk.model.Player;
-import main.java.edu.gatech.cs2340.risk.model.Territory;
-import main.java.edu.gatech.cs2340.risk.service.impl.ArmyServiceImpl;
-import main.java.edu.gatech.cs2340.risk.service.impl.CountryServiceImpl;
+import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
 import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
+import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 
 /** 
- * @author Caroline Paulus
  * 
  * This class receives and handles user input for the Risk game UI
  */
+@SuppressWarnings("serial")
 @WebServlet("/app")
 public class AppController extends HttpServlet {
 
 	private static Logger log = Logger.getLogger(AppController.class);
 
+	private Risk risk;
+
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
-	private ArmyServiceImpl armyService = new ArmyServiceImpl();
-	private CountryServiceImpl countryService = new CountryServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
 
-	private ArrayList<Player> players; 
-	private Player currentPlayer;
-	private ArrayList<Country> countries;
-	private HashMap<Integer, ArrayList<Territory>> territoryMap;
-	
+	private InitializeController initializeController = new InitializeController();
+	private TurnController turnController = new TurnController();
+	private AttackController attackController = new AttackController();
+	private MoveController moveController = new MoveController();
+
+	public static final boolean WIN_CASE = true;
+	private static final int NUMBER_OF_ARMIES = 3;
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -50,31 +53,34 @@ public class AppController extends HttpServlet {
 					throws IOException, ServletException {
 
 		log.debug("In doGet()");
-		players = playerService.getPlayers();
+
+		// get players from jsons
+		ArrayList<Player> players = playerService.getPlayers();
+		// put players in a random order
 		players = PlayerUtil.setPlayerOrder(players);
-		
-		currentPlayer = players.get(0);
-		log.debug("Current player: " + currentPlayer);
-		request.setAttribute("currentPlayer", currentPlayer);
-		
-		players = armyService.addArmies(players);
-		players = territoryService.addTerritories(players);
-		request.setAttribute("players", players);
+		log.debug("players after setPlayerOrder: " + players);
 
-		countries = countryService.getCountries();
-		request.setAttribute("countries", countries);
-		
-		territoryMap = new HashMap<Integer, ArrayList<Territory>>();
-		for (Country country : countries) {
-			ArrayList<Territory> territories = 
-					territoryService.getTerritories(country.getCountryId());
-			territoryMap.put(country.getCountryId(), territories);
+		// distribute armies to players
+		log.debug("Adding armies to players");
+		players = ArmyUtil.addArmies(players, NUMBER_OF_ARMIES); 
+		log.debug("players after addArmies: " + players);
+
+		if (WIN_CASE) {
+			log.debug("Using win case to speed up game play");
+			players = territoryService.addWinCaseTerritories(players);
 		}
-		request.setAttribute("territoryMap", territoryMap);
+		else {
+			// distribute territories to players
+			log.debug("Adding territories to players");
+			players = territoryService.addTerritories(players);
+			log.debug("players after addTerritories: " + players);
+		}
+		risk = new Risk(this, players);
+		risk.setStage(RiskConstants.INITIALIZE);
+		risk.setStep(RiskConstants.NO_STEP);
+		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
 
-		RequestDispatcher dispatcher = 
-				getServletContext().getRequestDispatcher("/app.jsp");
-		dispatcher.forward(request,response);
+		forwardUpdatedVariables(request, response, risk);
 	}
 
 	@Override
@@ -82,50 +88,76 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response)
 					throws IOException, ServletException {
 
-		log.debug("In doPost()");
-		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory territory = territoryService.getTerritory(territoryId);
-		log.debug("Current territory: " + territory);
-                
-		int currentPlayerId = Integer.parseInt(request.getParameter("currentPlayerId"));
-	       
-                // check current player owns the selected territory, and that the player
-	        // has armies left	
-		log.debug("Current player ID: " + currentPlayerId);
-		if (PlayerUtil.getPlayerById(players, currentPlayerId).getTerritories().contains(territory)
-				&& PlayerUtil.getPlayerById(players, currentPlayerId).getNumberOfArmies() > 0) {
-
-			log.debug("Territory belongs to player " + currentPlayer + ".");
-			int countryId = territory.getCountry().getCountryId();
-			log.debug("Country ID: " + countryId);
-			for ( Territory t : territoryMap.get(countryId) ) {
-				if (t.equals(territory)) {
-					log.debug("Adding army to territory " + territory);
-					t.addArmy();
-					PlayerUtil.getPlayerById(players, currentPlayerId).removeArmy();
-				}
-			}
-                       currentPlayer = PlayerUtil.getNextPlayer(players, currentPlayerId);
-                       currentPlayerId = currentPlayer.getPlayerId();
-
+		if (risk.getStage() == RiskConstants.DECLARE_WINNER) {
+			log.debug("Doing nothing. The game is over");
+			risk.setStage(RiskConstants.GAME_OVER);
 		}
 		else {
-			log.debug("Territory does not belong to player");
+			log.debug("In doPost()");
+			if (! playersRemaining() ) {
+				risk.setStage(RiskConstants.DECLARE_WINNER);
+				risk.setStep(RiskConstants.NO_STEP);
+				forwardUpdatedVariables(request, response, risk);
+			}
+			else {
+				risk.setDirections(RiskConstants.NO_DIRECTIONS);
+				switch (risk.getStage()) {
+				case RiskConstants.INITIALIZE: 
+					initializeController.doPost(request, response, risk);
+					break;
+				case RiskConstants.SETUP_TURN: 
+					turnController.doPost(request, response, risk);
+					break;
+				case RiskConstants.ATTACK: 
+					attackController.doPost(request, response, risk);
+					break;
+				case RiskConstants.MOVE_ARMIES: 
+					moveController.doPost(request, response, risk);
+					break;
+				}
+			}
 		}
+	}
 
+	private boolean playersRemaining() {
+		ArrayList<Player> playersCopy = new ArrayList<Player>(risk.getPlayers());
 
-		log.debug("New current player: " + currentPlayer);
-		request.setAttribute("currentPlayer", currentPlayer);
-		
-		request.setAttribute("players", players);
-		
-		// send the updated list back to login.jsp
-		request.setAttribute("countries", countries);
-		request.setAttribute("territoryMap", territoryMap);
-		request.setAttribute("currentPlayerId", currentPlayerId);
-                RequestDispatcher dispatcher = 
+		for (Player player : risk.getPlayers()) {
+			if (player.getTerritories().size() == 0) {
+				log.debug("Removing json for player " + player);
+				RiskUtil.deleteJsonFromPackage(player.getPlayerId());
+				log.debug("Players before: " + risk.getPlayers());
+				playersCopy.remove(player);
+				log.debug("Remaining players: " + risk.getPlayers());
+			}
+		}
+		risk.setPlayers(playersCopy);
+		if (playersCopy.size() == 1) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Sends updated variables back to app.jsp
+	 * Called by all helper controllers
+	 * 
+	 * @param request
+	 * @param response
+	 * @param risk  Risk object containing variables for the current game session
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public void forwardUpdatedVariables(HttpServletRequest request,
+			HttpServletResponse response, Risk risk) throws IOException, ServletException {
+
+		request.setAttribute("currentPlayer", risk.getCurrentPlayer());
+		request.setAttribute("players", risk.getPlayers());
+		request.setAttribute("risk", risk);
+
+		RequestDispatcher dispatcher = 
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
-
+	
 }

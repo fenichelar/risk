@@ -3,6 +3,7 @@ package main.java.edu.gatech.cs2340.risk.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,15 +15,14 @@ import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.model.Player;
 import main.java.edu.gatech.cs2340.risk.service.impl.PlayerServiceImpl;
-import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
-import main.java.edu.gatech.cs2340.risk.util.RiskMockUtil;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 
 /** 
- * @author Caroline Paulus
  *
  * This class receives and handles user input for the home page
  * Responsible for initializing database and adding players
  */
+@SuppressWarnings("serial")
 @WebServlet("")
 public class LoginController extends HttpServlet {
 
@@ -39,6 +39,7 @@ public class LoginController extends HttpServlet {
 
 		// determines which operation has been requested
 		String operation = (String) request.getParameter("operation");
+		log.debug("Operation: " + operation);
 
 		// if no operation has been requested, it indicates a name was added
 		if (operation == null) {
@@ -52,6 +53,9 @@ public class LoginController extends HttpServlet {
 			appController.doGet(request, response);
 		} else {
 			String name = request.getParameter("name");
+			if(name.equals("")) {
+				name = "Player "+(players.size()+1);
+			}
 			// create a new player
 			Player player = new Player(players.size() + 1, name);
 			log.debug("Creating player " + player);
@@ -80,7 +84,7 @@ public class LoginController extends HttpServlet {
 			HttpServletResponse response)
 					throws IOException, ServletException {
 		
-		RiskMockUtil.restoreDefaults();
+		RiskUtil.restoreDefaults();
 		players = new ArrayList<Player>();
 		request.setAttribute("players", players);
 		RequestDispatcher dispatcher = 
@@ -95,7 +99,7 @@ public class LoginController extends HttpServlet {
 			HttpServletResponse response)
 					throws IOException, ServletException {
 		log.debug("In doDelete()");
-		int id = getId(request);
+		int id = Integer.parseInt(request.getParameter("id"));
 		players.remove(id);
 		// delete player from list
 		// TODO this method has not been written yet
@@ -117,6 +121,7 @@ public class LoginController extends HttpServlet {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private int getId(HttpServletRequest request) {
 		String uri = request.getPathInfo();
 		// Strip off the leading slash, e.g. "/2" becomes "2"

@@ -1,8 +1,8 @@
 /*Contains the CSS for the Risk Login page (first page) */
-
 body {
-
+	
 }
+
 h1 {
 	margin-bottom: 50px;
 }
@@ -11,7 +11,7 @@ h1 {
 	margin-bottom: 0;
 }
 
-.newSubmissionName input{
+input[type=text] {
 	height: 30px;
 }
 

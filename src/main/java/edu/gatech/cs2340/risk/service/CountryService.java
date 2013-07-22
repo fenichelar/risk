@@ -4,10 +4,6 @@ import java.util.ArrayList;
 
 import main.java.edu.gatech.cs2340.risk.model.Country;
 
-/**
- * @author Caroline Paulus
- *
- */
 public interface CountryService {
 	/**
 	 * Returns a list of all countries in the game

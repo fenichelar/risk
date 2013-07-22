@@ -1,24 +1,30 @@
 package main.java.edu.gatech.cs2340.risk.model;
 
-/**
- * @author Caroline Paulus
- *
- */
+import java.util.ArrayList;
+
 public class Territory {
-	
+
 	private int territoryId;
 	private String territoryName;
 	private Country country;
 	private Player owner;
-    private int numberOfArmies;        
-	
+	private int numberOfArmies; 
+	private ArrayList<Territory> neighboringTerritories;
+
+	public Territory() {
+		this.setTerritoryId(-1);
+		this.territoryName = "Null Territory";
+
+		setNumberOfArmies(0);
+	}
+
 	public Territory(int territoryId, String territoryName) {
 		this.setTerritoryId(territoryId);
 		this.territoryName = territoryName;
-		
+
 		setNumberOfArmies(1);
 	}
-	
+
 	public int getTerritoryId() {
 		return territoryId;
 	}
@@ -30,7 +36,7 @@ public class Territory {
 	public String getTerritoryName() {
 		return territoryName;
 	}
-	
+
 	public void setTerritoryName(String territoryName) {
 		this.territoryName = territoryName;
 	}
@@ -51,18 +57,34 @@ public class Territory {
 		this.owner = owner;
 	}
 
-    public int getNumberOfArmies(){
-    	return numberOfArmies;
-    }
-    
-    public void setNumberOfArmies(int numberOfArmies) {
-    	this.numberOfArmies = numberOfArmies;
-    }
-	
-    public void addArmy() {
-    	numberOfArmies++;
-    }
-    
+	public int getNumberOfArmies(){
+		return numberOfArmies;
+	}
+
+	public void setNumberOfArmies(int numberOfArmies) {
+		this.numberOfArmies = numberOfArmies;
+	}
+
+	public void removeNumberOfArmies(int numberOfArmies) {
+		this.numberOfArmies -= numberOfArmies;
+	}
+
+	public void addNumberOfArmies(int numberOfArmies) {
+		this.numberOfArmies += numberOfArmies;
+	}
+
+	public void addArmy() {
+		numberOfArmies++;
+	}
+
+	public ArrayList<Territory> getNeighboringTerritories() {
+		return neighboringTerritories;
+	}
+
+	public void setNeighboringTerritories(ArrayList<Territory> neighboringTerritories) {
+		this.neighboringTerritories = neighboringTerritories;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj.getClass() != Territory.class) {
@@ -74,10 +96,10 @@ public class Territory {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "[" + territoryName + ", ID: " + territoryId + "]";
+		return "[" + territoryName + ", ID: " + territoryId + ", OWNER: " + owner + "]";
 	}
 
 }

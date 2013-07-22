@@ -1,45 +1,18 @@
 package main.java.edu.gatech.cs2340.risk.util;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
-
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.controller.AppController;
 import main.java.edu.gatech.cs2340.risk.model.Player;
+import main.java.edu.gatech.cs2340.risk.model.Territory;
 
 public class PlayerUtil {
 
 	private static Logger log = Logger.getLogger(PlayerUtil.class);
-
-	private static final Random RANDOM = new Random();
 	private static Player selectedPlayer;
 	private static Player nextPlayer;
-
-	/**
-	 * Simulates rolling a dice
-	 * 
-	 * @return Random number between 1 and 6
-	 */
-	public static int rollDie() {
-		return RANDOM.nextInt(6) + 1;
-	}
-
-	/**
-	 * Returns the results for rolling a certain number of dice
-	 * 
-	 * @param numDice  Number of dice being rolled
-	 * @return List of results corresponding to the number of dice
-	 */
-	public static int[] rollDice(int numDice) {
-		int[] rollResults = new int[numDice];
-		for (int i = 0; i < numDice; i ++) {
-			rollResults[i] = rollDie();
-		}
-		return rollResults;
-	}
 
 	/**
 	 * Returns a list of players randomly sorted
@@ -49,18 +22,18 @@ public class PlayerUtil {
 	 * @return Sorted list of players
 	 */
 	public static ArrayList<Player> setPlayerOrder(ArrayList<Player> players) {
+		
+		log.debug("Setting player order for " + players.size() + " players");
 		// each player rolls the dice and is assigned a temporary roll value
 		for (Player player : players) {
-			player.setRollOrder(PlayerUtil.rollDie());
+			player.setRollOrder(DiceUtil.rollDie());
 		}
 		// sort the list of players based on the values they rolled
 		Collections.sort(players, new Comparator<Player>() {
 
 			@Override
 			public int compare(Player p1, Player p2) {
-				System.out.println("player 1: " + p1 + "Roll order: " + p1.getRollOrder());
-				System.out.println("player 2: " + p2 + "Roll order: " + p2.getRollOrder());
-				return (p1.getRollOrder() > p2.getRollOrder() ? -1 : 1);
+				return (p1.getRollOrder() > p2.getRollOrder() ? 1 : -1);
 			}
 		});
 		for (int i = 0; i < players.size(); i++) {
@@ -71,7 +44,7 @@ public class PlayerUtil {
 	}
 
 	/**
-	 * Returns the player with TODO
+	 * Returns the player with ID matching playerId
 	 * @param players
 	 * @param playerId
 	 * @return
@@ -85,6 +58,13 @@ public class PlayerUtil {
 		return selectedPlayer;
 	}
 
+	/**
+	 * Returns the next player in the determined roll order
+	 * 
+	 * @param players
+	 * @param currentPlayerId
+	 * @return
+	 */
 	public static Player getNextPlayer(ArrayList<Player> players, int currentPlayerId) {
 		int counter = 0;
 		for (Player player : players) {
@@ -98,4 +78,77 @@ public class PlayerUtil {
 		}
 		return nextPlayer;
 	}
+	
+	/**
+	 * Returns the player who owns the provided territory
+	 * 
+	 * @param players
+	 * @param territory
+	 * @return
+	 */
+	public static Player getPlayerByTerritory(ArrayList<Player> players, Territory territory) {
+		
+		for (Player player : players) {
+			if (player.getTerritories().contains(territory)) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	public static boolean calculateAttackWinner(int[] attackingArmyDice, int[] defendingArmyDice ) {
+
+		int attackingDiceMax = 0;
+		int defendingDiceMax = 0;
+
+		for (int i = 0; i < Math.max(attackingArmyDice.length, defendingArmyDice.length); i++) {
+			if (i < defendingArmyDice.length) {
+				if (defendingArmyDice[i] > defendingDiceMax) {
+					defendingDiceMax = defendingArmyDice[i];
+				}
+			}
+			if (i < attackingArmyDice.length) {
+				if (attackingArmyDice[i] > attackingDiceMax) {
+					attackingDiceMax = attackingArmyDice[i];
+				}
+			}
+		}
+
+		return attackingDiceMax > defendingDiceMax;
+	}
+
+	public static String doAttack(boolean attackerWin, int attackingArmyNum, int defendingArmyNum, Territory attackingTerritory, Territory defendingTerritory) {
+
+		String attackResultsMessage = "";
+
+		if (attackerWin) {
+			attackResultsMessage = "Attacker wins! ";
+			if (defendingArmyNum > 1) {
+				defendingTerritory.removeNumberOfArmies(2);
+				attackResultsMessage += "Two Armies Removed.";
+			} else {
+				defendingTerritory.removeNumberOfArmies(1);
+				attackResultsMessage += "One Army Removed.";
+			}
+			if (defendingTerritory.getNumberOfArmies() < 1) {
+				attackResultsMessage = "Attacker wins! Territory acquired.";
+				defendingTerritory.getOwner().removeTerritory(defendingTerritory);
+				attackingTerritory.getOwner().addTerritory(defendingTerritory);
+				defendingTerritory.setNumberOfArmies(attackingArmyNum);
+				attackingTerritory.removeNumberOfArmies(attackingArmyNum);
+			} 
+		} else {
+			attackResultsMessage = "Attack unsuccessful. ";
+			if (attackingArmyNum > 1) {
+				attackingTerritory.removeNumberOfArmies(2);
+				attackResultsMessage += "Two Armies Removed.";
+			} else {
+				attackingTerritory.removeNumberOfArmies(1);
+				attackResultsMessage += "One Army Removed.";
+			}
+		}
+
+		return attackResultsMessage;
+	}
+
 }

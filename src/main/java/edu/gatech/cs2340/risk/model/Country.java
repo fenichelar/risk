@@ -2,10 +2,6 @@ package main.java.edu.gatech.cs2340.risk.model;
 
 import java.util.ArrayList;
 
-/**
- * @author Caroline Paulus
- *
- */
 public class Country {
 	
 	private int countryId;
@@ -53,6 +49,10 @@ public class Country {
 
 	public void setOwner(Player owner) {
 		this.owner = owner;
+	}
+
+	public int getPointValue() {
+		return pointValue;
 	}
 	
 	@Override
