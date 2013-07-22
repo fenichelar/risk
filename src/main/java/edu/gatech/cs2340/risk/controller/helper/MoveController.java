@@ -67,13 +67,17 @@ public class MoveController extends HttpServlet {
 		Territory currentTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (currentTerritory != null && currentTerritory.getNumberOfArmies() > 1) {
-
-			log.debug("Current territory: " + currentTerritory);
-
-			risk.setMove(new Move(currentTerritory));
-			log.debug("Changing step to SELECT_FORTIFIED_TERRITORY");
-			risk.setStep(RiskConstants.SELECT_DESTINATION_TERRITORY);
-
+			
+			if (TerritoryUtil.hasValidNeighboringTerritory(risk.getCurrentPlayer(), currentTerritory) ) {
+				log.debug("Current territory: " + currentTerritory);
+	
+				risk.setMove(new Move(currentTerritory));
+				log.debug("Changing step to SELECT_DESTINATION_TERRITORY");
+				risk.setStep(RiskConstants.SELECT_DESTINATION_TERRITORY);
+			}
+			else {
+				log.debug("Territory does not have any valid neighboring territories");
+			}
 		} else {
 			log.debug("Territory cannot be used as source territory");
 		}
@@ -94,8 +98,30 @@ public class MoveController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDestinationTerritory()");
+<<<<<<< HEAD
 
 
+=======
+		
+		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
+
+		if (cancelled) {
+			risk.setStage(RiskConstants.SETUP_TURN);
+			risk.setStep(RiskConstants.SHOW_OPTIONS);
+			risk.getAppController().forwardUpdatedVariables(request, response, risk);
+			return;
+		}// TODO parameter name?
+		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
+		Territory destinationTerritory = TerritoryUtil.getTerritoryFromNeighborById(
+				risk.getMove().getSource(), neighboringTerritoryId);
+
+		risk.getMove().setDestination(destinationTerritory);
+		log.debug("Destination territory: " + destinationTerritory);
+
+		log.debug("Changing step to SELECT_ARMIES_TRANSFERRED");
+		risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
+		risk.getAppController().forwardUpdatedVariables(request, response, risk);
+>>>>>>> 6265f11ba4867c72d771b9f53c45e320953afa66
 	}
 	
 	/**

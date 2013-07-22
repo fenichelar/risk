@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import main.java.edu.gatech.cs2340.risk.controller.AppController;
 import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Attack;
 import main.java.edu.gatech.cs2340.risk.model.Move;
@@ -82,7 +83,12 @@ public class AttackController extends HttpServlet {
 			risk.setStep(RiskConstants.SELECT_DEFENDING_TERRITORY);
 
 		} else {
-			log.debug("Territory not satisfactory");
+			if (TerritoryUtil.validAttacksExist(risk.getCurrentPlayer())) {
+				log.debug("No valid attacks exist. Displaying options.");
+				risk.setStage(RiskConstants.SETUP_TURN);
+				risk.setStep(RiskConstants.SHOW_OPTIONS);
+			}
+			log.debug("Attacking territory not satisfactory");
 		}
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
@@ -170,8 +176,13 @@ public class AttackController extends HttpServlet {
 
 		log.debug("In doAttack()");
 
-		String attackResultsMessage = risk.getAttack().doAttack();
-
+		String attackResultsMessage;
+		if (AppController.WIN_CASE) {
+			attackResultsMessage = risk.getAttack().doBiasedAttack();
+		}
+		else {
+			attackResultsMessage = risk.getAttack().doAttack();
+		}
 		log.debug(attackResultsMessage);
 
 		request.setAttribute("attackingArmyDice", risk.getAttack().getAttackingArmyDice());

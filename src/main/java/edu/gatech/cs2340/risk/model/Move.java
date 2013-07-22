@@ -6,16 +6,25 @@ public class Move {
 	Territory destination;
 	int numArmies;
 
-	public Move (Territory source) {
-		this.source = source;
-	}
-
 	public Move (Territory source, Territory destination) {
-		this(source);
+		this.source = source;
 		this.destination = destination;
 	}
+	
+	public Move (Territory source) {
+		this(source, null);
+	}
+	
+	// null move case to avoid throwing null pointer exception
+	public Move() {
+		this(null, null);
+	}
+	
+	public Territory getDestination() {
+		return destination;
+	}
 
-	public void setDestination (Territory destination) {
+	public void setDestination(Territory destination) {
 		this.destination = destination;
 	}
 
@@ -25,6 +34,10 @@ public class Move {
 
 	public Territory getSource() {
 		return source;
+	}
+	
+	public void setSource(Territory source) {
+		this.source = source;
 	}
 
 	public void doMove() {

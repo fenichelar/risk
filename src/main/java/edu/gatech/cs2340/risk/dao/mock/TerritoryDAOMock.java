@@ -13,9 +13,9 @@ import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 public class TerritoryDAOMock implements TerritoryDAO {
-	
+
 	private static Logger log = Logger.getLogger(TerritoryDAOMock.class);
-	
+
 	private static final int TERRITORY_COUNT = 42;
 	private static final String TERRITORY_FILE_PATH = "/territory/territory";
 	private static final String COUNTRY_FILE_PATH = "/country/country";
@@ -23,7 +23,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 	@Override
 	public ArrayList<Territory> getTerritories() {
 		ArrayList<Territory> territories = new ArrayList<Territory>();
-		
+
 		String fileName;
 		for (int i = 1; i <= TERRITORY_COUNT; i++) {
 			// get the location of each territory's json file
@@ -47,9 +47,9 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		// create a country object from the country's json file
 		Country country = (Country) 
 				RiskUtil.convertJsonFileToObject(fileName, Country.class);
-		
+
 		ArrayList<Territory> territories = new ArrayList<Territory>();
-		
+
 		// go through country's territories and get the IDs 
 		// json file does not include all information about territories so 
 		//    it is necessary to build them from their json files
@@ -69,11 +69,11 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		// create a territory object from the territory's json file
 		Territory territory = (Territory) 
 				RiskUtil.convertJsonFileToObject(fileName, Territory.class);
-		
+
 		log.debug("Returning territory " + territory);
 		return territory;
 	}
-	
+
 
 	@Override
 	public Territory getTerritory(Player currentPlayer, int territoryId) {
@@ -85,21 +85,21 @@ public class TerritoryDAOMock implements TerritoryDAO {
 	public ArrayList<Player> addTerritories(ArrayList<Player> players) {
 		// get all territories from jsons
 		ArrayList<Territory> territories = getTerritories();
-		cleanUpNeighboringTerritories(territories);
+		addNeighboringTerritories(territories);
 
 		Random rand = new Random();
-		
+
 		// continue until all territories have been assigned to players
 		while (territories.size() > 0) {
 			for (Player player : players) {
-				
+
 				// make sure there are still territories left to assign
 				if (territories.size() > 0) {
-					
+
 					// randomly select a value between 0 and territories.size()-1
 					int territoryIndex = rand.nextInt(territories.size());
 					Territory territory = territories.get(territoryIndex);
-					
+
 					// add the territory located at that index to the player's list of territories
 					player.addTerritory(territory);
 					// remove that territory from the list of territories
@@ -121,7 +121,7 @@ public class TerritoryDAOMock implements TerritoryDAO {
 		return players;
 	}
 
-	private static void cleanUpNeighboringTerritories(ArrayList<Territory> territories) {
+	private static void addNeighboringTerritories(ArrayList<Territory> territories) {
 		ArrayList<Territory> tempNeighboringTerritories;
 		for (Territory territory : territories) {
 			tempNeighboringTerritories = new ArrayList<Territory>();
@@ -130,6 +130,46 @@ public class TerritoryDAOMock implements TerritoryDAO {
 			}
 			territory.setNeighboringTerritories(tempNeighboringTerritories);
 		}
+	}
+
+	@Override
+	public ArrayList<Player> addWinCaseTerritories(ArrayList<Player> players) {
+		Player winningPlayer = players.get(0);
+
+		ArrayList<Territory> territories = getTerritories();
+		addNeighboringTerritories(territories);
+
+		Random rand = new Random();
+		while (territories.size() > players.size() -1) {
+			// make sure there are still territories left to assign
+			if (territories.size() > players.size() -1) {
+
+				// randomly select a value between 0 and territories.size()-1
+				int territoryIndex = rand.nextInt(territories.size());
+				Territory territory = territories.get(territoryIndex);
+
+				// add the territory located at that index to the player's list of territories
+				winningPlayer.addTerritory(territory);
+				// remove that territory from the list of territories
+				territories.remove(territoryIndex);
+			}
+			// if all the territories have been assigned, break out of the while loop
+			else {
+				break;
+			}
+		}
+		for (int i = 1; i < players.size(); i++) {
+			players.get(i).addTerritory(territories.get(0));
+			territories.remove(0);
+		}
+		for (int i = 0; i < players.size(); i ++) {
+			// sort territories by ID
+			players.get(i).setTerritories(TerritoryUtil.sort(players.get(i).getTerritories()));
+			log.debug("Player " + players.get(i) 
+					+ " has territories " + players.get(i).getTerritories());
+		}
+		// return the updated list of players 
+		return players;
 	}
 
 }

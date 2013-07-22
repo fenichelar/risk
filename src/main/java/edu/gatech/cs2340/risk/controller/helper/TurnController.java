@@ -133,6 +133,7 @@ public class TurnController extends HttpServlet {
 
 				case "fortify":		risk.setStage(RiskConstants.MOVE_ARMIES);
 									risk.setStep(RiskConstants.SELECT_SOURCE_TERRITORY);
+									risk.setDirections(RiskConstants.SELECT_SOURCE_DIRECTIONS);
 									break;
 
 				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);

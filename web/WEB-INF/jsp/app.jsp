@@ -38,6 +38,9 @@
 		directionsText = currentPlayer.getPlayerName()
 				+ ", select a territory to attack from.";
 		break;
+	case 4:
+		directionsText = currentPlayer.getPlayerName() + ", select a territory to transfer armies from.";
+		break;
 	}
 %>
 <%
@@ -45,7 +48,8 @@
 	Territory defendingTerritory = risk.getAttack().getDefendingTerritory();
 %>
 <%
-	Territory source = (Territory) request.getAttribute("source");
+	Territory source = risk.getMove().getSource();
+	Territory destination = risk.getMove().getDestination();
 %>
 <html>
 <head>
@@ -85,7 +89,6 @@ function showalert(message,alerttype) {
       $("#alertdiv").remove();
     }, 4000);
   }
-
 <%if (risk.getDirections() != 0) {%>
 	$(function() {
 		showalert("<%=directionsText%>","alert-info");
@@ -144,6 +147,34 @@ function showalert(message,alerttype) {
 			show : true
 		});
 		$('.slider').slider();
+	});
+<%}%>
+
+<%if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) {%>
+	$(function() {
+		$('#fortifyDialog').modal({
+			keyboard : false,
+			show : true
+		});
+	});
+<%}%>
+
+<%if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) {%>
+	$(function() {
+		$('#fortifyDialog').modal({
+			keyboard : false,
+			show : true
+		});
+	});
+<%}%>
+<%if (risk.getStage() == RiskConstants.DECLARE_WINNER) {%>
+	$(function() {
+		$('#winnerDialog').modal({
+			keyboard : false,
+			show : true
+		});
 	});
 <%}%>
 
@@ -374,6 +405,8 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 			</form>
 		</div>
 	</div>
+	
+	
 	<%
 		}
 	%>
@@ -454,10 +487,18 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 	<%
 		}
 	%>
+	
 	<%
 	if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
 	risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {
 			String territoryName = risk.getMove().getSource().getTerritoryName();
+			String destinationName;
+			if (risk.getMove().getDestination() != null) {
+				destinationName = risk.getMove().getDestination().getTerritoryName();
+			}
+			else {
+				destinationName = defendingTerritory.getTerritoryName();
+			}
 			int minArmies = 1;
 			int maxArmies = risk.getMove().getSource().getNumberOfArmies() - 1;
 	%>
@@ -474,7 +515,7 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 			<h3 id="movingArmyNumLabel">Select Number of Armies</h3>
 		</div>
 		<div class="modal-body">
-			<h2><%=territoryName%></h2>
+			<h2><%=territoryName + " to " + destinationName%></h2>
 			<form
 				method="POST"
 				action="app"
@@ -581,6 +622,122 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 			%>
 		</div>
 	</div>
+	
+	<% if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
+		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) { %>
+	<div
+		id="fortifyDialog"
+		class="modal hide fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="fortifyLabel"
+		aria-hidden="true"
+		data-backdrop="static"
+	>
+		<div class="modal-header">
+			<h3 id="fortifyLabel">Select a Territory to Fortify</h3>
+		</div>
+		<form
+			action="app"
+			method="POST"
+		>
+			<div class="modal-body">
+				<p>Select a Neighboring Territory to Fortify:</p>
+				<%
+					for (Territory neighboringTerritory : source
+								.getNeighboringTerritories()) {
+				%>
+				<%
+					if (neighboringTerritory.getOwner().equals(currentPlayer)) {
+				%>
+				<label class="radio neighboringTerritory<%=neighboringTerritory.getTerritoryId()%> owner<%=neighboringTerritory.getOwner().getPlayerId()%>"> <input
+					type="radio"
+					name="neighboringTerritoryId"
+					value="<%=neighboringTerritory.getTerritoryId()%>"
+					checked
+				> <span><%=neighboringTerritory.getTerritoryName()%> (<%=neighboringTerritory.getNumberOfArmies()%>)</span>
+				</label>
+				<%
+					}
+				%>
+				<%
+					}
+				%>
+			</div>
+			<div class="modal-footer">
+				<input
+					type="hidden"
+					name="currentPlayerId"
+					value="<%=currentPlayer.getPlayerId()%>"
+				/> <input
+					type="hidden"
+					name="cancelled"
+					value="false"
+				/> <input
+					type="submit"
+					class="btn btn-primary"
+					value="Fortify"
+				/>
+		</form>
+		<form
+			class="cancelAttack"
+			action="app"
+			method="POST"
+		>
+			<input
+				type="hidden"
+				name="currentPlayerId"
+				value="<%=currentPlayer.getPlayerId()%>"
+			/> <input
+				type="hidden"
+				name="cancelled"
+				value="true"
+			/> <input
+				type="submit"
+				class="btn btn-danger"
+				value="Cancel"
+			/>
+		</form>
+		</div>
+	</div>
+<% }%>
+	<%
+	if (risk.getStage() == RiskConstants.DECLARE_WINNER) {
+			String winnerName = risk.getPlayers().get(0).getPlayerName();
+	%>
+	<div
+		id="winnerDialog"
+		class="modal hide fade"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="winnerLabel"
+		aria-hidden="true"
+		data-backdrop="static"
+	>
+		<div class="modal-header">
+			<h3 id="winnerLabel">Global Domination!</h3>
+		</div>
+		<div class="modal-body">
+			<h2><%="Winner: " + winnerName%></h2>
+			<form
+				method="POST"
+				action="app"
+			>
+		</div>
+		<div class="modal-footer">
+			<input
+				type="submit"
+				class="btn btn-primary"
+				value="Okay"
+			/>
+			</form>
+		</div>
+	</div>
+	
+	
+	<%
+		}%>
+	
 	<div id="alert_placeholder"></div>
 </body>
 </html>

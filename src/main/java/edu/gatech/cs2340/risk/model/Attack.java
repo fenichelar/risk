@@ -61,6 +61,23 @@ public class Attack {
 
 		return createResultsMessage(results);
 	}
+	
+	public String doBiasedAttack() {
+		attackingArmyDice = new int[Math.min(attackingArmyNum, 3)];
+		defendingArmyDice = new int[Math.min(defendingTerritory.getNumberOfArmies(), 2)];
+		
+		for (int i = 0; i < attackingArmyDice.length; i++) {
+			attackingArmyDice[i] = 6;
+		}
+		for (int i = 0; i < defendingArmyDice.length; i++) {
+			defendingArmyDice[i] = 1;
+		}
+		
+		int[] results = calculateAttackWinners();
+		this.removeArmies(results);
+
+		return createResultsMessage(results);
+	}
 
 	private int[] calculateAttackWinners() {
 

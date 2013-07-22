@@ -91,7 +91,7 @@ public class Risk {
 	}
 
 	public Move getMove() {
-		return move;
+		return ( move  == null ? new Move() : move );
 	}
 
 	public void setMove(Move move) {

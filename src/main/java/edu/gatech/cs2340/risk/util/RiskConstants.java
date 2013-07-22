@@ -7,6 +7,8 @@ public interface RiskConstants {
 	public static final int SETUP_TURN = 2;
 	public static final int ATTACK = 3;
 	public static final int MOVE_ARMIES = 4;
+	public static final int DECLARE_WINNER = 5;
+	public static final int GAME_OVER = 0;
 	
 	public static final int NO_STEP = 0;
 	
@@ -33,4 +35,5 @@ public interface RiskConstants {
 	public static final int INITIAL_DIRECTIONS = 1;
 	public static final int ADDITIONAL_ARMIES_DIRECTIONS = 2;
 	public static final int SELECT_TERRITORY_DIRECTIONS = 3;
+	public static final int SELECT_SOURCE_DIRECTIONS = 4;
 }

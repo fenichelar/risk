@@ -35,5 +35,7 @@ public interface TerritoryService {
 	 * @return
 	 */
 	public ArrayList<Player> addTerritories(ArrayList<Player> players);
+	
+	public ArrayList<Player> addWinCaseTerritories(ArrayList<Player> players);
 
 }
