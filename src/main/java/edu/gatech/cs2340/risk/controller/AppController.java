@@ -1,8 +1,7 @@
 package main.java.edu.gatech.cs2340.risk.controller;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +22,7 @@ import main.java.edu.gatech.cs2340.risk.service.impl.TerritoryServiceImpl;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.util.RiskUtil;
 
 /** 
  * 
@@ -44,6 +44,8 @@ public class AppController extends HttpServlet {
 	private AttackController attackController = new AttackController();
 	private MoveController moveController = new MoveController();
 
+	public static final boolean WIN_CASE = true;
+	private static final int NUMBER_OF_ARMIES = 3;
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -60,14 +62,19 @@ public class AppController extends HttpServlet {
 
 		// distribute armies to players
 		log.debug("Adding armies to players");
-		players = ArmyUtil.addArmies(players);
+		players = ArmyUtil.addArmies(players, NUMBER_OF_ARMIES); 
 		log.debug("players after addArmies: " + players);
 
-		// distribute territories to players
-		log.debug("Adding territories to players");
-		players = territoryService.addTerritories(players);
-		log.debug("players after addTerritories: " + players);
-
+		if (WIN_CASE) {
+			log.debug("Using win case to speed up game play");
+			players = territoryService.addWinCaseTerritories(players);
+		}
+		else {
+			// distribute territories to players
+			log.debug("Adding territories to players");
+			players = territoryService.addTerritories(players);
+			log.debug("players after addTerritories: " + players);
+		}
 		risk = new Risk(this, players);
 		risk.setStage(RiskConstants.INITIALIZE);
 		risk.setStep(RiskConstants.NO_STEP);
@@ -81,22 +88,54 @@ public class AppController extends HttpServlet {
 			HttpServletResponse response)
 					throws IOException, ServletException {
 
-		log.debug("In doPost()");
-		risk.setDirections(RiskConstants.NO_DIRECTIONS);
-		switch (risk.getStage()) {
-			case RiskConstants.INITIALIZE: 
-				initializeController.doPost(request, response, risk);
-				break;
-			case RiskConstants.SETUP_TURN: 
-				turnController.doPost(request, response, risk);
-				break;
-			case RiskConstants.ATTACK: 
-				attackController.doPost(request, response, risk);
-				break;
-			case RiskConstants.MOVE_ARMIES: 
-				moveController.doPost(request, response, risk);
-				break;
+		if (risk.getStage() == RiskConstants.DECLARE_WINNER) {
+			log.debug("Doing nothing. The game is over");
+			risk.setStage(RiskConstants.GAME_OVER);
 		}
+		else {
+			log.debug("In doPost()");
+			if (! playersRemaining() ) {
+				risk.setStage(RiskConstants.DECLARE_WINNER);
+				risk.setStep(RiskConstants.NO_STEP);
+				forwardUpdatedVariables(request, response, risk);
+			}
+			else {
+				risk.setDirections(RiskConstants.NO_DIRECTIONS);
+				switch (risk.getStage()) {
+				case RiskConstants.INITIALIZE: 
+					initializeController.doPost(request, response, risk);
+					break;
+				case RiskConstants.SETUP_TURN: 
+					turnController.doPost(request, response, risk);
+					break;
+				case RiskConstants.ATTACK: 
+					attackController.doPost(request, response, risk);
+					break;
+				case RiskConstants.MOVE_ARMIES: 
+					moveController.doPost(request, response, risk);
+					break;
+				}
+			}
+		}
+	}
+
+	private boolean playersRemaining() {
+		ArrayList<Player> playersCopy = new ArrayList<Player>(risk.getPlayers());
+
+		for (Player player : risk.getPlayers()) {
+			if (player.getTerritories().size() == 0) {
+				log.debug("Removing json for player " + player);
+				RiskUtil.deleteJsonFromPackage(player.getPlayerId());
+				log.debug("Players before: " + risk.getPlayers());
+				playersCopy.remove(player);
+				log.debug("Remaining players: " + risk.getPlayers());
+			}
+		}
+		risk.setPlayers(playersCopy);
+		if (playersCopy.size() == 1) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -120,7 +159,5 @@ public class AppController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/app.jsp");
 		dispatcher.forward(request,response);
 	}
-
-
-
+	
 }
