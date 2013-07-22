@@ -13,6 +13,10 @@ import main.java.edu.gatech.cs2340.risk.controller.AppController;
 
 @RunWith(JUnit4.class)
 public class EndOfGameTest {
+    AppController appController = new AppController();
+    Risk risk;
+    ArrayList<Player> players = new ArrayList<Player>();
+
     @Test
     public void testGameWon() {
         Player player = new Player(1, "GameWinner");
@@ -99,7 +103,9 @@ public class EndOfGameTest {
         player.addTerritory(easternAus);
         player.addTerritory(indonesia);
         player.addTerritory(newGuinea);
-        player.addTerritory(westernAus); 
-        assertTrue(player.getTerritories().size() == 42);
+        player.addTerritory(westernAus);
+        players.add(player);
+        risk = new Risk(appController, players);
+        assertTrue(risk.getStage() == RiskConstants.GAME_OVER); 
     }
 }
