@@ -114,6 +114,17 @@ public class MoveController extends HttpServlet {
 		risk.getMove().setDestination(destinationTerritory);
 		log.debug("Destination territory: " + destinationTerritory);
 
+		if (!risk.getMove().oneArmyLeftToMove()) {
+			log.debug("Changing step to SELECT_ARMIES_TRANSFERRED");
+			risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
+		} else {
+			risk.getMove().setNumArmies(1); 
+			log.debug("Changing step to DO_MOVE");
+			risk.setStep(RiskConstants.DO_MOVE);
+			doMove(request, response, risk);
+			return;
+		}
+
 		log.debug("Changing step to SELECT_ARMIES_TRANSFERRED");
 		risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
@@ -157,6 +168,6 @@ public class MoveController extends HttpServlet {
 		risk.setStage(RiskConstants.SETUP_TURN);
 		risk.setStep(RiskConstants.SHOW_OPTIONS);
 		log.debug("Changing stage to SETUP_TURN and step to SHOW_OPTIONS");
-		risk.getAppController().forwardUpdatedVariables(request, response, risk);
+		turnController.determineNextMove(request, response, risk);
 	}
 }

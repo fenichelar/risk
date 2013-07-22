@@ -43,14 +43,7 @@
 		break;
 	}
 %>
-<%
-	Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
-	Territory defendingTerritory = risk.getAttack().getDefendingTerritory();
-%>
-<%
-	Territory source = risk.getMove().getSource();
-	Territory destination = risk.getMove().getDestination();
-%>
+
 <html>
 <head>
 <title>Risk - Game</title>
@@ -159,15 +152,6 @@ function showalert(message,alerttype) {
 	});
 <%}%>
 
-<%if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
-		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) {%>
-	$(function() {
-		$('#fortifyDialog').modal({
-			keyboard : false,
-			show : true
-		});
-	});
-<%}%>
 <%if (risk.getStage() == RiskConstants.DECLARE_WINNER) {%>
 	$(function() {
 		$('#winnerDialog').modal({
@@ -183,6 +167,7 @@ function showalert(message,alerttype) {
 	<%
 	if (risk.getStage() == RiskConstants.ATTACK &&
 		risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
+			Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
 			String territoryName = attackingTerritory.getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 1;
@@ -362,7 +347,7 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 	<%
 	if (risk.getStage() == RiskConstants.ATTACK &&
 	risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {
-			String territoryName = defendingTerritory.getTerritoryName();
+			String territoryName = risk.getAttack().getDefendingTerritory().getTerritoryName();
 			int minArmies = 1;
 			int maxArmies = 2;
 	%>
@@ -412,6 +397,8 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 	<%
 		if (risk.getStage() == RiskConstants.SETUP_TURN &&
 				risk.getStep() == RiskConstants.SHOW_OPTIONS) {
+
+				Boolean hasFortified = (Boolean) request.getAttribute("hasFortified");
 	%>
 	<div
 		id="optionsDialog"
@@ -427,7 +414,7 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 		</div>
 		<div class="modal-body">
 			<%
-				if (TerritoryUtil.canAttack(currentPlayer)) {
+				if (TerritoryUtil.canAttack(currentPlayer) && (hasFortified == null || !hasFortified)) {
 			%>
 			<form
 				method="POST"
@@ -496,7 +483,7 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 				destinationName = risk.getMove().getDestination().getTerritoryName();
 			}
 			else {
-				destinationName = defendingTerritory.getTerritoryName();
+				destinationName = risk.getAttack().getDefendingTerritory().getTerritoryName();
 			}
 			int minArmies = 1;
 			int maxArmies = risk.getMove().getSource().getNumberOfArmies() - 1;
@@ -623,7 +610,9 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 	</div>
 	
 	<% if (risk.getStage() == RiskConstants.MOVE_ARMIES &&
-		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) { %>
+		risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) { 
+			Territory source = risk.getMove().getSource();
+		%>
 	<div
 		id="fortifyDialog"
 		class="modal hide fade"

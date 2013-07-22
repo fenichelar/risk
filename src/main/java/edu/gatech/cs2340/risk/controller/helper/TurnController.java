@@ -24,6 +24,7 @@ import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 public class TurnController extends HttpServlet {
 	
 	private static Logger log = Logger.getLogger(TurnController.class);
+	private boolean hasFortified;
 	
 	public void doPost(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws IOException, ServletException {
@@ -134,17 +135,21 @@ public class TurnController extends HttpServlet {
 				case "fortify":		risk.setStage(RiskConstants.MOVE_ARMIES);
 									risk.setStep(RiskConstants.SELECT_SOURCE_TERRITORY);
 									risk.setDirections(RiskConstants.SELECT_SOURCE_DIRECTIONS);
+									hasFortified = true;
 									break;
 
 				case "end turn":	risk.setDirections(RiskConstants.NO_DIRECTIONS);
 									risk.setStage(RiskConstants.SETUP_TURN);
 									risk.setStep(RiskConstants.BEFORE_TURN);
+									hasFortified = false;
 									risk.moveToNextPlayer();
 									log.debug("New Current Player: " + risk.getCurrentPlayer());
 									assignAdditionalArmies(request, response, risk);
 									return;
 			}
 		}
+		request.setAttribute("hasFortified", hasFortified);
+		log.debug("Has Fortified: " + hasFortified);
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 
 	}
