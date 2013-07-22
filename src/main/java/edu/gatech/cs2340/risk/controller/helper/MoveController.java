@@ -14,6 +14,7 @@ import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /**
  * Stage 4 (RiskConstants.MOVE_ARMIES)
@@ -37,6 +38,7 @@ public class MoveController extends HttpServlet {
 				break;
 			case RiskConstants.SELECT_ARMIES_TRANSFERRED:
 				selectArmiesTransferred(request, response, risk);
+				break;
 			case RiskConstants.DO_MOVE: 
 				doMove(request, response, risk);
 				break;
@@ -61,9 +63,8 @@ public class MoveController extends HttpServlet {
 
 		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 
-		TerritoryDAOMock territoryDAO = new TerritoryDAOMock();
-		Territory currentTerritory = territoryDAO.getTerritory(risk.getCurrentPlayer(), 
-				Integer.parseInt(request.getParameter("territoryId")));
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory currentTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (currentTerritory != null && currentTerritory.getNumberOfArmies() > 1) {
 
@@ -93,6 +94,8 @@ public class MoveController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDestinationTerritory()");
+
+
 	}
 	
 	/**
@@ -109,9 +112,8 @@ public class MoveController extends HttpServlet {
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		risk.getMove().setNumArmies(Integer.parseInt(request.getParameter("numArmies")));
-		log.debug("Changing stage to ATTACK and step to DO ATTACK");
-		risk.setStage(RiskConstants.ATTACK);
-		risk.setStep(RiskConstants.DO_ATTACK);
+		log.debug("Changing step to DO_MOVE");
+		risk.setStep(RiskConstants.DO_MOVE);
 		doMove(request, response, risk);
 	}
 
@@ -130,10 +132,9 @@ public class MoveController extends HttpServlet {
 
 		log.debug("In doMove()");
 		risk.getMove().doMove();
-		risk.setDirections(RiskConstants.NO_DIRECTIONS);
 		risk.setStage(RiskConstants.SETUP_TURN);
 		risk.setStep(RiskConstants.SHOW_OPTIONS);
 		log.debug("Changing stage to SETUP_TURN and step to SHOW_OPTIONS");
-		turnController.determineNextMove(request, response, risk);
+		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
 }

@@ -459,7 +459,7 @@ if (risk.getStage() == RiskConstants.ATTACK &&
 	risk.getStep() == RiskConstants.SELECT_ARMIES_TRANSFERRED) {
 			String territoryName = risk.getMove().getSource().getTerritoryName();
 			int minArmies = 1;
-			int maxArmies = source.getNumberOfArmies() - 1;
+			int maxArmies = risk.getMove().getSource().getNumberOfArmies() - 1;
 	%>
 	<div
 		id="movingArmyNumDialog"

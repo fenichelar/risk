@@ -67,9 +67,8 @@ public class AttackController extends HttpServlet {
 
 		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 
-		TerritoryDAOMock territoryDAO = new TerritoryDAOMock();
-		Territory attackingTerritory = territoryDAO.getTerritory(risk.getCurrentPlayer(), 
-				Integer.parseInt(request.getParameter("territoryId")));
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory attackingTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (TerritoryUtil.validAttackTerritory(attackingTerritory)) {
 
@@ -200,18 +199,16 @@ public class AttackController extends HttpServlet {
 			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), 
 					risk.getAttack().getDefendingTerritory()));
 			
-			// there are no armies available to be transferred
-			if (risk.getMove().oneArmyAtSourceTerritory()) {
-				log.debug("(oneArmyAtSourceTerritory) Move: " + risk.getMove());
-				risk.getMove().setNumArmies(1); //TODO is this doing what we want it to?
-				log.debug("Changing stage to ATTACK and step to DO_ATTACK");
-				risk.setStage(RiskConstants.ATTACK);
-				risk.setStep(RiskConstants.DO_ATTACK);
-
+			// there is one army left to transfer
+			if (risk.getMove().oneArmyLeftToMove()) {
+				log.debug("(oneArmyLeftToMove) Move: " + risk.getMove());
+				risk.getMove().setNumArmies(1); 
+				risk.setStage(RiskConstants.MOVE_ARMIES);
+				risk.setStep(RiskConstants.DO_MOVE);
 				moveController.doMove(request, response, risk);
 				return;
 			} 
-			else { // there is one or more armies available to be transferred
+			else { // there are two or more armies available to be transferred
 				log.debug("Move: " + risk.getMove());
 				risk.setDirections(RiskConstants.NO_DIRECTIONS);
 				log.debug("Changing stage to MOVE and step to SELECT_ARMIES_TRANSFERRED");

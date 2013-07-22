@@ -13,6 +13,7 @@ import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 
 /**
  * Stage 1 (RiskConstants.INITIALIZE)
@@ -50,9 +51,8 @@ public class InitializeController extends HttpServlet {
 		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 		log.debug("Current player: " + risk.getCurrentPlayer());
 
-		TerritoryDAOMock territoryDAO = new TerritoryDAOMock();
-		Territory currentTerritory = territoryDAO.getTerritory(risk.getCurrentPlayer(), 
-				Integer.parseInt(request.getParameter("territoryId")));
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory currentTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (currentTerritory != null && risk.getCurrentPlayer().getAvailableArmies() > 0) {
 

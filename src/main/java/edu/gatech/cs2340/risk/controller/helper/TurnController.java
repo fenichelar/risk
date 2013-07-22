@@ -14,6 +14,7 @@ import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
 import main.java.edu.gatech.cs2340.risk.util.ArmyUtil;
 import main.java.edu.gatech.cs2340.risk.util.PlayerUtil;
+import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 
 /**
@@ -84,9 +85,8 @@ public class TurnController extends HttpServlet {
 
 		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 
-		TerritoryDAOMock territoryDAO = new TerritoryDAOMock();
-		Territory currentTerritory = territoryDAO.getTerritory(risk.getCurrentPlayer(), 
-				Integer.parseInt(request.getParameter("territoryId")));
+		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
+		Territory currentTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (currentTerritory != null && risk.getCurrentPlayer().getAvailableArmies() > 0) {
 
