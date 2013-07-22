@@ -1,12 +1,18 @@
-package test.java.edu.gatech.cs2340.risk.model;
+package edu.gatech.cs2340.risk.model;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import java.util.ArrayList;
+
 
 import main.java.edu.gatech.cs2340.risk.model.*;
+import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.controller.AppController;
 
-//@RunWith(Junit4.class)
+@RunWith(JUnit4.class)
 public class EndOfGameTest {
-
     @Test
     public void testGameWon() {
         Player player = new Player(1, "GameWinner");
@@ -94,6 +100,6 @@ public class EndOfGameTest {
         player.addTerritory(indonesia);
         player.addTerritory(newGuinea);
         player.addTerritory(westernAus); 
-        //TODO check if player is winner
+        assertTrue(player.getTerritories().size() == 42);
     }
 }
