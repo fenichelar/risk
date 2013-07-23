@@ -48,8 +48,8 @@ public class AppController extends HttpServlet {
 	private MoveController moveController = new MoveController(turnController);
 	private AttackController attackController = new AttackController(turnController, moveController);
 
-	public static final boolean WIN_CASE = true;
-	private static final int NUMBER_OF_ARMIES = 3;
+	public static final boolean WIN_CASE = false;
+	private static final int NUMBER_OF_ARMIES = 10;
 	
 	/**
 	 * Retrieves players, puts them in a random order, distributes
