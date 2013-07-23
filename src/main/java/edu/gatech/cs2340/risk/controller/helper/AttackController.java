@@ -20,17 +20,12 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 /**
  * Stage 3 (RiskConstants.ATTACK)
  *
- * @author Caroline Paulus
- * @author Brittany Wood
- * @author Julian Popescu
- * @author Alec Fenichal
- * @author Andrew Osborn
  */
 @SuppressWarnings("serial")
 public class AttackController extends HttpServlet {
 
 	private static Logger log = Logger.getLogger(AttackController.class);
-	private MoveController moveController = new MoveController();
+
 	private TurnController turnController = new TurnController();
 
 	public AttackController() {
@@ -96,17 +91,14 @@ public class AttackController extends HttpServlet {
 	 * @throws ServletException
 	 */
 	protected void selectAttackingTerritory(HttpServletRequest request,
-			HttpServletResponse response, Risk risk) throws IOException, 
-			ServletException {
+			HttpServletResponse response, Risk risk) throws IOException, ServletException {
 
 		log.debug("In selectAttackingTerritory()");
 
-		int tempID = Integer.parseInt(request.getParameter("currentPlayerId"));
-		risk.setCurrentPlayer(tempID);
+		risk.setCurrentPlayer(Integer.parseInt(request.getParameter("currentPlayerId")));
 
 		int territoryId = Integer.parseInt(request.getParameter("territoryId"));
-		Territory attackingTerritory = 
-				TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
+		Territory attackingTerritory = TerritoryUtil.getTerritoryById(risk.getCurrentPlayer(), territoryId);
 
 		if (TerritoryUtil.validAttackTerritory(attackingTerritory)) {
 
@@ -141,13 +133,11 @@ public class AttackController extends HttpServlet {
 	 * @throws IOException
 	 */
 	protected void selectDefendingTerritory(HttpServletRequest request,
-			HttpServletResponse response, Risk risk) 
-					throws ServletException, IOException {
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In selectDefendingTerritory()");
 
-		boolean cancelled = 
-				Boolean.parseBoolean(request.getParameter("cancelled"));
+		boolean cancelled = Boolean.parseBoolean(request.getParameter("cancelled"));
 
 		if (cancelled) {
 			risk.setStage(RiskConstants.SETUP_TURN);
@@ -155,14 +145,10 @@ public class AttackController extends HttpServlet {
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}
-		
-		int attackingArmyNum = 
-				Integer.parseInt(request.getParameter("attackingArmyNum"));
-		risk.getAttack().setAttackingArmyNum(attackingArmyNum);
 
-		int neighboringTerritoryId = 
-				Integer.parseInt(request.getParameter("neighboringTerritoryId"));
-		
+		risk.getAttack().setAttackingArmyNum(Integer.parseInt(request.getParameter("attackingArmyNum")));
+
+		int neighboringTerritoryId = Integer.parseInt(request.getParameter("neighboringTerritoryId"));
 		Territory defendingTerritory = TerritoryUtil.getTerritoryFromNeighborById(
 				risk.getAttack().getAttackingTerritory(), neighboringTerritoryId);
 
@@ -196,10 +182,7 @@ public class AttackController extends HttpServlet {
 	protected void selectDefendingNumberOfArmies(HttpServletRequest request,
 			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
-		int defendingArmyNum = 
-				Integer.parseInt(request.getParameter("defendingArmyNum"));
-		
-		risk.getAttack().setDefendingArmyNum(defendingArmyNum);
+		risk.getAttack().setDefendingArmyNum(Integer.parseInt(request.getParameter("defendingArmyNum")));
 		log.debug("Changing step to DO_ATTACK");
 		risk.setStep(RiskConstants.DO_ATTACK);
 		doAttack(request, response, risk);
@@ -218,8 +201,7 @@ public class AttackController extends HttpServlet {
 	 * @throws IOException
 	 */
 	protected void doAttack(HttpServletRequest request,
-			HttpServletResponse response, Risk risk) 
-					throws ServletException, IOException {
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		log.debug("In doAttack()");
 
@@ -231,7 +213,7 @@ public class AttackController extends HttpServlet {
 			attackResultsMessage = risk.getAttack().doAttack();
 		}
 		log.debug(attackResultsMessage);
-	
+
 		request.setAttribute("attackingArmyDice", risk.getAttack().getAttackingArmyDice());
 		request.setAttribute("defendingArmyDice", risk.getAttack().getDefendingArmyDice());
 		request.setAttribute("attackResultsMessage", attackResultsMessage);
@@ -250,30 +232,16 @@ public class AttackController extends HttpServlet {
 	 * @throws IOException
 	 */
 	protected void processAttackRequest(HttpServletRequest request,
-			HttpServletResponse response, Risk risk) 
-					throws ServletException, IOException {
+			HttpServletResponse response, Risk risk) throws ServletException, IOException {
 
 		if (risk.getAttack().defendingTerritoryIsConquered()) {
-
-			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), 
-					risk.getAttack().getDefendingTerritory()));
-			
-			if (risk.getMove().oneArmyLeftToMove()) {
-				log.debug("(oneArmyLeftToMove) Move: " + risk.getMove());
-				risk.getMove().setNumArmies(1); 
-				risk.setStage(RiskConstants.MOVE_ARMIES);
-				risk.setStep(RiskConstants.DO_MOVE);
-				moveController.doMove(request, response, risk);
-				return;
-			} 
-			else { 
-				log.debug("Move: " + risk.getMove());
-				risk.setDirections(RiskConstants.NO_DIRECTIONS);
-				log.debug("Changing stage to MOVE and step to SELECT_ARMIES_TRANSFERRED");
-				risk.setStage(RiskConstants.MOVE_ARMIES);
-				risk.setStep(RiskConstants.SELECT_ARMIES_TRANSFERRED);
-				risk.getAppController().forwardUpdatedVariables(request, response, risk);
-			}
+			risk.setMove(new Move(risk.getAttack().getAttackingTerritory(), risk.getAttack().getDefendingTerritory()));
+			log.debug("Move: " + risk.getMove());
+			risk.setDirections(RiskConstants.NO_DIRECTIONS);
+			log.debug("Changing stage to MOVE and step to ATTACK_MOVE");
+			risk.setStage(RiskConstants.MOVE_ARMIES);
+			risk.setStep(RiskConstants.ATTACK_MOVE);
+			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 		} else { // attacking territory was conquered or cannot transfer armies
 			risk.setDirections(RiskConstants.NO_DIRECTIONS);
 			risk.setStage(RiskConstants.SETUP_TURN);
