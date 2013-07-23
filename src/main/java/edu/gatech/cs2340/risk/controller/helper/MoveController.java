@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
 import main.java.edu.gatech.cs2340.risk.model.Territory;
@@ -25,6 +24,7 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
  * @author Alec Fenichal
  * @author Andrew Osborn
  */
+@SuppressWarnings("serial")
 public class MoveController extends HttpServlet {
 	
 	private static Logger log = Logger.getLogger(MoveController.class);
