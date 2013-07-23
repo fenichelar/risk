@@ -1,5 +1,4 @@
 <%
-String moduleName = "";
 int show = 6;
 // 0 = none
 // 1 = current players territories
@@ -21,7 +20,7 @@ switch (risk.getStage()) {
 				show = 1;
 				break;
 			case RiskConstants.SHOW_OPTIONS:
-				moduleName = "options";
+				//moduleName = "options";
 				show = 0;
 				break;
 		}
@@ -32,15 +31,15 @@ switch (risk.getStage()) {
 				show = 2;
 				break;
 			case RiskConstants.SELECT_DEFENDING_TERRITORY:
-				moduleName = "attack";
+				//moduleName = "attack";
 				show = 3;
 				break;
 			case RiskConstants.SELECT_DEFENDING_ARMIES:
-				moduleName = "defendingArmyNum";
+				//moduleName = "defendingArmyNum";
 				show = 0;
 				break;
 			case RiskConstants.DO_ATTACK:
-				moduleName = "attackResults";
+				//moduleName = "attackResults";
 				show = 0;
 				break;
 		}
@@ -51,17 +50,17 @@ switch (risk.getStage()) {
 				show = 4;
 				break;
 			case RiskConstants.ATTACK_MOVE:
-				moduleName = "attackMove";
+				//moduleName = "attackMove";
 				show = 0;
 				break;
 			case RiskConstants.SELECT_DESTINATION_TERRITORY:
 				show = 5;
-				moduleName = "fortify";
+				//moduleName = "fortify";
 				break;
 		}
 		break;
 	case RiskConstants.DECLARE_WINNER: 
-		moduleName = "winner";
+		//moduleName = "winner";
 		break;
 } 
 %>

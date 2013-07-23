@@ -60,31 +60,31 @@
 						'<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'
 								+ message + '</span></div>')
 	}
-<%if (risk.getDirections() != 0) {%>
-	$(function() {
-		showalert(
-<%out.write("'" + directionsText + "'");%>
-	, "alert-info");
-	});
-<%}%>
+
+	<%if (risk.getDirections() != 0) {%>
+		$(function() {
+			showalert(
+				<%out.write(
+					"'" + directionsText + "'");%>
+					, "alert-info"
+				);
+		});
+	<%}%>
+
+	<%if (risk.getStage() == RiskConstants.SETUP_TURN
+						&& risk.getStep() == RiskConstants.SHOW_OPTIONS) {
+		directionsText = currentPlayer.getPlayerName() + ", select your next move.";%>
+		$(function() {
+			showalert(
+				<%out.write("'" + directionsText + "'");%>
+					, "alert-info"
+				);
+			});
+	<% } %>
 	
 	$(function() {
 		$('.slider').slider();
 	});
-
-	
-
-	
-<%if (risk.getStage() == RiskConstants.SETUP_TURN
-					&& risk.getStep() == RiskConstants.SHOW_OPTIONS) {
-	directionsText = currentPlayer.getPlayerName() + ", select your next move.";%>
-	$(function() {
-		showalert(
-<%out.write("'" + directionsText + "'");%>
-	, "alert-info");
-	});
-<%}%>
-
 	
 	
 </script>
@@ -128,74 +128,13 @@
 	</div>
 	<div id="wrap" class="container-fluid">
 		<div class="row-fluid">
+
 			<div class="span3">
 				<div id="sidebar">
-					<%
-						if (risk.getStage() == RiskConstants.ATTACK
-								&& risk.getStep() == RiskConstants.SELECT_DEFENDING_TERRITORY) {
-					%>
-						<%@include file="module/attack.jsp" %>
-
-					<%
-						}
-					%>
-					<%
-						if (risk.getStage() == RiskConstants.ATTACK
-								&& risk.getStep() == RiskConstants.DO_ATTACK) {	
-					%>
-						<%@include file="module/attackResults.jsp" %>	
-
-					<%
-						}
-					%>
-
-					<%
-						if (risk.getStage() == RiskConstants.ATTACK
-								&& risk.getStep() == RiskConstants.SELECT_DEFENDING_ARMIES) {
-					%>
-						<%@include file="module/defendingArmyNum.jsp" %>
-
-					<%
-						}
-					%>
-
-					<%
-						if (risk.getStage() == RiskConstants.SETUP_TURN
-								&& risk.getStep() == RiskConstants.SHOW_OPTIONS) {
-					%>
-						<%@include file="module/options.jsp" %>
-
-					<%
-						}
-					%>
-
-					<%
-						if (risk.getStage() == RiskConstants.MOVE_ARMIES
-								&& risk.getStep() == RiskConstants.SELECT_DESTINATION_TERRITORY) {	
-					%>
-						<%@include file="module/fortify.jsp" %>
-					<%
-						}
-					%>
-
-					<%
-						if (risk.getStage() == RiskConstants.MOVE_ARMIES
-								&& risk.getStep() == RiskConstants.ATTACK_MOVE) {
-					%>
-						<%@include file="module/attackMove.jsp" %>
-					<%
-						}
-					%>
-
-					<%
-						if (risk.getStage() == RiskConstants.DECLARE_WINNER) {
-					%>
-						<%@include file="module/winner.jsp" %>
-					<%
-						}
-					%>
+					<%@include file="helper/getSidebarModule.jsp" %>
 				</div>
 			</div>
+
 			<div class="span9" id="map-container">
 				<div id="map">
 					<%for (Player player : players) {%>
@@ -205,80 +144,7 @@
 								<input type="hidden" name="operation" value="POST" />
 								<input type="hidden" name="territoryId" value="<%=territory.getTerritoryId()%>" />
 								<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-								<%
-
-								boolean drawn;
-								switch (show) {
-								case 0:%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%break;
-								case 1:
-									if(player == currentPlayer) {%>
-							<input class="territoryButton btn btn-link" type="submit"
-								value="<%=territory.getNumberOfArmies()%>" />
-							<%} else {%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%}
-									break;
-								case 2:
-									if(player == currentPlayer && TerritoryUtil.validAttackTerritory(territory)) {%>
-							<input class="territoryButton btn btn-link" type="submit"
-								value="<%=territory.getNumberOfArmies()%>" />
-							<%} else {%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%}
-									break;
-								case 3:
-									Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
-									drawn = false;
-									for (Territory neighboringTerritory : attackingTerritory.getNeighboringTerritories()) {
-										if (!neighboringTerritory.getOwner().equals(currentPlayer) && territory==neighboringTerritory) {%>
-							<input
-								onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('attacksubmit').click()"
-								class="territoryButton btn btn-link" type="button"
-								value="<%=territory.getNumberOfArmies()%>">
-							<%drawn = true;
-										}
-									}
-									if(!drawn) {%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%}
-									break;
-								case 4:
-									if(player == currentPlayer && TerritoryUtil.validFortifyTerritory(territory)) {%>
-							<input class="territoryButton btn btn-link" type="submit"
-								value="<%=territory.getNumberOfArmies()%>" />
-							<%} else {%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%}
-									break;
-								case 5:
-									Territory source = risk.getMove().getSource();
-									drawn = false;
-									for (Territory neighboringTerritory : source.getNeighboringTerritories()) {
-										if (neighboringTerritory.getOwner().equals(currentPlayer) && territory==neighboringTerritory) {%>
-							<input
-								onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('fortifysubmit').click()"
-								class="territoryButton btn btn-link" type="button"
-								value="<%=territory.getNumberOfArmies()%>">
-							<%drawn = true;
-										}
-									}
-									if(!drawn) {%>
-							<input class="territoryButton btn btn-link" disabled
-								type="submit" value="<%=territory.getNumberOfArmies()%>" />
-							<%}
-									break;
-								case 6:%>
-							<input class="territoryButton btn btn-link" type="submit"
-								value="<%=territory.getNumberOfArmies()%>" />
-							<%break;
-								}%>
+								<%@include file="helper/alterVisibilities.jsp" %>
 						</form>
 					</div>
 					<%}%>
