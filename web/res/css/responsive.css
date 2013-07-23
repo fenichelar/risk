@@ -7,10 +7,10 @@
 }
 
  /* Large Displays */
-@media all and (min-width: 1280px) and (max-width: 1444px) {
+@media all and (min-width: 1200px) and (max-width: 1444px) {
 	#map {
-		width: 890px;
-		height: 537px;
+		width: 840px;
+		height: 507px;
 	}
 
 	.slider {
@@ -20,7 +20,7 @@
 
 
 /* Default Displays */
-@media all and (max-width: 1279px) {
+@media all and (max-width: 1199px) {
 	#map {
 		width: 700px;
 		height: 422px;
@@ -28,6 +28,17 @@
 
 	.slider {
 		width: 140px;
+	}
+
+	div.territory form {
+		height: 40px;
+		width: 26px;
+	}
+
+	div.territory form .territoryButton {	
+		height: 30px;
+		min-width: 30px;
+		margin: 15px 0px 0px 5px;
 	}
 }
 

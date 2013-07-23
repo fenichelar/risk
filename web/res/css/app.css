@@ -104,6 +104,15 @@ div.territory {
 	height: 0px;
 }
 
+div.territory form {
+	height: 52px;
+	width: 35px;
+	background-size: cover !important;
+	-webkit-background-size: cover !important;
+	-moz-background-size: cover !important;
+}
+
+
 div.territory form .territoryButton {
 	height: 35px;
 	min-width: 35px;
@@ -119,9 +128,9 @@ div.territory form .territoryButton {
 	box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.75);
 }
 
+
+
 div.territory.player1 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/greenPlayer.png');
 }
 
@@ -130,8 +139,6 @@ div.territory.player1 form .territoryButton {
 }
 
 div.territory.player2 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/bluePlayer.png');
 }
 
@@ -140,8 +147,6 @@ div.territory.player2 form .territoryButton {
 }
 
 div.territory.player3 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/redPlayer.png');
 }
 
@@ -150,8 +155,6 @@ div.territory.player3 form .territoryButton {
 }
 
 div.territory.player4 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/yellowPlayer.png');
 }
 
@@ -160,8 +163,6 @@ div.territory.player4 form .territoryButton {
 }
 
 div.territory.player5 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/purplePlayer.png');
 }
 
@@ -170,8 +171,6 @@ div.territory.player5 form .territoryButton {
 }
 
 div.territory.player6 form {
-	height: 52px;
-	width: 35px;
 	background: url('../img/cyanPlayer.png');
 }
 
@@ -274,14 +273,13 @@ div.dice {
 
 /* SIDEBAR */
 #sidebar {
-	margin-top: 3%;
 	height: 75%;
 	position: fixed;
 	z-index: 999;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 #sidebarPlaceHolder {
 	position: absolute;
-	top: 15%;
+	top: 23%;
 }
