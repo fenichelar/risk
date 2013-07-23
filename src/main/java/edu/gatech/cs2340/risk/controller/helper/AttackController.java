@@ -27,8 +27,6 @@ public class AttackController extends HttpServlet {
 	private static Logger log;
 
 	private TurnController turnController;
-	private MoveController moveController;
-
 	public AttackController() {
 		this(new TurnController());
 	}
@@ -45,7 +43,6 @@ public class AttackController extends HttpServlet {
 		super();
 		log = Logger.getLogger(AttackController.class);
 		this.turnController = turnController;
-		this.moveController = moveController;
 	}
 
 
