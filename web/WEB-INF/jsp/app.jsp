@@ -269,9 +269,6 @@ $('.slider').slider();
 							if(attackResultsMessage.equals("Attack Successful! Territory acquired.")) {
 								alerttype = "alert-success";
 							}
-							if(attackResultsMessage.substring(3,3).equals("t")) {
-								alerttype = "alert-warning";
-							}
 					%>
 							<script type="text/javascript">
 							$(function() {
