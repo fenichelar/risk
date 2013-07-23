@@ -137,7 +137,7 @@ public class MoveController extends HttpServlet {
 			turnController.revertHasFortified();
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
-		}// TODO parameter name?
+		}
 		int neighboringTerritoryId = Integer.parseInt(request
 				.getParameter("neighboringTerritoryId"));
 		Territory destinationTerritory = TerritoryUtil
