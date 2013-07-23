@@ -10,8 +10,7 @@
 	background: -moz-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff),
-	color-stop(47%, #fbfbfb),
-	color-stop(100%, #f7f7f7));
+		color-stop(47%, #fbfbfb), color-stop(100%, #f7f7f7));
 	/* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* Chrome10+,Safari5.1+ */
@@ -22,8 +21,7 @@
 	background: linear-gradient(to bottom, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
-	endColorstr='#f7f7f7',
-	GradientType=0); /* IE6-9 */
+		endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
 	border: 1px solid #CCC;
 	border-bottom: 10px solid #CCC;
 	border-top: none;
@@ -83,6 +81,7 @@
 #map-container {
 	overflow: scroll;
 }
+
 #map {
 	margin-top: 20px;
 	background: url('../img/riskmap.png') no-repeat;
@@ -393,16 +392,15 @@ input.optionBtn {
 }
 
 /* ATTACK DIALOG */
-#attackDialog form.cancelAttack, #fortifyDialog form.cancelAttack {
+#attackDialog form.cancelAttack,#fortifyDialog form.cancelAttack {
 	display: inline;
 }
 
-#attackDialog .modal-footer, #fortifyDialog .modal-footer {
+#attackDialog .modal-footer,#fortifyDialog .modal-footer {
 	margin-bottom: -20px;
 }
 
 /*RADIO BUTTONS*/
-
 .modal label.radio {
 	display: inline-block;
 	margin: 10px;
@@ -439,7 +437,6 @@ input.optionBtn {
 }
 
 /* ATTACK RESULTS */
-
 h5#attackResultsMessage {
 	float: left;
 	font-size: 16px;
