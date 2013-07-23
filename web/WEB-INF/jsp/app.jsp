@@ -59,18 +59,6 @@
 						'<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'
 								+ message + '</span></div>')
 	}
-	function selectdefender(id)
-	{
-		document.getElementById(id).checked = true;
-	}
-	function submitattack(id)
-	{
-		document.getElementById(id).click();
-	}
-	function clickbyid(id)
-	{
-		document.getElementById(id).click();
-	}
 <%if (risk.getDirections() != 0) {%>
 	$(function() {
 		showalert(
