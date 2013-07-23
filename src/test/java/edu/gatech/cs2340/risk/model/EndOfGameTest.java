@@ -1,11 +1,21 @@
 package test.java.edu.gatech.cs2340.risk.model;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import java.util.ArrayList;
+
 
 import main.java.edu.gatech.cs2340.risk.model.*;
+import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
+import main.java.edu.gatech.cs2340.risk.controller.AppController;
 
-//@RunWith(Junit4.class)
+@RunWith(JUnit4.class)
 public class EndOfGameTest {
+    AppController appController = new AppController();
+    Risk risk;
+    ArrayList<Player> players = new ArrayList<Player>();
 
     @Test
     public void testGameWon() {
@@ -19,37 +29,16 @@ public class EndOfGameTest {
         Territory ontario = new Territory(7, "Ontario");
         Territory quebec = new Territory(8, "Quebec");
         Territory westernUS = new Territory(9, "Western United States");
-        player.addTerritory(alaska);
-        player.addTerritory(alberta);
-        player.addTerritory(centralAmerica);
-        player.addTerritory(easternUS);
-        player.addTerritory(greenland);
-        player.addTerritory(northwestTerritory);
-        player.addTerritory(ontario);
-        player.addTerritory(quebec);
-        player.addTerritory(westernUS);
-        
         Territory argentina = new Territory(10, "Argentina");
         Territory brazil = new Territory(11, "Brazil");
         Territory peru = new Territory(12, "Peru");
         Territory venezuela = new Territory(13, "Venezuela");
-        player.addTerritory(argentina);
-        player.addTerritory(brazil);
-        player.addTerritory(peru);
-        player.addTerritory(venezuela);
-        
         Territory congo = new Territory(14, "Congo");
         Territory eastAfrica = new Territory(15, "East Africa");
         Territory egypt = new Territory(16, "Egypt");
         Territory madagascar = new Territory(17, "Madagascar");
         Territory northAfrica = new Territory(18, "North Africa");
         Territory southAfrica = new Territory(19, "South Africa");
-        player.addTerritory(congo);
-        player.addTerritory(eastAfrica);
-        player.addTerritory(egypt);
-        player.addTerritory(madagascar);
-        player.addTerritory(northAfrica);
-        player.addTerritory(southAfrica);
         Territory greatBritain = new Territory(20, "Great Britain");
         Territory iceland = new Territory(21, "Iceland");
         Territory northernEurope = new Territory(22, "Nothern Europe");
@@ -58,14 +47,6 @@ public class EndOfGameTest {
         Territory ukraine = new Territory(25, "Ukraine");
         Territory westernEurope = new Territory(26, "Western Europe");
         Territory afghanistan = new Territory(27, "Afghanistan");
-        player.addTerritory(greatBritain);
-        player.addTerritory(iceland);
-        player.addTerritory(northernEurope);
-        player.addTerritory(scandinavia);
-        player.addTerritory(southernEurope);
-        player.addTerritory(ukraine);
-        player.addTerritory(westernEurope);
-        player.addTerritory(afghanistan);
         Territory china = new Territory(28, "China");
         Territory india = new Territory(29, "India");
         Territory irkutsk = new Territory(30, "Irkutsk");
@@ -81,6 +62,33 @@ public class EndOfGameTest {
         Territory indonesia = new Territory(40, "Indonesia");
         Territory newGuinea = new Territory(41, "New Guinea");
         Territory westernAus = new Territory(42, "Western Australia");
+        player.addTerritory(alaska);
+        player.addTerritory(alberta);
+        player.addTerritory(centralAmerica);
+        player.addTerritory(easternUS);
+        player.addTerritory(greenland);
+        player.addTerritory(northwestTerritory);
+        player.addTerritory(ontario);
+        player.addTerritory(quebec);
+        player.addTerritory(westernUS);
+        player.addTerritory(argentina);
+        player.addTerritory(brazil);
+        player.addTerritory(peru);
+        player.addTerritory(venezuela);
+        player.addTerritory(congo);
+        player.addTerritory(eastAfrica);
+        player.addTerritory(egypt);
+        player.addTerritory(madagascar);
+        player.addTerritory(northAfrica);
+        player.addTerritory(southAfrica);
+        player.addTerritory(greatBritain);
+        player.addTerritory(iceland);
+        player.addTerritory(northernEurope);
+        player.addTerritory(scandinavia);
+        player.addTerritory(southernEurope);
+        player.addTerritory(ukraine);
+        player.addTerritory(westernEurope);
+        player.addTerritory(afghanistan);
         player.addTerritory(china);
         player.addTerritory(india);
         player.addTerritory(irkutsk);
@@ -95,7 +103,9 @@ public class EndOfGameTest {
         player.addTerritory(easternAus);
         player.addTerritory(indonesia);
         player.addTerritory(newGuinea);
-        player.addTerritory(westernAus); 
-        //TODO check if player is winner
+        player.addTerritory(westernAus);
+        players.add(player);
+        risk = new Risk(appController, players);
+        assertTrue(risk.getStage() == RiskConstants.GAME_OVER); 
     }
 }

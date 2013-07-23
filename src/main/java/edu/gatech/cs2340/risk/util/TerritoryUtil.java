@@ -65,12 +65,58 @@ public class TerritoryUtil {
 		}
 		return false;
 	}
+	
+	public static boolean validFortifyTerritory(Territory territory) {
+		return territory != null && territory.getNumberOfArmies() > 1 && TerritoryUtil.anyFriendlyTerritories(territory);
+	}
+	
+	public static boolean canFortify(Player player) {
+		for (Territory territory : player.getTerritories()) {
+			if (validFortifyTerritory(territory)) return true;
+		}
+		return false;
+	}
 
 	public static boolean anyEnemyTerritories (Territory territory) {
 		Player owner = territory.getOwner();
 		for (Territory neighboringTerritory : territory.getNeighboringTerritories()) {
 			if (!neighboringTerritory.getOwner().equals(owner)) {
 				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean anyFriendlyTerritories (Territory territory) {
+		Player owner = territory.getOwner();
+		for (Territory neighboringTerritory : territory.getNeighboringTerritories()) {
+			if (neighboringTerritory.getOwner().equals(owner)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean hasValidNeighboringTerritory(Player currentPlayer, Territory territory) {
+		
+		for (Territory playerTerritory : currentPlayer.getTerritories()) {
+			for (Territory neighborTerritory : territory.getNeighboringTerritories()) {
+				if (playerTerritory.equals(neighborTerritory)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean validAttacksExist(Player currentPlayer) {
+		for (Territory territory : currentPlayer.getTerritories()) {
+			if (territory.getNumberOfArmies() > 1) {
+				for (Territory neighborTerritory : territory.getNeighboringTerritories()) {
+					if (! currentPlayer.getTerritories().contains(neighborTerritory) ) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;

@@ -1,14 +1,17 @@
 /* Contains the CSS for the Risk Game page */
 #wrap {
-	width: 1024px;
 	margin: 0 auto;
+	padding-top: 130px;
 }
 
 #players div.player {
+	text-align: center;
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(47%, #fbfbfb), color-stop(100%, #f7f7f7));
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff),
+	color-stop(47%, #fbfbfb),
+	color-stop(100%, #f7f7f7));
 	/* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* Chrome10+,Safari5.1+ */
@@ -18,7 +21,9 @@
 	/* IE10+ */
 	background: linear-gradient(to bottom, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(       startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
+	endColorstr='#f7f7f7',
+	GradientType=0); /* IE6-9 */
 	border: 1px solid #CCC;
 	border-bottom: 10px solid #CCC;
 	border-top: none;
@@ -74,8 +79,10 @@
 #players div.player6.active {
 	border-bottom-color: #00d7da;
 }
-
 /* MAP STYLES */
+#map-container {
+	overflow: scroll;
+}
 #map {
 	margin-top: 20px;
 	background: url('../img/riskmap.png') no-repeat;
@@ -382,25 +389,21 @@ span.sliderContext {
 
 /* OPTION DIALOG */
 input.optionBtn {
-	width: 200px;
-	margin: auto 150px;
-}
-
-a.optionBtn {
-	margin: 10px 150px 20px 150px;
-	width: 160px
+	width: 120px;
 }
 
 /* ATTACK DIALOG */
-#attackDialog form.cancelAttack {
+#attackDialog form.cancelAttack, #fortifyDialog form.cancelAttack {
 	display: inline;
 }
 
-#attackDialog .modal-footer {
+#attackDialog .modal-footer, #fortifyDialog .modal-footer {
 	margin-bottom: -20px;
 }
 
-#attackDialog label.radio {
+/*RADIO BUTTONS*/
+
+.modal label.radio {
 	display: inline-block;
 	margin: 10px;
 	padding: 10px 15px 10px 30px;
@@ -411,27 +414,27 @@ a.optionBtn {
 	text-shadow: #000 0px 0px 5px;
 }
 
-#attackDialog label.radio.owner1 {
+.modal label.radio.owner1 {
 	background: #24c612;
 }
 
-#attackDialog label.radio.owner2 {
+.modal label.radio.owner2 {
 	background: #126fc6;
 }
 
-#attackDialog label.radio.owner3 {
+.modal label.radio.owner3 {
 	background: #c61216;
 }
 
-#attackDialog label.radio.owner4 {
+.modal label.radio.owner4 {
 	background: #c6b312;
 }
 
-#attackDialog label.radio.owner5 {
+.modal label.radio.owner5 {
 	background: #7e12c6;
 }
 
-#attackDialog label.radio.owner6 {
+.modal label.radio.owner6 {
 	background: #12c692;
 }
 
@@ -439,7 +442,7 @@ a.optionBtn {
 
 h5#attackResultsMessage {
 	float: left;
-    font-size: 16px;
+	font-size: 16px;
 }
 
 div.dice {
@@ -506,10 +509,8 @@ div.dice {
 	background: url("../img/diceWhite.jpg") 120px 120px;
 }
 
-/* ALERT STYLING */
-
-div#alertdiv {
-    position: relative;
-    width = 100%;
-    top: -400px;
+/* SIDEBAR */
+#sidebar {
+	margin-top: 20px;
+	position: fixed;
 }
