@@ -81,7 +81,10 @@
 
 #map {
 	margin-top: 20px;
-	background: url('../img/riskmap.png') no-repeat;
+	background: url('../img/riskmap.png');
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
 	height: 618px;
 	width: 1024px;
 }
@@ -470,6 +473,7 @@ div.dice {
 
 /* SIDEBAR */
 #sidebar {
-	margin-top: 60px;
+	margin-top: 50px;
 	position: fixed;
+	z-index: 999;
 }
