@@ -24,9 +24,10 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 @SuppressWarnings("serial")
 public class AttackController extends HttpServlet {
 
-	private static Logger log = Logger.getLogger(AttackController.class);
+	private static Logger log;
 
-	private TurnController turnController = new TurnController();
+	private TurnController turnController;
+	private MoveController moveController;
 
 	public AttackController() {
 		this(new TurnController());
