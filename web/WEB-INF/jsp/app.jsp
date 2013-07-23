@@ -166,7 +166,8 @@ $('.slider').slider();
 				<%
 					for (Player player : players) {
 				%>
-				<div class="<%if (oddOffset)
+				<div
+					class="<%if (oddOffset)
 					out.write("offset1 ");
 				out.write(span);%> player <%out.write("player" + (player.getPlayerId()));%> <%if (currentPlayer.equals(player))
 					out.write("active");%>">
@@ -207,51 +208,61 @@ $('.slider').slider();
 							directionsText = currentPlayer.getPlayerName() + ", click a teritory to attack with " + territoryName + ".";
 
 					%>
-						<form action="app" method="POST">
-							<script type="text/javascript">
+					<form action="app" method="POST">
+						<script type="text/javascript">
 								$(function() {
 									showalert(
 								<%out.write("'" + directionsText + "'");%>
 								, "alert-info");
 								});
 							</script>
-								<%
+						<%
 									if (maxArmies > 1) {
 								%>
-								<p>Select number of armies to attack with</p>
-								<span class="sliderContext minArmies"><%=minArmies%></span>
-								<input type="text" name="attackingArmyNum" class="slider" value="<%=maxArmies%>" data-slider-min="<%=minArmies%>" data-slider-max="<%=maxArmies%>" data-slider-value="<%=maxArmies%>">
-								<span class="sliderContext maxArmies"><%=maxArmies%></span>
-								<hr />
-								<%
+						<p>Select number of armies to attack with</p>
+						<span class="sliderContext minArmies"><%=minArmies%></span> <input
+							type="text" name="attackingArmyNum" class="slider"
+							value="<%=maxArmies%>" data-slider-min="<%=minArmies%>"
+							data-slider-max="<%=maxArmies%>"
+							data-slider-value="<%=maxArmies%>"> <span
+							class="sliderContext maxArmies"><%=maxArmies%></span>
+						<hr />
+						<%
 									} else {
 								%>
-								<input type="hidden" name="attackingArmyNum" value="1" />
-								<%
+						<input type="hidden" name="attackingArmyNum" value="1" />
+						<%
 									}
 								%>
-								<%
+						<%
 									for (Territory neighboringTerritory : attackingTerritory
 												.getNeighboringTerritories()) {
 								%>
-								<%
+						<%
 									if (!neighboringTerritory.getOwner().equals(currentPlayer)) {
 								%>
-								<input style="display:none;" type="radio" id="<%=neighboringTerritory.getTerritoryId()%>" name="neighboringTerritoryId" value="<%=neighboringTerritory.getTerritoryId()%>" checked>
-								<%
+						<input style="display: none;" type="radio"
+							id="<%=neighboringTerritory.getTerritoryId()%>"
+							name="neighboringTerritoryId"
+							value="<%=neighboringTerritory.getTerritoryId()%>" checked>
+						<%
 									}
 								%>
-								<%
+						<%
 									}
 								%>
-								<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-								<input type="hidden" name="cancelled" value="false" />
-								<input style="display:none;" id="attacksubmit" type="submit" class="btn btn-primary" value="Attack!" />
-						</form>
-						<form class="cancelAttack" action="app" method="POST">
-							<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-							<input type="hidden" name="cancelled" value="true" /> <input type="submit" class="btn btn-danger" value="Cancel Attack" />
-						</form>
+						<input type="hidden" name="currentPlayerId"
+							value="<%=currentPlayer.getPlayerId()%>" /> <input type="hidden"
+							name="cancelled" value="false" /> <input style="display: none;"
+							id="attacksubmit" type="submit" class="btn btn-primary"
+							value="Attack!" />
+					</form>
+					<form class="cancelAttack" action="app" method="POST">
+						<input type="hidden" name="currentPlayerId"
+							value="<%=currentPlayer.getPlayerId()%>" /> <input type="hidden"
+							name="cancelled" value="true" /> <input type="submit"
+							class="btn btn-danger" value="Cancel Attack" />
+					</form>
 					<%
 						}
 					%>
@@ -270,37 +281,37 @@ $('.slider').slider();
 								alerttype = "alert-success";
 							}
 					%>
-							<script type="text/javascript">
+					<script type="text/javascript">
 							$(function() {
 								showalert(
 							<%out.write("'" + directionsText + "'");%>
 							, "<%=alerttype%>");
 							});
 							</script>
-							<p>Attacker Rolled</p>
-							<div class="row attackRolls dice">
-								<%
+					<p>Attacker Rolled</p>
+					<div class="row attackRolls dice">
+						<%
 									for (int dieValue : attackingArmyDice) {
 								%>
-								<div class="value<%=dieValue%>"></div>
-								<%
+						<div class="value<%=dieValue%>"></div>
+						<%
 									}
 								%>
-							</div>
-							<p>Defender Rolled</p>
-							<div class="row defenceRolls dice">
-								<%
+					</div>
+					<p>Defender Rolled</p>
+					<div class="row defenceRolls dice">
+						<%
 									for (int dieValue : defendingArmyDice) {
 								%>
-								<div class="value<%=dieValue%>"></div>
-								<%
+						<div class="value<%=dieValue%>"></div>
+						<%
 									}
 								%>
-							</div>
-							<hr />
-							<form method="POST" action="app">
-								<input type="submit" class="btn btn-primary" value="Continue" />
-							</form>
+					</div>
+					<hr />
+					<form method="POST" action="app">
+						<input type="submit" class="btn btn-primary" value="Continue" />
+					</form>
 					<%
 						}
 					%>
@@ -313,21 +324,24 @@ $('.slider').slider();
 							int maxArmies = 2;
 							directionsText = risk.getAttack().getDefendingTerritory().getOwner().getPlayerName() + ", " + territoryName + " is being attacked by " + attackingTerritoryName + ".";
 					%>
-						<script type="text/javascript">
+					<script type="text/javascript">
 							$(function() {
 								showalert(
 							<%out.write("'" + directionsText + "'");%>
 							, "alert-info");
 							});
 						</script>
-							<form method="POST" action="app">
-								<p>Select number of armies to defend with</p>
-								<span class="sliderContext minArmies"><%=minArmies%></span>
-								<input type="text" name="defendingArmyNum" class="slider" value="<%=maxArmies%>" data-slider-min="<%=minArmies%>" data-slider-max="<%=maxArmies%>" data-slider-value="<%=maxArmies%>">
-								<span class="sliderContext maxArmies"><%=maxArmies%></span>
-							<hr />
-							<input type="submit" class="btn btn-primary" value="Continue" />
-							</form>
+					<form method="POST" action="app">
+						<p>Select number of armies to defend with</p>
+						<span class="sliderContext minArmies"><%=minArmies%></span> <input
+							type="text" name="defendingArmyNum" class="slider"
+							value="<%=maxArmies%>" data-slider-min="<%=minArmies%>"
+							data-slider-max="<%=maxArmies%>"
+							data-slider-value="<%=maxArmies%>"> <span
+							class="sliderContext maxArmies"><%=maxArmies%></span>
+						<hr />
+						<input type="submit" class="btn btn-primary" value="Continue" />
+					</form>
 					<%
 						}
 					%>
@@ -338,29 +352,35 @@ $('.slider').slider();
 							Boolean hasFortified = (Boolean) request
 									.getAttribute("hasFortified");
 					%>
-							<%
+					<%
 								if (TerritoryUtil.canAttack(currentPlayer)
 											&& (hasFortified == null || !hasFortified)) {
 							%>
-							<form method="POST" action="app">
-								<input type="hidden" name="option" value="attack" /> <input type="submit" class="optionBtn btn btn-large btn-primary " value="Attack">
-							</form>
-							<%
+					<form method="POST" action="app">
+						<input type="hidden" name="option" value="attack" /> <input
+							type="submit" class="optionBtn btn btn-large btn-primary "
+							value="Attack">
+					</form>
+					<%
 								}
 							%>
-							<%
+					<%
 								if (TerritoryUtil.canFortify(currentPlayer)
 											&& (hasFortified == null || !hasFortified)) {
 							%>
-							<form method="POST" action="app">
-								<input type="hidden" name="option" value="fortify" /> <input type="submit" class="optionBtn btn btn-large btn-success" value="Fortify">
-							</form>
-							<%
+					<form method="POST" action="app">
+						<input type="hidden" name="option" value="fortify" /> <input
+							type="submit" class="optionBtn btn btn-large btn-success"
+							value="Fortify">
+					</form>
+					<%
 								}
 							%>
-							<form method="POST" action="app">
-								<input type="hidden" name="option" value="end turn" /> <input type="submit" class="optionBtn btn btn-large btn-danger" value="End Turn">
-							</form>
+					<form method="POST" action="app">
+						<input type="hidden" name="option" value="end turn" /> <input
+							type="submit" class="optionBtn btn btn-large btn-danger"
+							value="End Turn">
+					</form>
 					<%
 						}
 					%>
@@ -374,56 +394,65 @@ $('.slider').slider();
 							ArrayList<Territory> neighboringTerritories = source .getNeighboringTerritories();
 							directionsText = currentPlayer.getPlayerName() + ", click a teritory to fortify with " + territoryName + ".";
 					%>
-						<form action="app" method="POST">
-								<script type="text/javascript">
+					<form action="app" method="POST">
+						<script type="text/javascript">
 								$(function() {
 									showalert(
 								<%out.write("'" + directionsText + "'");%>
 								, "alert-info");
 								});
 							</script>
-								<%
+						<%
 									if (maxArmies > 1) {
 								%>
-								<p>Select number of armies to fortify with</p>
-								<span class="sliderContext minArmies"><%=minArmies%></span>
-								<input type="text" name="numArmies" class="slider" value="<%=maxArmies%>" data-slider-min="<%=minArmies%>" data-slider-max="<%=maxArmies%>" data-slider-value="<%=maxArmies%>">
-								<span class="sliderContext maxArmies"><%=maxArmies%></span>
-								<hr />
-								<%
+						<p>Select number of armies to fortify with</p>
+						<span class="sliderContext minArmies"><%=minArmies%></span> <input
+							type="text" name="numArmies" class="slider"
+							value="<%=maxArmies%>" data-slider-min="<%=minArmies%>"
+							data-slider-max="<%=maxArmies%>"
+							data-slider-value="<%=maxArmies%>"> <span
+							class="sliderContext maxArmies"><%=maxArmies%></span>
+						<hr />
+						<%
 									} else {
 								%>
-								<input type="hidden" name="numArmies" value="1" />
-								<%
+						<input type="hidden" name="numArmies" value="1" />
+						<%
 									}
 								%>
-								<%
+						<%
 									for (Territory neighboringTerritory : source
 												.getNeighboringTerritories()) {
 								%>
-								<%
+						<%
 									if (neighboringTerritory.getOwner().equals(currentPlayer)) {
 								%>
-								<input style="display:none;" type="radio" id="<%=neighboringTerritory.getTerritoryId()%>" name="neighboringTerritoryId" value="<%=neighboringTerritory.getTerritoryId()%>" checked>
-								<%
+						<input style="display: none;" type="radio"
+							id="<%=neighboringTerritory.getTerritoryId()%>"
+							name="neighboringTerritoryId"
+							value="<%=neighboringTerritory.getTerritoryId()%>" checked>
+						<%
 									}
 								%>
-								<%
+						<%
 									}
 								%>
-								<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-								<input type="hidden" name="cancelled" value="false" />
-								<input style="display:none;" type="submit" id="fortifysubmit" class="btn btn-primary" value="Fortify" />
-						</form>
-						<form class="cancelFortify" action="app" method="POST">
-							<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-							<input type="hidden" name="cancelled" value="true" />
-							<input type="submit" class="btn btn-danger" value="Cancel Fortify" />
-						</form>
-				<%
+						<input type="hidden" name="currentPlayerId"
+							value="<%=currentPlayer.getPlayerId()%>" /> <input type="hidden"
+							name="cancelled" value="false" /> <input style="display: none;"
+							type="submit" id="fortifysubmit" class="btn btn-primary"
+							value="Fortify" />
+					</form>
+					<form class="cancelFortify" action="app" method="POST">
+						<input type="hidden" name="currentPlayerId"
+							value="<%=currentPlayer.getPlayerId()%>" /> <input type="hidden"
+							name="cancelled" value="true" /> <input type="submit"
+							class="btn btn-danger" value="Cancel Fortify" />
+					</form>
+					<%
 					}
 				%>
-				<%
+					<%
 						if (risk.getStage() == RiskConstants.MOVE_ARMIES
 								&& risk.getStep() == RiskConstants.ATTACK_MOVE) {
 							Territory source = risk.getMove().getSource();
@@ -433,66 +462,71 @@ $('.slider').slider();
 							ArrayList<Territory> neighboringTerritories = source .getNeighboringTerritories();
 							directionsText = currentPlayer.getPlayerName() + ", you have acquired a new territory.";
 					%>
-						<form action="app" method="POST">
-								<script type="text/javascript">
+					<form action="app" method="POST">
+						<script type="text/javascript">
 								$(function() {
 									showalert(
 								<%out.write("'" + directionsText + "'");%>
 								, "alert-info");
 								});
 							</script>
-								<%
+						<%
 									if (maxArmies > 1) {
 								%>
-								<p>Select number of armies to fortify with</p>
-								<span class="sliderContext minArmies"><%=minArmies%></span>
-								<input type="text" name="numArmies" class="slider" value="<%=maxArmies%>" data-slider-min="<%=minArmies%>" data-slider-max="<%=maxArmies%>" data-slider-value="<%=maxArmies%>">
-								<span class="sliderContext maxArmies"><%=maxArmies%></span>
-								<hr />
-								<%
+						<p>Select number of armies to fortify with</p>
+						<span class="sliderContext minArmies"><%=minArmies%></span> <input
+							type="text" name="numArmies" class="slider"
+							value="<%=maxArmies%>" data-slider-min="<%=minArmies%>"
+							data-slider-max="<%=maxArmies%>"
+							data-slider-value="<%=maxArmies%>"> <span
+							class="sliderContext maxArmies"><%=maxArmies%></span>
+						<hr />
+						<%
 									} else {
 								%>
-								<input type="hidden" name="numArmies" value="1" />
-								<%
+						<input type="hidden" name="numArmies" value="1" />
+						<%
 									}
 								%>
-								<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-								<input type="hidden" name="cancelled" value="false" />
-								<input type="submit" class="btn btn-primary" value="Fortify" />
-						</form>
-				<%
+						<input type="hidden" name="currentPlayerId"
+							value="<%=currentPlayer.getPlayerId()%>" /> <input type="hidden"
+							name="cancelled" value="false" /> <input type="submit"
+							class="btn btn-primary" value="Fortify" />
+					</form>
+					<%
 					}
 				%>
-				<%
+					<%
 					if (risk.getStage() == RiskConstants.DECLARE_WINNER) {
 						String winnerName = risk.getPlayers().get(0).getPlayerName();
 					directionsText = risk.getPlayers().get(0).getPlayerName() + ", you won!";
 					%>
-							<script type="text/javascript">
+					<script type="text/javascript">
 								$(function() {
 									showalert(
 								<%out.write("'" + directionsText + "'");%>
 								, "alert-sucess");
 								});
 							</script>
-						<h3>Global Domination!</h3>
-						<form method="POST" action="app">
-						</form>
-				<%
+					<h3>Global Domination!</h3>
+					<form method="POST" action="app"></form>
+					<%
 					}
 				%>
+				</div>
 			</div>
-		</div>
-		<div class="span9" id="map-container">
-			<div id="map">
+			<div class="span9" id="map-container">
+				<div id="map">
 					<%for (Player player : players) {%>
-						<%for (Territory territory : player.getTerritories()) {%>
-						<div class="territory <%out.write("player" + (player.getPlayerId()));%> <%out.write("territory" + territory.getTerritoryId());%>">
-							<form action="app" method="POST">
-								<input type="hidden" name="operation" value="POST" />
-								<input type="hidden" name="territoryId" value="<%=territory.getTerritoryId()%>" />
-								<input type="hidden" name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
-								<%
+					<%for (Territory territory : player.getTerritories()) {%>
+					<div
+						class="territory <%out.write("player" + (player.getPlayerId()));%> <%out.write("territory" + territory.getTerritoryId());%>">
+						<form action="app" method="POST">
+							<input type="hidden" name="operation" value="POST" /> <input
+								type="hidden" name="territoryId"
+								value="<%=territory.getTerritoryId()%>" /> <input type="hidden"
+								name="currentPlayerId" value="<%=currentPlayer.getPlayerId()%>" />
+							<%
 								int show;
 								// 0 = none
 								// 1 = current players territories
@@ -531,66 +565,82 @@ $('.slider').slider();
 								boolean drawn;
 								switch (show) {
 								case 0:%>
-									<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%break;
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%break;
 								case 1:
 									if(player == currentPlayer) {%>
-										<input class="territoryButton btn btn-link" type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%} else {%>
-										<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%}
+							<input class="territoryButton btn btn-link" type="submit"
+								value="<%=territory.getNumberOfArmies()%>" />
+							<%} else {%>
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%}
 									break;
 								case 2:
 									if(player == currentPlayer && TerritoryUtil.validAttackTerritory(territory)) {%>
-										<input class="territoryButton btn btn-link" type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%} else {%>
-										<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%}
+							<input class="territoryButton btn btn-link" type="submit"
+								value="<%=territory.getNumberOfArmies()%>" />
+							<%} else {%>
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%}
 									break;
 								case 3:
 									Territory attackingTerritory = risk.getAttack().getAttackingTerritory();
 									drawn = false;
 									for (Territory neighboringTerritory : attackingTerritory.getNeighboringTerritories()) {
 										if (!neighboringTerritory.getOwner().equals(currentPlayer) && territory==neighboringTerritory) {%>
-										<input onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('attacksubmit').click()" class="territoryButton btn btn-link" type="button" value="<%=territory.getNumberOfArmies()%>">
-										<%drawn = true;
+							<input
+								onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('attacksubmit').click()"
+								class="territoryButton btn btn-link" type="button"
+								value="<%=territory.getNumberOfArmies()%>">
+							<%drawn = true;
 										}
 									}
 									if(!drawn) {%>
-									<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%}
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%}
 									break;
 								case 4:
 									if(player == currentPlayer && TerritoryUtil.validFortifyTerritory(territory)) {%>
-										<input class="territoryButton btn btn-link" type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%} else {%>
-										<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%}
+							<input class="territoryButton btn btn-link" type="submit"
+								value="<%=territory.getNumberOfArmies()%>" />
+							<%} else {%>
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%}
 									break;
 								case 5:
 									Territory source = risk.getMove().getSource();
 									drawn = false;
 									for (Territory neighboringTerritory : source.getNeighboringTerritories()) {
 										if (neighboringTerritory.getOwner().equals(currentPlayer) && territory==neighboringTerritory) {%>
-										<input onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('fortifysubmit').click()" class="territoryButton btn btn-link" type="button" value="<%=territory.getNumberOfArmies()%>">
-										<%drawn = true;
+							<input
+								onClick="javascript: document.getElementById(<%=neighboringTerritory.getTerritoryId()%>).click(),document.getElementById('fortifysubmit').click()"
+								class="territoryButton btn btn-link" type="button"
+								value="<%=territory.getNumberOfArmies()%>">
+							<%drawn = true;
 										}
 									}
 									if(!drawn) {%>
-									<input class="territoryButton btn btn-link" disabled type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%}
+							<input class="territoryButton btn btn-link" disabled
+								type="submit" value="<%=territory.getNumberOfArmies()%>" />
+							<%}
 									break;
 								case 6:%>
-									<input class="territoryButton btn btn-link" type="submit" value="<%=territory.getNumberOfArmies()%>" />
-									<%break;
+							<input class="territoryButton btn btn-link" type="submit"
+								value="<%=territory.getNumberOfArmies()%>" />
+							<%break;
 								}%>
-							</form>
-						</div>
-						<%}%>
+						</form>
+					</div>
 					<%}%>
+					<%}%>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </body>
 </html>
