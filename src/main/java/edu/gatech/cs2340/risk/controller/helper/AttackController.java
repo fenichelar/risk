@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import main.java.edu.gatech.cs2340.risk.controller.AppController;
-import main.java.edu.gatech.cs2340.risk.dao.mock.TerritoryDAOMock;
 import main.java.edu.gatech.cs2340.risk.model.Attack;
 import main.java.edu.gatech.cs2340.risk.model.Move;
 import main.java.edu.gatech.cs2340.risk.model.Risk;
@@ -22,11 +21,11 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
  * Stage 3 (RiskConstants.ATTACK)
  *
  */
+@SuppressWarnings("serial")
 public class AttackController extends HttpServlet {
 
 	private static Logger log = Logger.getLogger(AttackController.class);
 
-	private MoveController moveController = new MoveController();
 	private TurnController turnController = new TurnController();
 
 	public void doPost(HttpServletRequest request,
