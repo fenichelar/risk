@@ -4,6 +4,10 @@
 	padding-top: 130px;
 }
 
+#playerContainer {
+	height: 12%;
+}
+
 #players div.player {
 	text-align: center;
 	background: #ffffff; /* Old browsers */
@@ -24,6 +28,11 @@
 	endColorstr='#f7f7f7',
 	GradientType=0); /* IE6-9 */
 	border-bottom: 10px solid #CCC;
+	height: 100%;
+}
+
+#players div.player h3 {
+	line-height: 20px;
 }
 
 /* PLAYER COLORS */
@@ -100,7 +109,7 @@ div.territory form .territoryButton {
 	min-width: 35px;
 	margin: 25px 0px 0px 10px;
 	border-radius: 50%;
-	webkit-border-radius: 50%;
+	-webkit-border-radius: 50%;
 	background: #666;
 	color: #FFF;
 	text-shadow: #000 0px 0px 5px;
@@ -265,7 +274,14 @@ div.dice {
 
 /* SIDEBAR */
 #sidebar {
-	margin-top: 50px;
+	margin-top: 3%;
+	height: 75%;
 	position: fixed;
 	z-index: 999;
+	overflow-y: scroll;
+}
+
+#sidebarPlaceHolder {
+	position: absolute;
+	top: 15%;
 }

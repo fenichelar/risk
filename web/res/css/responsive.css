@@ -1,0 +1,42 @@
+ /* Large Displays */
+@media all and (min-width: 1445px) {
+	#map {
+		width: 1024px;
+		height: 618px;
+	}
+}
+
+ /* Large Displays */
+@media all and (min-width: 1280px) and (max-width: 1444px) {
+	#map {
+		width: 890px;
+		height: 537px;
+	}
+
+	.slider {
+		width: 175px;
+	}
+}
+
+
+/* Default Displays */
+@media all and (max-width: 1279px) {
+	#map {
+		width: 700px;
+		height: 422px;
+	}
+
+	.slider {
+		width: 140px;
+	}
+}
+
+/* Tablet Displays */
+@media all and (min-width: 768px) and (max-width: 979px) {
+
+}
+
+/* Mobile Displays */
+@media all and (max-width: 767px) {
+
+}

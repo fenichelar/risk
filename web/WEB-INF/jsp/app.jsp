@@ -94,7 +94,7 @@
 </script>
 </head>
 <body>
-	<div class="navbar navbar-fixed-top">
+	<div class="navbar navbar-fixed-top" id="playerContainer">
 		<div class="navbar-inner">
 			<div class="row-fluid text-center" id="players">
 				<%
@@ -133,7 +133,7 @@
 	<div id="wrap" class="container-fluid">
 		<div class="row-fluid">
 
-			<div class="sidebarPlaceHolder">
+			<div id="sidebarPlaceHolder">
 				<div id="sidebar" class="span3">
 					<%@include file="helper/getSidebarModule.jsp" %>
 				</div>
