@@ -32,6 +32,27 @@ public class AttackController extends HttpServlet {
 	private static Logger log = Logger.getLogger(AttackController.class);
 	private MoveController moveController = new MoveController();
 	private TurnController turnController = new TurnController();
+
+	public AttackController() {
+		this(new TurnController());
+	}
+
+	public AttackController(TurnController turnController) {
+		this(turnController, new MoveController());
+	}
+
+	public AttackController(MoveController moveController) {
+		this(new TurnController(), moveController);
+	}
+
+	public AttackController(TurnController turnController, MoveController moveController) {
+		super();
+		log = Logger.getLogger(AttackController.class);
+		this.turnController = turnController;
+		this.moveController = moveController;
+	}
+
+
  
 	/**
 	 * Processes the attack by calling helper methods contained

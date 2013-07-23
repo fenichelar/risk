@@ -27,9 +27,18 @@ import main.java.edu.gatech.cs2340.risk.util.TerritoryUtil;
 @SuppressWarnings("serial")
 public class MoveController extends HttpServlet {
 	
-	private static Logger log = Logger.getLogger(MoveController.class);
-	
-	private TurnController turnController = new TurnController();
+	private static Logger log;
+	private TurnController turnController;
+
+	public MoveController() {
+		this(new TurnController());
+	}
+
+	public MoveController(TurnController turnController) {
+		super();
+		log = Logger.getLogger(MoveController.class);
+		this.turnController = turnController;
+	}
 	
 	/**
 	 * Calls helper methods within MoveController to initialize Stage 4 steps
@@ -123,6 +132,7 @@ public class MoveController extends HttpServlet {
 		if (cancelled) {
 			risk.setStage(RiskConstants.SETUP_TURN);
 			risk.setStep(RiskConstants.SHOW_OPTIONS);
+			turnController.revertHasFortified();
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}

@@ -1,6 +1,4 @@
-<%
-	Boolean hasFortified = (Boolean) request.getAttribute("hasFortified");
-%>
+
 <div
 	id="optionsDialog"
 	class="modal hide fade"
@@ -15,7 +13,7 @@
 	</div>
 	<div class="modal-body">
 		<%
-			if (TerritoryUtil.canAttack(currentPlayer) && (hasFortified == null || !hasFortified)) {
+			if (TerritoryUtil.canAttack(currentPlayer)) {
 		%>
 		<form
 			method="POST"

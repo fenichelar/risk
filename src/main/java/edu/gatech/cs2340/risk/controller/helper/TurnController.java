@@ -27,8 +27,13 @@ import main.java.edu.gatech.cs2340.risk.util.RiskConstants;
 @SuppressWarnings("serial")
 public class TurnController extends HttpServlet {
 	
-	private static Logger log = Logger.getLogger(TurnController.class);
+	private static Logger log;
 	private boolean hasFortified;
+
+	public TurnController () {
+		super();
+		log = Logger.getLogger(TurnController.class);
+	}
 	
 	/**
 	 * Calls helper methods contained within TurnController that correspond 
@@ -147,6 +152,11 @@ public class TurnController extends HttpServlet {
 		String option = request.getParameter("option");
 		log.debug("Option: " + option);
 
+		if (hasFortified) {
+			revertHasFortified();
+			option = "end turn";
+		}
+
 		if (option != null) {
 			switch (option) {
 				case "attack":		
@@ -166,18 +176,22 @@ public class TurnController extends HttpServlet {
 					risk.setDirections(RiskConstants.NO_DIRECTIONS);
 					risk.setStage(RiskConstants.SETUP_TURN);
 					risk.setStep(RiskConstants.BEFORE_TURN);
-					hasFortified = false;
 					risk.moveToNextPlayer();
 					log.debug("New Current Player: " + risk.getCurrentPlayer());
 					assignAdditionalArmies(request, response, risk);
 					return;
 			}
 		}
-		request.setAttribute("hasFortified", hasFortified);
-		log.debug("Has Fortified: " + hasFortified);
+
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 
 	}
+
+	protected void revertHasFortified() {
+		hasFortified = false;
+	}
+
+
 
 
 }

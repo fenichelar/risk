@@ -42,10 +42,12 @@ public class AppController extends HttpServlet {
 	private Risk risk;
 	private PlayerServiceImpl playerService = new PlayerServiceImpl();
 	private TerritoryServiceImpl territoryService = new TerritoryServiceImpl();
-	private InitializeController initializeController = new InitializeController();
+	
 	private TurnController turnController = new TurnController();
-	private AttackController attackController = new AttackController();
-	private MoveController moveController = new MoveController();
+	private InitializeController initializeController = new InitializeController(turnController);
+	private MoveController moveController = new MoveController(turnController);
+	private AttackController attackController = new AttackController(turnController, moveController);
+
 	public static final boolean WIN_CASE = true;
 	private static final int NUMBER_OF_ARMIES = 3;
 	
