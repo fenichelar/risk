@@ -24,21 +24,18 @@
 	case 0:
 		break;
 	case 1:
-		directionsText = "When it is your turn, click on any territory belonging to you to add an army to it.";
+		directionsText = currentPlayer.getPlayerName()
+		+ ", select a territory to fortify. You have "
+		+ currentPlayer.getAvailableArmies()
+		+ " additional "
+		+ (currentPlayer.getAvailableArmies() > 1 ? "armies"
+				: "army") + " to distribute.";
 		break;
 	case 2:
 		directionsText = currentPlayer.getPlayerName()
-				+ ", you have "
-				+ currentPlayer.getAvailableArmies()
-				+ " additional "
-				+ (currentPlayer.getAvailableArmies() > 1 ? "armies"
-						: "army") + " to distribute.";
-		break;
-	case 3:
-		directionsText = currentPlayer.getPlayerName()
 				+ ", select a territory to attack from.";
 		break;
-	case 4:
+	case 3:
 		directionsText = currentPlayer.getPlayerName()
 				+ ", select a territory to transfer armies from.";
 		break;
@@ -140,7 +137,7 @@
 			</div>
 
 			
-				<div id="map" class="span9 offset<%= isMapCentered ? "2" : "3" %>">
+				<div id="map" class="span9 offset3">
 					<%for (Player player : players) {%>
 						<%for (Territory territory : player.getTerritories()) {%>
 						<div class="territory <%out.write("player" + (player.getPlayerId()));%> <%out.write("territory" + territory.getTerritoryId());%>">
