@@ -4,6 +4,12 @@
 		width: 1024px;
 		height: 618px;
 	}
+
+	.slider {
+		width: 210px !important;
+	}
+
+
 }
 
  /* Large Displays */
@@ -14,7 +20,7 @@
 	}
 
 	.slider {
-		width: 175px;
+		width: 175px !important;
 	}
 }
 
@@ -27,7 +33,7 @@
 	}
 
 	.slider {
-		width: 140px;
+		width: 110px !important;
 	}
 
 	div.territory form {
