@@ -86,7 +86,7 @@ public class AppController extends HttpServlet {
 		risk = new Risk(this, players);
 		risk.setStage(RiskConstants.INITIALIZE);
 		risk.setStep(RiskConstants.NO_STEP);
-		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
+		risk.setDirections(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
 
 		forwardUpdatedVariables(request, response, risk);
 	}
