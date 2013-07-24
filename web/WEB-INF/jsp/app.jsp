@@ -47,9 +47,13 @@
 <html>
 <head>
 <title>Risk - Game</title>
+
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="css/app.css" />
 <link rel="stylesheet" type="text/css" href="css/slider.css" />
+<link rel="stylesheet" type="text/css" href="css/app.css" />
+<link rel="stylesheet" type="text/css" href="css/territoryPositions.css" />
+<link rel="stylesheet" type="text/css" href="css/responsive.css" />
+
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/bootstrap-slider.js"></script>
@@ -90,7 +94,7 @@
 </script>
 </head>
 <body>
-	<div class="navbar navbar-fixed-top">
+	<div class="navbar navbar-fixed-top" id="playerContainer">
 		<div class="navbar-inner">
 			<div class="row-fluid text-center" id="players">
 				<%
@@ -129,14 +133,14 @@
 	<div id="wrap" class="container-fluid">
 		<div class="row-fluid">
 
-			<div class="span3">
-				<div id="sidebar">
+			<div id="sidebarPlaceHolder">
+				<div id="sidebar" class="span3">
 					<%@include file="helper/getSidebarModule.jsp" %>
 				</div>
 			</div>
 
-			<div class="span9" id="map-container">
-				<div id="map">
+			
+				<div id="map" class="span9 offset<%= isMapCentered ? "2" : "3" %>">
 					<%for (Player player : players) {%>
 						<%for (Territory territory : player.getTerritories()) {%>
 						<div class="territory <%out.write("player" + (player.getPlayerId()));%> <%out.write("territory" + territory.getTerritoryId());%>">
@@ -150,7 +154,7 @@
 					<%}%>
 					<%}%>
 				</div>
-			</div>
+			
 		</div>
 	</div>
 </body>
