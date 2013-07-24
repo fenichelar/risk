@@ -1,4 +1,5 @@
 <%
+boolean isMapCentered = false;
 int show = 6;
 // 0 = none
 // 1 = current players territories
@@ -9,14 +10,17 @@ int show = 6;
 // 6 = all
 switch (risk.getStage()) {
 	case RiskConstants.INITIALIZE:
+		isMapCentered = true;
 		show = 1;
 		break;
 	case RiskConstants.SETUP_TURN: 
 		switch (risk.getStep()) {
 			case RiskConstants.BEFORE_TURN:
+				isMapCentered = true;
 				show = 1;
 				break;
 			case RiskConstants.BEGINNING_OF_TURN:
+				isMapCentered = true;
 				show = 1;
 				break;
 			case RiskConstants.SHOW_OPTIONS:
@@ -28,6 +32,7 @@ switch (risk.getStage()) {
 	case RiskConstants.ATTACK: 
 		switch (risk.getStep()) {
 			case RiskConstants.SELECT_ATTACKING_TERRITORY:
+				isMapCentered = true;
 				show = 2;
 				break;
 			case RiskConstants.SELECT_DEFENDING_TERRITORY:
@@ -47,6 +52,7 @@ switch (risk.getStage()) {
 	case RiskConstants.MOVE_ARMIES: 
 		switch (risk.getStep()) {
 			case RiskConstants.SELECT_SOURCE_TERRITORY:
+				isMapCentered = true;
 				show = 4;
 				break;
 			case RiskConstants.ATTACK_MOVE:
