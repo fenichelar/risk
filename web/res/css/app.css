@@ -232,43 +232,43 @@ div.dice {
 }
 
 .attackRolls div.value2 {
-	background: url("../img/diceRed.jpg") 242px 0px;
+	background: url("../img/diceRed.jpg") 50% 0px;
 }
 
 .defenceRolls div.value2 {
-	background: url("../img/diceWhite.jpg") 242px 0px;
+	background: url("../img/diceWhite.jpg") 50% 0px;
 }
 
 .attackRolls div.value3 {
-	background: url("../img/diceRed.jpg") 120px 0px;
+	background: url("../img/diceRed.jpg") 100% 0px;
 }
 
 .defenceRolls div.value3 {
-	background: url("../img/diceWhite.jpg") 120px 0px;
+	background: url("../img/diceWhite.jpg") 100% 0px;
 }
 
 .attackRolls div.value4 {
-	background: url("../img/diceRed.jpg") 0px 120px;
+	background: url("../img/diceRed.jpg") 0px 100%;
 }
 
 .defenceRolls div.value4 {
-	background: url("../img/diceWhite.jpg") 0px 120px;
+	background: url("../img/diceWhite.jpg") 0px 100%;
 }
 
 .attackRolls div.value5 {
-	background: url("../img/diceRed.jpg") 243px 120px;
+	background: url("../img/diceRed.jpg") 50% 100%;
 }
 
 .defenceRolls div.value5 {
-	background: url("../img/diceWhite.jpg") 243px 120px;
+	background: url("../img/diceWhite.jpg") 50% 100%;
 }
 
 .attackRolls div.value6 {
-	background: url("../img/diceRed.jpg") 120px 120px;
+	background: url("../img/diceRed.jpg") 100% 100%;
 }
 
 .defenceRolls div.value6 {
-	background: url("../img/diceWhite.jpg") 120px 120px;
+	background: url("../img/diceWhite.jpg") 100% 100%;
 }
 
 /* SIDEBAR */

@@ -22,6 +22,12 @@
 	.slider {
 		width: 170px !important;
 	}
+
+	.dice div {
+		width: 100px;
+		height: 100px;
+		background-size: 300px 200px !important;
+	}
 }
 
 
@@ -45,6 +51,12 @@
 		height: 30px;
 		min-width: 30px;
 		margin: 15px 0px 0px 5px;
+	}
+
+	.dice div {
+		width: 75px;
+		height: 75px;
+		background-size: 225px 150px !important;
 	}
 }
 
