@@ -21,12 +21,9 @@
 	background: linear-gradient(to bottom, #ffffff 0%, #fbfbfb 47%, #f7f7f7 100%);
 	/* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
-		endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
-	border: 1px solid #CCC;
+	endColorstr='#f7f7f7',
+	GradientType=0); /* IE6-9 */
 	border-bottom: 10px solid #CCC;
-	border-top: none;
-	-webkit-border-radius: 0 0 15px 15px;
-	border-radius: 0 0 15px 15px;
 }
 
 /* PLAYER COLORS */
@@ -508,6 +505,6 @@ div.dice {
 
 /* SIDEBAR */
 #sidebar {
-	margin-top: 20px;
+	margin-top: 60px;
 	position: fixed;
 }
