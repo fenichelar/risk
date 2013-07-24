@@ -5,7 +5,7 @@
 }
 
 #playerContainer {
-	height: 12%;
+	min-height: 12%;
 }
 
 #players div.player {
@@ -33,6 +33,7 @@
 
 #players div.player h3 {
 	line-height: 20px;
+	margin-top: 3%;
 }
 
 /* PLAYER COLORS */
@@ -188,7 +189,8 @@ span.sliderContext {
 
 /* OPTION DIALOG */
 input.optionBtn {
-	width: 120px;
+	width: 60%;
+	margin-left: 20%;
 }
 
 /* ATTACK DIALOG */
