@@ -58,6 +58,7 @@
 		height: 75px;
 		background-size: 225px 150px !important;
 	}
+
 }
 
 /* Tablet Displays */
@@ -79,5 +80,8 @@
 	}
 	#players div.player h4{
 		display: inline-block;
+	}
+	#wrap {
+		padding-top: 100px;
 	}
 }
