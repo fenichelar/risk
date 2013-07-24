@@ -20,7 +20,7 @@
 	}
 
 	.slider {
-		width: 175px !important;
+		width: 170px !important;
 	}
 }
 
@@ -56,4 +56,16 @@
 /* Mobile Displays */
 @media all and (max-width: 767px) {
 
+}
+
+
+/* Resizing header */ 
+@media all and (max-height: 640px) {
+	#players div.player h3{
+		margin-right: 5%;
+		display: inline-block;
+	}
+	#players div.player h4{
+		display: inline-block;
+	}
 }
