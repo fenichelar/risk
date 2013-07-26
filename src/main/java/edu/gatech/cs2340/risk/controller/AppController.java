@@ -48,7 +48,7 @@ public class AppController extends HttpServlet {
 	private MoveController moveController = new MoveController(turnController);
 	private AttackController attackController = new AttackController(turnController, moveController);
 
-	public static final boolean WIN_CASE = false;
+	public static final boolean WIN_CASE = true; //TODO change back to false
 	private static final int NUMBER_OF_ARMIES = 3;
 	
 	/**
@@ -72,7 +72,7 @@ public class AppController extends HttpServlet {
 		log.debug("players after setPlayerOrder: " + players);
 
 		log.debug("Adding armies to players");
-		players = ArmyUtil.addArmies(players, NUMBER_OF_ARMIES); 
+		players = ArmyUtil.addArmies(players,NUMBER_OF_ARMIES); //TODO change back to one parameter
 		log.debug("players after addArmies: " + players);
 
 		if (WIN_CASE) {
@@ -87,7 +87,7 @@ public class AppController extends HttpServlet {
 		risk = new Risk(this, players);
 		risk.setStage(RiskConstants.INITIALIZE);
 		risk.setStep(RiskConstants.NO_STEP);
-		risk.setDirections(RiskConstants.INITIAL_DIRECTIONS);
+		risk.setDirections(RiskConstants.ADDITIONAL_ARMIES_DIRECTIONS);
 
 		forwardUpdatedVariables(request, response, risk);
 	}
