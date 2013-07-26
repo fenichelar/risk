@@ -6,7 +6,7 @@
 	$(function() {
 		showalert(
 	<%out.write("'" + directionsText + "'");%>
-	, "alert-scccess");
+	, "alert-success");
 	});
 </script>
 <h3>Global Domination!</h3>
