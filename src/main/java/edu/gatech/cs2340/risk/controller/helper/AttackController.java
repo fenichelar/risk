@@ -110,12 +110,18 @@ public class AttackController extends HttpServlet {
 			risk.setStep(RiskConstants.SELECT_DEFENDING_TERRITORY);
 
 		} else {
-			if (TerritoryUtil.validAttacksExist(risk.getCurrentPlayer())) {
+			if (! TerritoryUtil.validAttacksExist(risk.getCurrentPlayer())) {
 				log.debug("No valid attacks exist. Displaying options.");
 				risk.setStage(RiskConstants.SETUP_TURN);
 				risk.setStep(RiskConstants.SHOW_OPTIONS);
 			}
-			log.debug("Attacking territory not satisfactory");
+			else {
+				risk.setStage(RiskConstants.ATTACK);
+				risk.setStep(RiskConstants.SELECT_ATTACKING_TERRITORY);
+				risk.setDirections(RiskConstants.SELECT_TERRITORY_DIRECTIONS);
+				log.debug("Attacking territory not satisfactory");
+			}
+			
 		}
 		risk.getAppController().forwardUpdatedVariables(request, response, risk);
 	}
@@ -140,6 +146,13 @@ public class AttackController extends HttpServlet {
 		if (cancelled) {
 			risk.setStage(RiskConstants.SETUP_TURN);
 			risk.setStep(RiskConstants.SHOW_OPTIONS);
+			risk.getAppController().forwardUpdatedVariables(request, response, risk);
+			return;
+		}
+		if (request.getParameter("attackingArmyNum") == null) {
+			risk.setStage(RiskConstants.ATTACK);
+			risk.setStep(RiskConstants.SELECT_ATTACKING_TERRITORY);
+			risk.setDirections(RiskConstants.SELECT_TERRITORY_DIRECTIONS);
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}
