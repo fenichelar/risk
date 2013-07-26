@@ -10,5 +10,6 @@
 	});
 </script>
 <h3>Global Domination!</h3>
-<form method="POST" action="app">
+<form method="GET" action="/risk">
+	<input type="submit" class="optionBtn btn btn-large btn-success" value="New Game">
 </form>
