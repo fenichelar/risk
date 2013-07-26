@@ -43,6 +43,10 @@ div.territory form .territoryButton {
 	box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.75);
 }
 
+div.territory form .territoryButton:disabled {
+	opacity: 1;
+}
+
 div.territory.player1 form {
 	background: url('../img/greenPlayer.png');
 }
