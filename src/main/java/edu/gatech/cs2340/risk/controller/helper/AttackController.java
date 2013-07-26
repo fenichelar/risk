@@ -143,6 +143,13 @@ public class AttackController extends HttpServlet {
 			risk.getAppController().forwardUpdatedVariables(request, response, risk);
 			return;
 		}
+		if (request.getParameter("attackingArmyNum") == null) {
+			risk.setStage(RiskConstants.ATTACK);
+			risk.setStep(RiskConstants.SELECT_ATTACKING_TERRITORY);
+			risk.setDirections(RiskConstants.SELECT_TERRITORY_DIRECTIONS);
+			risk.getAppController().forwardUpdatedVariables(request, response, risk);
+			return;
+		}
 
 		risk.getAttack().setAttackingArmyNum(Integer.parseInt(request.getParameter("attackingArmyNum")));
 
