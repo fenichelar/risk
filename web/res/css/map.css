@@ -45,6 +45,8 @@ div.territory form .territoryButton {
 
 div.territory form .territoryButton:disabled {
 	opacity: 1;
+	color: #FFF;
+	cursor: not-allowed;
 }
 
 div.territory.player1 form {
